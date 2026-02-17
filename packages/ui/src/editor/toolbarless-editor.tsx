@@ -43,6 +43,8 @@ import { FloatingLinkContext } from "./context/floating-link-context";
 import { MentionsContextProvider } from "./context/mentions-context";
 import { MentionsPlugin } from "./plugins/mentions-plugin";
 import { SlashCommandMenuPlugin } from "./plugins/slash-command-menu-plugin";
+import { CodeBlockLanguagePlugin } from "./plugins/code-block-language-plugin";
+import { CodeHighlightPlugin } from "./plugins/code-highlight-plugin";
 
 type Project = {
   _id: string;
@@ -171,6 +173,10 @@ export function ToolbarlessEditor({
                   <FloatingTextFormatToolbarPlugin
                     anchorElem={floatingAnchorElem}
                   />
+                  {floatingAnchorElem && (
+                    <CodeBlockLanguagePlugin anchorElem={floatingAnchorElem} />
+                  )}
+                  <CodeHighlightPlugin />
                   <ListPlugin />
                   <CheckListPlugin />
 

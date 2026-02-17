@@ -51,7 +51,7 @@ export const editorTheme: EditorThemeClasses = {
   inlineImage:
     "relative inline-block user-select-none cursor-default inline-editor-image",
   keyword: "text-purple-900 font-medium",
-  code: "EditorTheme__code",
+  code: "EditorTheme__code border border-border rounded-lg bg-muted/50",
   codeHighlight: {
     atrule: "EditorTheme__tokenAttr",
     attr: "EditorTheme__tokenAttr",

@@ -1,31 +1,31 @@
 .EditorTheme__code {
-  background-color: transparent;
-  font-family: Menlo, Consolas, Monaco, monospace;
+  /* bg handled by Tailwind class in editor-theme.ts */
+  font-family: Menlo, Consolas, Monaco, "Courier New", monospace;
   display: block;
-  padding: 8px 8px 8px 52px;
+  padding: 12px 12px 12px 52px;
   line-height: 1.53;
   font-size: 13px;
   margin: 0;
   margin-top: 8px;
   margin-bottom: 8px;
   overflow-x: auto;
-  border: 1px solid #ccc;
   position: relative;
-  border-radius: 8px;
   tab-size: 2;
 }
 .EditorTheme__code:before {
   content: attr(data-gutter);
   position: absolute;
   background-color: transparent;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid hsl(var(--muted-foreground) / 0.25);
   left: 0;
   top: 0;
-  padding: 8px;
-  color: #777;
+  bottom: 0;
+  padding: 12px 8px 8px 8px;
+  color: color-mix(in srgb, currentColor 30%, transparent);
   white-space: pre-wrap;
   text-align: right;
   min-width: 25px;
+  opacity: 0.6;
 }
 .EditorTheme__table {
   border-collapse: collapse;
