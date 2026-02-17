@@ -1,0 +1,27 @@
+---
+alwaysApply: true
+---
+
+## Shared utility functions
+
+### 1) No inline “generic helpers”
+Do not define generic, reusable helpers inline inside components, pages, or Convex functions.
+
+Examples of “generic helpers”:
+- `formatDate`, `formatTimestamp`, `cn`, `truncate`, `groupBy`, `debounce`, etc.
+
+### 2) Put utilities in `lib/` and import them
+Shared helpers must live in `src/lib/` (or an appropriate subfolder like `src/lib/date/`, `src/lib/string/`), and be imported wherever used — including:
+- React components / pages
+- Convex `mutations`, `queries`, `actions`
+
+### 3) Rule of thumb
+If a helper is used in **2+ places** or is likely to be reused, extract it to `lib/` immediately.
+
+✅ Good:
+- `src/lib/date/formatDate.ts`
+- `import { formatDate } from "@/lib/date/formatDate";`
+
+❌ Avoid:
+- Defining `const formatDate = (...) => ...` inside a component or mutation
+- Copy/pasting the same formatting logic across files

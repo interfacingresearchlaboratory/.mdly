@@ -1,0 +1,32 @@
+---
+title: Import/Export your data
+description: Export your projects, tasks, reviews, and accomplishments as CSV; current limits on import
+icon: Download
+---
+
+You can export your MONOid data as CSV files for backup or use in spreadsheets and other tools. Bulk import from CSV is not currently available.
+
+## Export
+
+Export is available under **Settings > Workspace > Export**. You choose which entities to include, then click **Export CSV** to download files for the selected data.
+
+### What you can export
+
+- **Projects** — One CSV with: `_id`, `title`, `description`, `status`, `updatedAt` (ISO timestamp).
+- **Tasks** — One CSV with: `_id`, `title`, `notes`, `bucket`, `projectId`, `project` (project title), `categoryId`, `category`, `doneAt`, `lastScheduledOn`, `updatedAt` (timestamps in ISO format).
+- **Reviews** — One CSV with: `_id`, `date`, `type`, `description` (plain-text preview), `updatedAt`.
+- **Accomplishments & Disappointments** — Two CSVs (accomplishments and disappointments), each including the review, date, title, description, scope, linked projects, and linked tasks.
+
+Filenames include the entity name and date, e.g. `projects-export-2026-02-12.csv`.
+
+### How to export
+
+1. Go to **Settings** and open the **Export** tab (under Workspace).
+2. Select the checkboxes for the entities you want (Projects, Tasks, Reviews, Accomplishments & Disappointments).
+3. Click **Export CSV**. A separate file is downloaded for each selected entity.
+
+Export is a one-time download; there is no scheduled or automatic export.
+
+## Import
+
+Bulk import of data from CSV (or other file formats) is **not currently available** in MONOid. Export is intended for backup and for use in other tools (e.g. analysis in a spreadsheet). If you need to bring in data from another system, use the [Notion](/integrations/app-integrations/01-notion) or [Linear](/integrations/app-integrations/02-linear) integrations where applicable, or contact [Support](/getting-started/04-support) for enterprise options.

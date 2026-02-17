@@ -1,0 +1,44 @@
+---
+title: Notion
+description: Connect Notion databases to MONOid — create containers, projects, and tasks from new Notion pages
+icon: notion
+---
+
+You can connect Notion so that new pages in selected databases automatically create containers, projects, or tasks in MONOid and link back to the Notion page. This keeps Notion-backed work visible in your planning and calendar.
+
+## What you can sync from Notion
+
+New pages in a connected **database** can trigger creation of:
+
+- A **container** (e.g. for a Notion "area" or parent)
+- A **project** (one project per Notion page)
+- A **task** (one task per page, for a tasks-style database)
+
+The integration is **one-way**: Notion sends a webhook when a page is created; MONOid creates the chosen entity and stores an external link to the Notion page. MONOid does not write back into Notion.
+
+## Setup
+
+1. Go to **Settings > Workspace > Integrations** and connect **Notion**.
+2. Authorise with your Notion account and select the workspace(s) MONOid may access.
+3. Configure **which databases create which MONOid entities** in the Tasks, Containers, and Projects sections of settings (e.g. "When a page is added to this database, create a task").
+
+The mapping is: **one Notion database -> one entity type** (container, project, or task). You can map multiple databases to the same type. The page title becomes the MONOid entity title.
+
+## Sync behaviour
+
+- **Trigger** — Driven by Notion webhooks. As soon as Notion sends a "page created" event, MONOid processes it. No fixed sync interval.
+- **Create only** — Only **page created** events trigger the integration. Updating a page in Notion does not update the MONOid entity.
+
+## Typical uses
+
+- **Notion as backlog** — Connect a tasks database to create MONOid tasks. Triage and schedule them in My Inbox and Calendar.
+- **Notion areas as containers** — Connect an "areas" database to create containers, mirroring your Notion structure.
+- **Notion projects as projects** — Connect a projects database so new Notion projects become MONOid projects.
+
+## Troubleshooting
+
+- **Nothing created** — Confirm the database is selected in the right section (Containers / Projects / Tasks) and that the integration is connected. Check that the page was **created** (not only updated).
+- **Connection lost** — Reconnect Notion in Settings > Integrations. If Notion revoked access or the token expired, you'll need to reconnect and re-select databases.
+- **Wrong entity type** — Check which section (Containers vs Projects vs Tasks) you configured for that database.
+
+For more on how integrations work, see [Integrations](/integrations/01-integrations) and [API & Webhooks](/integrations/03-api-webhooks).

@@ -1,0 +1,43 @@
+---
+title: Linear
+description: Connect Linear teams to MONOid — create tasks, projects, and containers from issues and projects
+icon: linear
+---
+
+You can connect Linear so that new (and optionally updated) issues and projects create or update tasks, projects, and containers in MONOid. This keeps your week aligned with Linear backlogs and statuses.
+
+## What you can sync from Linear
+
+- **Issues -> Tasks** — New issues create tasks in MONOid. Issue state changes (e.g. moved to "Done" in Linear) can update the linked task's status if enabled.
+- **Projects -> Projects** — New Linear projects create MONOid projects.
+- **Teams -> Containers** — New Linear teams create containers.
+
+Optionally, when an issue belongs to a Linear project, MONOid can create or link a project alongside the task.
+
+## Setup
+
+1. Go to **Settings > Workspace > Integrations** and connect **Linear** (OAuth flow).
+2. Configure automations in the **Tasks**, **Projects**, and **Containers** sections of settings. Choose which Linear **teams** (or "all teams") trigger which MONOid entities.
+
+You can restrict by team so only selected teams create MONOid work, or use "all teams" for a single global automation.
+
+## Sync behaviour
+
+- **Trigger** — Driven by Linear webhooks. Events are processed as soon as Linear sends them. No fixed poll interval.
+- **Two-way for status** — Issue creation creates a task; issue **state changes** can update the linked task's status. Other fields are not synced back into Linear. Linear is the source of truth for issue state when sync is enabled.
+
+Labels in Linear don't automatically become MONOid tags; you can use them for filtering in Linear and plan the resulting tasks in MONOid.
+
+## Typical uses
+
+- **Linear backlog -> MONOid tasks** — Issues from one or more teams feed into tasks. Triage and schedule in My Inbox and Calendar; closing the issue in Linear updates the task.
+- **Linear projects -> MONOid projects** — New projects become MONOid projects for attaching tasks and planning into your week.
+- **Linear teams -> MONOid containers** — New teams become containers, keeping org structure in sync.
+
+## Troubleshooting
+
+- **No task created** — Confirm the team is selected in the Tasks automation config and that the integration is connected. Check that the event was a create (not only an update) if your automation is create-only.
+- **Status not updating** — Ensure "auto-update status" (or equivalent) is enabled for that automation.
+- **Connection or webhook errors** — Reconnect Linear in Settings > Integrations. Reconnecting and re-saving the automation usually re-registers webhooks.
+
+For more on how integrations work, see [Integrations](/integrations/01-integrations) and [API & Webhooks](/integrations/03-api-webhooks).

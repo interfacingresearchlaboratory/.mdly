@@ -1,0 +1,37 @@
+---
+title: Review Steps and Interface
+description: The runtime experience — steps panel, completion, progress, and how the merged template appears
+icon: ListChecks
+---
+
+When you open a review, the left side shows **steps** in a single ordered list. This is the merged template in action — personal steps first, then org, then container. Each step has a **checkbox** and a **rich-text editor** for your notes.
+
+## The steps panel
+
+- **Order** follows the [merge order](/reviews/08-how-templates-merge): all personal steps in template order, then all org steps, then all container steps. You see one continuous list, not separate blocks.
+- **Badges** — Each step is labelled **Org** or **Personal** (or **Container**) so you know which template it came from and, therefore, who can see your response.
+- **Completion** — Check the box to mark a step done. Some steps (header-type) auto-complete when the editor has content; manual steps require an explicit check.
+- **Progress** — The panel shows progress (e.g. "3 of 5 completed"). When all steps are done, the panel indicates completion visually.
+- **Collapse** — Use **Cmd/Ctrl+Shift+E** to collapse the steps panel and give more space to the editors and side panels.
+
+## Steps are fixed at creation
+
+The step list is determined when you create the review and does not change after that. If someone updates the org template later (adds a step, removes one, reorders), your existing review keeps its original steps and responses. Only new reviews pick up template changes. See [How templates merge](/reviews/08-how-templates-merge).
+
+## Step–embed link
+
+A step can be linked to one or two **embeds** from the template. When you focus that step, the right panel can switch to show those specific embeds instead of all tabs — so the right context appears alongside the right prompt. See [Review Embeds](/reviews/11-review-embeds).
+
+## Right panel: Projects, Tasks, and Embeds
+
+The right side of the review shows:
+
+- **Projects** and **Tasks** tabs — work in scope for the review's period.
+- **Embeds** — tabs for each external resource from the merged templates (deduplicated). Switch tabs to see different embeds, or let step focus drive which embed appears.
+
+## Related pages
+
+- [Reviews](/reviews/01-overview) — The review loop and what a review contains
+- [How templates merge](/reviews/08-how-templates-merge) — Merge order and versioning
+- [Responses and permissions](/reviews/10-responses-and-permissions) — Who sees what based on step source
+- [Review Embeds](/reviews/11-review-embeds) — How embeds work in the review UI

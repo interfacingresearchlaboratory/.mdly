@@ -1,0 +1,43 @@
+---
+title: API & Webhooks
+description: API keys for programmatic access; how webhooks are used for Linear and Notion
+icon: Key
+---
+
+MONOid provides **API keys** for programmatic access to your data. **Webhooks** are used internally so that Linear and Notion can notify MONOid when something changes; there are no user-configured outgoing webhook URLs.
+
+## API Keys
+
+API keys let you authenticate programmatic requests to your MONOid data. You create and manage them under **Settings > Dev > API Keys**.
+
+### Creating a key
+
+1. Go to **Settings** and open the **API Keys** tab (under Dev).
+2. Click **Create API Key**.
+3. Give the key a name (e.g. “Script” or “CI”).
+4. Choose one or more **scopes**: **read**, **write**, **delete**. These define what the key is allowed to do.
+5. Optionally set an **expiry date**.
+6. Click create. The full key (prefix `tw_`) is **shown only once**. Copy and store it securely; you cannot view it again.
+
+### Managing keys
+
+- You can **revoke** a key at any time. Revoked keys stop working immediately.
+- To rotate a key: create a new key, update your scripts or apps to use it, then revoke the old key.
+- Keys are listed with name, last four characters (e.g. `tw_...a1b2`), status (active / revoked / expired), and last used date.
+
+### Security
+
+- Treat API keys like passwords. Do not commit them to version control or share them in chat or email.
+- Use the minimum scopes needed (e.g. read-only for reporting).
+- Use expiry dates for temporary access and revoke keys you no longer need.
+
+API keys are validated by MONOid when you call the API; the exact endpoints and usage are part of the programmatic API surface. This documentation does not list individual HTTP endpoints; the keys authenticate that access.
+
+## Webhooks
+
+Webhooks in MONOid are **incoming only**: external services send HTTP requests to MONOid when events happen.
+
+- **Linear** and **Notion** — When you connect these integrations and set up automations (e.g. “create a task when a Linear issue is created”), MONOid registers webhooks with the provider. The provider then sends events (e.g. issue created, page created) to MONOid, which runs your automation rules. You do not configure a “webhook URL” yourself; the app handles subscription and verification.
+- **Clerk** — Used for authentication events (e.g. user or organisation created/updated). This is an internal integration, not user-configurable.
+
+There are **no user-facing outgoing webhooks** (e.g. “notify this URL when a task is completed”). For automation into other tools, use the API with your API key or the available app integrations.

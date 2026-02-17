@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+
+## Dependency changes
+
+### Prefer `pnpm add` over editing `package.json`
+When adding or updating dependencies, provide terminal commands (e.g. `pnpm add`, `pnpm add -D`) instead of manually editing `package.json`, to avoid version drift and lockfile mismatch.
+
+Examples:
+- Add runtime dep: `pnpm add <package>`
+- Add dev dep: `pnpm add -D <package>`
+- Pin a version: `pnpm add <package>@<version>`

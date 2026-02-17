@@ -1,0 +1,19 @@
+---
+description: Prefer SDKs over raw fetch for data access
+alwaysApply: false
+---
+
+## Data access rule
+
+### Prefer SDKs/clients over `fetch`
+- Use the official or project-standard SDK/client first (e.g. Convex client + hooks, typed API clients).
+- Avoid ad-hoc `fetch()` calls in components and UI flows when an SDK exists.
+
+### When `fetch` is acceptable
+- No SDK/client exists for the target API.
+- You need a low-level feature the SDK doesn’t expose (e.g. special streaming/headers/caching).
+- You are calling a simple internal route handler that is explicitly designed for `fetch`.
+
+### Implementation guidance
+- Keep data access in dedicated hooks/services (e.g. `src/lib/api/*` or `src/hooks/*`), not inline in components.
+- Preserve typing end-to-end (typed request/response contracts) and reuse the same client across the app.

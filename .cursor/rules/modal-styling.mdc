@@ -1,0 +1,35 @@
+---
+description: Rules for building create and edit dialogs
+alwaysApply: false
+---
+
+## Create/Edit dialog UI standards
+
+Use the **Create Project** dialog as the reference implementation for layout, styling, and interaction.
+
+### 1) Input styling
+- Text inputs must be **borderless** and **minimalist** (no heavy outlines).
+- Keep spacing calm and consistent with the reference dialog.
+
+### 2) Structure
+- Main fields at the top (title/name/description).
+- A **Properties** section at the bottom for metadata/relationships.
+
+### 3) Properties section
+- Each property control must be implemented as a **reusable selector component**.
+- Reusable selector styling:
+  - `bg-muted`
+  - minimal padding
+  - compact, consistent height
+- If a property can have many options, use a **searchable select** (not a long list).
+
+### 4) Submission
+- Use the **reusable Submit button** component.
+- Enable the **Cmd/Ctrl + Enter** hotkey to submit (and show the hotkey hint in the button/tooltip per hotkey-hint rules).
+
+✅ Checklist
+- [ ] Borderless text inputs
+- [ ] Properties section at bottom
+- [ ] All properties use reusable selectors (`bg-muted`, minimal padding)
+- [ ] Searchable select for large option sets
+- [ ] Reusable submit button + Cmd/Ctrl+Enter submit hotkey

@@ -1,0 +1,27 @@
+---
+title: Responses and Permissions
+description: Who can see what — step-scoped visibility for organisation and personal responses
+icon: Shield
+---
+
+**Visibility is step-scoped.** Responses inherit visibility from the step that generated them:
+
+- **Organisation-template steps** — responses are visible to **organisation admins**.
+- **Personal-template steps** — responses are visible **only to you**.
+
+This is the single rule. One review can contain both org and personal steps; each response follows its own step's visibility.
+
+## What this means in practice
+
+- **You see everything in your own review.** When you open your review, you see all steps (org + personal) and all your responses. The boundary only matters when someone else views your data.
+- **Admins see the org layer only.** Organisation admins can view org-step responses across the team. They cannot access personal-step responses — the product enforces this even though both run in the same review session.
+- **Exports and embeds respect the same boundary.** An org-level export includes only org-step responses. A personal export includes everything. If review data is embedded elsewhere (e.g. in a dashboard), the same rules apply.
+
+In the review UI, steps are badged **Org** or **Personal** so the boundary is always visible. If you're not sure whether a response is shared, check the badge.
+
+## Related pages
+
+- [Reviews](/reviews/01-overview) — What reviews contain
+- [How templates merge](/reviews/08-how-templates-merge) — Which steps are org vs personal
+- [Review Steps and Interface](/reviews/09-review-steps-and-interface) — Badges and the steps panel
+- [Organisation templates](/reviews/06-organisation-templates) — Who manages org templates

@@ -1,0 +1,48 @@
+---
+description: Rules for writing Convex mutations, queries, and actions.
+alwaysApply: false
+---
+
+## Convex file organisation
+
+### 1) Group by domain/table
+Organise Convex functions by table/domain. Each domain folder should contain up to three files:
+
+- `convex/<domain>/mutations.ts`
+- `convex/<domain>/queries.ts`
+- `convex/<domain>/actions.ts`
+
+Example:
+- `convex/tasks/mutations.ts`
+- `convex/tasks/queries.ts`
+- `convex/tasks/actions.ts`
+
+### 2) Keep boundaries clear
+- **mutations.ts**: writes to DB (create/update/delete)
+- **queries.ts**: reads from DB
+- **actions.ts**: external side effects / long-running work (APIs, background tasks), may call mutations/queries
+
+## Query design rules
+
+### 3) Prefer one “list” query with filters over many variants
+Avoid proliferating query names like:
+- `listForCurrentUser`, `listByProject`, `listByDate`
+
+Instead, create a single `list` (or `listTasks`) query that accepts an optional filter object.
+
+Guidelines:
+- Accept **optional** filter props (e.g. `userId?`, `projectId?`, `status?`, `from?`, `to?`, `cursor?`, `limit?`)
+- Filters should be composable (multiple can be provided together)
+- Provide sensible defaults (e.g. `limit`)
+
+Example naming:
+- ✅ `tasks.list({ userId, projectId, status, limit })`
+- ✅ `tasks.list({ from, to, cursor, limit })`
+- ❌ `tasks.listByProject(projectId)`
+- ❌ `tasks.listForCurrentUser()`
+
+### 4) Only split into specialised queries when justified
+Create a specialised query only if:
+- the performance/index strategy is materially different, or
+- the result shape is meaningfully different (e.g. aggregation / grouped output), or
+- it’s a core product concept that benefits from a distinct contract (e.g. `tasks.overdueSummary`)

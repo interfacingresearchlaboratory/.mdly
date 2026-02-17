@@ -1,0 +1,43 @@
+---
+title: Review Embeds
+description: External resources in reviews — Notion, Linear, and step-linked embeds
+icon: LayoutPanelLeft
+---
+
+Review embeds are external resources — Notion pages, Notion databases, Linear teams, Linear projects — that appear inside the review UI so you can reference them without leaving MONOid. Embeds are defined on **templates** and collected from all merged templates when a review is created.
+
+## How embeds work
+
+Each template can have an **embeds** list. An embed has a **provider** (e.g. Notion, Linear), a **resource type** (page, database, team, project), a **resource ID**, and a **title**. When the review loads:
+
+1. Embeds from all merged templates (personal + org + container) are collected.
+2. Duplicates are removed by (provider, resource type, resource ID) — first occurrence in merge order wins.
+3. Embeds appear as **tabs** in the right panel of the review.
+
+The corresponding integration (Notion, Linear) must be connected in Settings for embeds to load.
+
+## Step–embed link
+
+A template step can be linked to one or two embeds. When you **focus** that step in the review, the right panel switches to show those specific embeds instead of all tabs. This puts the right context next to the right prompt — e.g. a Linear sprint board alongside "What shipped this week?"
+
+## Adding embeds to a template
+
+1. Open the template in Settings (personal or workspace Review Templates).
+2. In the **Embeds** section, add an embed: choose provider, resource type, and pick the resource. Give it a title.
+3. Optionally, edit a step and link it to one or two embeds from the list.
+4. Save. New reviews of that type will include the embed.
+
+If both your personal and org templates include the same resource, it appears once (deduplicated). If they include different resources, both appear as separate tabs in merge order.
+
+## Troubleshooting
+
+- **Embed not loading** — Check that the integration (Notion/Linear) is still connected in Settings > Integrations. Reconnect if the token expired.
+- **Embed missing from review** — Confirm the embed is on the default template for that review type, and that the template is set as default.
+
+## Related pages
+
+- [Reviews](/reviews/01-overview) — What reviews contain
+- [Templates](/reviews/05-templates) — Where embeds are defined
+- [How templates merge](/reviews/08-how-templates-merge) — Merge order affects embed tab order
+- [Review Steps and Interface](/reviews/09-review-steps-and-interface) — Step–embed focus behaviour
+- [Integrations](/integrations/01-integrations) — Connecting Notion and Linear

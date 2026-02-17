@@ -1,0 +1,29 @@
+---
+description: "Standards for rendering hotkey hints in the UI"
+alwaysApply: false
+---
+
+## Hotkey hint rendering (tooltips + UI hints)
+
+### 1) Always use `<Kbd />`
+All hotkey hints MUST be rendered using the `Kbd` component (no raw `<kbd>`, no plain text).
+
+### 2) Key label standards
+- Enter: render as `Enter` (exact casing)
+- Shift: render as the `ArrowBigUp` icon from `lucide-react` (not the text "Shift")
+
+### 3) Key combinations
+- Render multi-key shortcuts as **adjacent Kbd blocks** (no `"+"` separators).
+- Maintain visual spacing between keys (e.g. small gap via layout, not a plus character).
+
+✅ Good:
+- `<Kbd>⌘</Kbd><Kbd>K</Kbd>`
+- `<Kbd><ArrowBigUp /></Kbd><Kbd>Enter</Kbd>`
+
+❌ Avoid:
+- `⌘ + K`
+- `<kbd>cmd</kbd> + <kbd>k</kbd>`
+- `<Kbd>Shift</Kbd> + <Kbd>Enter</Kbd>`
+
+### 4) Layout guidance
+Wrap combos in a horizontal container (e.g. `flex items-center gap-1`) to ensure consistent spacing and alignment.

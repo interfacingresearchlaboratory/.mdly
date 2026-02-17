@@ -1,0 +1,51 @@
+---
+title: How Templates Merge
+description: Ordering, conflicts, and versioning when personal, organisation, and container templates combine
+icon: GitMerge
+---
+
+When you create a review, the app builds one ordered list of steps from every applicable template. This page is the source of truth for how that merge works.
+
+## Merge order
+
+Templates are merged in a fixed order:
+
+1. **Personal** template — your default for that review type. These steps appear **first**.
+2. **Organisation** template(s) — one default per org you're a member of. Steps appear **after** personal steps.
+3. **Container** template(s) — one default per container in scope for the review. Steps appear **last**.
+
+Within each layer, steps keep the order defined on the template. The final sequence is always: all personal steps in order, then all org steps in order, then all container steps in order. You cannot interleave steps across layers.
+
+The same order applies to **embeds**: embeds from all merged templates are collected, deduplicated by (provider, resource type, resource ID), and displayed as tabs in merge order. First occurrence wins.
+
+## Conflicts
+
+There is no overwriting. If both your personal template and the org template have a step labelled "Wins", **both appear** — your "Wins" first (personal layer), then the org's "Wins" (org layer). Each has its own editor and its own response. Your response to the personal step is private; your response to the org step is visible to org admins.
+
+## What happens when a template changes
+
+- **Future reviews** use the updated template immediately. As soon as an admin saves a change (or you edit your personal template), the next review created will merge with the new step list.
+- **Existing reviews are snapshots.** The steps were copied into the review at creation time. Adding, removing, or reordering steps on the template does not alter reviews that already exist. Past reviews keep their original steps and responses intact.
+
+This means "template change" never retroactively alters a completed review.
+
+## Example
+
+You have a personal Weekly template with steps: "Energy check", "One thing to improve." Your org has a Weekly template with: "What did you ship?", "Top blocker", "Next week priorities."
+
+When you create a weekly review, the merged step list is:
+
+1. Energy check *(Personal)*
+2. One thing to improve *(Personal)*
+3. What did you ship? *(Org)*
+4. Top blocker *(Org)*
+5. Next week priorities *(Org)*
+
+Your responses to steps 1-2 are private. Your responses to steps 3-5 are visible to org admins.
+
+## Related pages
+
+- [Templates](/reviews/05-templates) — Templates overview
+- [Organisation templates](/reviews/06-organisation-templates) — Org template governance
+- [Personal templates](/reviews/07-personal-templates) — Personal template setup
+- [Responses and permissions](/reviews/10-responses-and-permissions) — Step-scoped visibility rules

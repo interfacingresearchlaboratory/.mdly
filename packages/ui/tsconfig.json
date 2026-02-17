@@ -1,0 +1,14 @@
+{
+  "extends": "@editor/typescript-config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist", 
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

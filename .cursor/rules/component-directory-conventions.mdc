@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+## Component location rules (Next.js App Router)
+
+### 1) Page/route-scoped components
+If a component is only used by a single route segment, place it in that segment’s `_components` folder.
+
+Example:
+- `src/app/projects/_components/projects-sidebar.tsx`
+
+### 2) Shared components
+If a component is used by 2+ routes (or is intended to be reusable), place it in:
+- `src/components/`
+
+### 3) Naming + intent
+- Prefer feature/route-prefixed filenames for route-scoped components (e.g. `projects-sidebar.tsx`) to avoid collisions.
+- When unsure, default to route-scoped (`src/app/<segment>/_components`) until reuse is proven.

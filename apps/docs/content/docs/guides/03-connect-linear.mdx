@@ -1,0 +1,77 @@
+---
+title: How to Connect Linear and Sync Tasks
+description: Connect Linear to MONOid, configure automations, and get your first issue synced as a task
+icon: Plug
+---
+
+This guide walks you through connecting Linear to MONOid — from the OAuth connection to seeing your first Linear issue appear as a task. It takes about 5 minutes.
+
+## What you'll do
+
+1. Connect your Linear account
+2. Select which Linear teams to sync
+3. Configure automations (what happens when issues are created)
+4. Verify tasks are syncing
+
+---
+
+## 1. Connect your Linear account
+
+1. Open **Settings** from the gear icon at the bottom of the left sidebar.
+2. Go to the **Integrations** tab.
+3. Find **Linear** and click **Connect**.
+4. You'll be redirected to Linear's OAuth page — authorise MONOid to access your Linear workspace.
+5. After authorising, you're redirected back to MONOid. The connection is now active.
+
+MONOid requests the minimum permissions needed: read access to your teams, projects, and issues, plus webhook access to receive updates.
+
+## 2. Select teams to sync
+
+After connecting, you'll see your Linear teams listed. Choose which teams MONOid should listen to:
+
+- Select teams that are relevant to your MONOid containers and projects.
+- You can always add or remove teams later from the same settings page.
+
+## 3. Configure automations
+
+Automations define what MONOid does when something happens in Linear. The most common setup:
+
+**When a Linear issue is created → Create a MONOid task**
+
+For each team, configure:
+
+- **Target container** — Which MONOid container should receive tasks from this team? (e.g. Linear team "Engineering" → MONOid container "Work")
+- **Target project** — Optionally map to a specific project within the container.
+- **What to sync:**
+  - **Issues → Tasks** — Each Linear issue becomes a MONOid task.
+  - **Projects → Projects** — Linear projects map to MONOid projects.
+  - **Teams → Containers** — Linear teams map to MONOid containers.
+
+## 4. Verify the sync
+
+Once automations are configured, create a test issue in Linear (or wait for a teammate to create one). Within a few seconds:
+
+1. The issue should appear as a **task** in MONOid.
+2. Check the task's detail page — it will have an **external link** badge (the Linear icon) linking back to the original issue.
+3. The task will be in the container and project you configured.
+
+You can find synced tasks in **My Inbox** (if unscheduled), on the **Tasks** index page, or by searching.
+
+## How sync works going forward
+
+- **Linear → MONOid:** When issues are created or updated in Linear, webhooks notify MONOid and tasks are created or updated automatically.
+- **Status sync:** Status changes in Linear flow to MONOid. If you move an issue to "Done" in Linear, the task status updates in MONOid.
+- **One-way for creation:** Tasks are created from Linear issues, not the other way around. You can still create tasks directly in MONOid that aren't linked to Linear.
+
+## Troubleshooting
+
+- **Tasks aren't appearing?** Check that the team is selected and automations are configured in Settings > Integrations. Webhooks can be delayed during Linear outages.
+- **Wrong container or project?** Edit the automation mapping in Settings > Integrations. Future issues will use the new mapping; existing tasks aren't retroactively moved.
+- **Connection lost?** Go to Settings > Integrations, disconnect Linear, and reconnect. This re-establishes the OAuth token and webhooks.
+
+## Next steps
+
+- [Linear](/integrations/app-integrations/02-linear) — Full reference for the Linear integration
+- [Notion](/integrations/app-integrations/01-notion) — Connect Notion for page and database sync
+- [How to Plan Your Week](/guides/01-plan-your-week) — Once tasks are flowing in, plan them into your week
+- [Integrations](/integrations/01-integrations) — Overview of all integration patterns

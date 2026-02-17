@@ -1,0 +1,158 @@
+{
+  "categories": [
+    {
+      "id": "organisation",
+      "name": "Organisation",
+      "order": 1,
+      "features": [
+        {
+          "id": "workspaces",
+          "name": "Workspaces",
+          "explanation": "Connected workspaces let you separate company and personal work. Each workspace can have its own containers, projects, and team members.",
+          "featurePatterns": ["workspaces", "workspace", "connected workspaces", "connected workspace"]
+        },
+        {
+          "id": "containers",
+          "name": "Containers",
+          "explanation": "Organize projects by area—e.g. Work, Studio, Home. Filter and scope your calendar, kanban, and inbox by container.",
+          "featurePatterns": ["containers", "container"]
+        },
+        {
+          "id": "projects",
+          "name": "Projects",
+          "explanation": "Ongoing efforts with an outcome. Group tasks by project, link projects to routine blocks, and scope your planning to what matters.",
+          "featurePatterns": ["projects", "project"],
+          "planValues": { "Starter": "50", "Free": "50", "Basic": "Unlimited", "Team": "Unlimited" }
+        },
+        {
+          "id": "tasks",
+          "name": "Tasks",
+          "explanation": "Individual work items with status, priority, and dates. Drag tasks into routine blocks to schedule your week.",
+          "featurePatterns": ["tasks", "task"],
+          "planValues": { "Starter": "Unlimited", "Free": "Unlimited", "Basic": "Unlimited", "Team": "Unlimited" }
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "name": "Planning",
+      "order": 2,
+      "features": [
+        {
+          "id": "routine-blocks",
+          "name": "Routine blocks",
+          "explanation": "Reusable time slots (e.g. Deep work, Meetings) that define your week. Tasks from allowed projects appear when you schedule.",
+          "featurePatterns": ["routine blocks", "routine block"]
+        },
+        {
+          "id": "daily-schedule-blocks",
+          "name": "Daily schedule blocks",
+          "explanation": "Fixed slots (meals, buffer, sleep) that show when you're available. Tasks cannot be scheduled here—only into routine blocks.",
+          "featurePatterns": ["daily schedule blocks"]
+        }
+      ]
+    },
+    {
+      "id": "reviews",
+      "name": "Reviews",
+      "order": 3,
+      "features": [
+        {
+          "id": "daily-reviews",
+          "name": "Daily reviews",
+          "explanation": "Quick end-of-day reflection. Capture what happened and how you felt.",
+          "featurePatterns": ["daily reviews", "daily review", "daily_and_weekly_reviews"],
+          "planValues": { "Starter": "Included", "Free": "Included", "Basic": "Included", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "weekly-reviews",
+          "name": "Weekly reviews",
+          "explanation": "Weekly reflection on accomplishments, disappointments, and priorities for the week ahead.",
+          "featurePatterns": ["weekly reviews", "weekly review", "daily_and_weekly_reviews"],
+          "planValues": { "Starter": "Included", "Free": "Included", "Basic": "Included", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "monthly-reviews",
+          "name": "Monthly reviews",
+          "explanation": "Monthly reflection and planning. Track progress, adjust priorities, and set intentions.",
+          "featurePatterns": ["monthly reviews", "monthly review", "monthly_quarterly_annual_reviews"],
+          "planValues": { "Starter": "—", "Free": "—", "Basic": "Included", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "quarterly-reviews",
+          "name": "Quarterly reviews",
+          "explanation": "Quarterly check-ins. Align on goals, review progress, and plan the next quarter.",
+          "featurePatterns": ["quarterly reviews", "quarterly review", "monthly_quarterly_annual_reviews"],
+          "planValues": { "Starter": "—", "Free": "—", "Basic": "—", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "annual-reviews",
+          "name": "Annual reviews",
+          "explanation": "Year-in-review. Reflect on the full year, track goals, and set direction for the next.",
+          "featurePatterns": ["annual reviews", "annual review", "year review", "monthly_quarterly_annual_reviews"],
+          "planValues": { "Starter": "—", "Free": "—", "Basic": "—", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "personal-review-templates",
+          "name": "Personal review templates",
+          "explanation": "Create and edit your own review templates. Define steps, prompts, and structure for your reflections.",
+          "featurePatterns": ["personal review templates", "personal review template"],
+          "planValues": { "Starter": "Included", "Free": "Included", "Basic": "Included", "Team": "Included" },
+          "displayAsTick": true
+        },
+        {
+          "id": "organisation-review-templates",
+          "name": "Organisation review templates",
+          "explanation": "Org-wide and container-level templates. Share review structures across your team or workspace.",
+          "featurePatterns": ["organisation review templates", "organisation review template", "organization review templates"],
+          "planValues": { "Starter": "—", "Free": "—", "Basic": "Included", "Team": "Included" },
+          "displayAsTick": true
+        }
+      ]
+    },
+    {
+      "id": "integrations",
+      "name": "Integrations",
+      "order": 4,
+      "features": [
+        {
+          "id": "calendar-sync",
+          "name": "Calendar sync",
+          "explanation": "Sync with Google Calendar or other providers. See availability, schedule around events, and keep your week in sync.",
+          "featurePatterns": ["calendar", "calendar sync"],
+          "displayAsTick": true,
+          "planValues": { "Starter": "✓", "Free": "✓", "Basic": "✓", "Team": "✓" }
+        },
+        {
+          "id": "api",
+          "name": "API access",
+          "explanation": "Access your data via the MONOid API. Build dashboards, automations, and agents. Export to CSV or your tools.",
+          "featurePatterns": ["api"],
+          "displayAsTick": true,
+          "planValues": { "Starter": "✓", "Free": "✓", "Basic": "✓", "Team": "✓" }
+        },
+        {
+          "id": "linear",
+          "name": "Linear",
+          "explanation": "Sync issues and projects from Linear. New issues create tasks in MONOid; status changes sync back.",
+          "featurePatterns": ["linear"],
+          "displayAsTick": true,
+          "planValues": { "Starter": "✓", "Free": "✓", "Basic": "✓", "Team": "✓" }
+        },
+        {
+          "id": "notion",
+          "name": "Notion",
+          "explanation": "Connect Notion databases. New pages create containers, projects, or tasks in MONOid with links back to the source.",
+          "featurePatterns": ["notion"],
+          "displayAsTick": true,
+          "planValues": { "Starter": "✓", "Free": "✓", "Basic": "✓", "Team": "✓" }
+        }
+      ]
+    }
+  ]
+}

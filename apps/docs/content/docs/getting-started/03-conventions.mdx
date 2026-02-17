@@ -1,0 +1,90 @@
+---
+title: Conventions
+description: Understand MONOid's naming conventions, display configurations, and interface patterns
+icon: LayoutDashboard
+---
+
+## Index Pages
+
+Each core entity in **MONOid** (containers, projects, tasks, routine blocks, reviews) has a dedicated index page that supports view customisation. These pages are accessible via the left-hand shell sidebar.
+
+Index pages can typically be viewed:
+- across the whole workspace (e.g. all projects), or
+- in scoped contexts (e.g. projects within a specific container).
+
+### Display Configuration
+
+Each index page includes a set of display utilities at the top, typically including:
+
+- **Search**
+- **Filters**
+- **Display config** (choose which properties show, and how they render)
+
+Filters help narrow what you're looking at, while display config changes the way information is presented so the view fits the job you're doing.
+
+### Views (List, Kanban)
+
+Most entities support multiple view modes:
+
+- **List View**: A tabular view showing items in rows with columns for properties. Best for scanning, comparing, and bulk editing.
+- **Kanban View**: A board view for organising items into columns based on a grouping property (commonly status). Best for workflow and progress.
+
+> Tasks also have dedicated planning surfaces (Calendar + My Inbox) covered below.
+
+### Grouping
+
+Items can be organised using grouping options:
+
+- **Primary grouping**: the main grouping logic (e.g. status, priority, container, project, none)
+- **Secondary grouping**: an additional layer when you need more structure
+- **Board grouping**: for kanban, determines the columns shown
+
+Grouping helps you reshape the same dataset depending on what you're trying to see.
+
+### Property Toggles
+
+Each view lets you toggle which properties are visible so you can focus on what matters right now.
+
+Common property groups include:
+
+- Status / bucket, category
+- Dates and timestamps
+- Relationships (container, project, routine block)
+
+### Compactness
+
+Control how dense the UI is:
+
+- **Compact**: more items visible, less breathing room
+- **Regular**: balanced spacing
+- **Relaxed**: easiest to read, more space
+
+## Detail Pages
+
+Detail pages provide in-depth information and editing capabilities for individual entities. Each detail page follows consistent patterns for navigation and interaction.
+
+### Main Content
+
+Detail pages centre around a main content area for notes, context, and decisions — the place where the "why" lives alongside the "what".
+
+### Property Sidebar
+
+Detail pages include a property sidebar (desktop) for key metadata and relationships, such as:
+
+- Status and priority
+- Dates
+- Container / project relationships
+- Routine Block assignment (for tasks)
+- System metadata (created, updated, etc.)
+
+On smaller screens, this collapses to keep the page usable.
+
+### Tabs
+
+Some detail pages use tabs to separate different aspects of an entity (depending on the entity type), for example:
+
+- **Overview** (core info + notes)
+- **Tasks** (for containers/projects)
+- **Activity / History** (when available)
+
+Tabs help you navigate without losing context, and the active tab is reflected in the URL so specific views can be shared.

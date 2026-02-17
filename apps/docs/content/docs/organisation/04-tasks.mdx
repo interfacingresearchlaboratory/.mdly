@@ -1,0 +1,63 @@
+---
+title: Tasks
+description: Create and manage tasks — optionally inside projects — and connect them to your week via routine blocks
+icon: SquareSlash
+---
+
+## What it is
+
+**Tasks** are the concrete actions that move work forward. A task can optionally belong to a **project** (and thus to that project's **container**), but tasks can also exist on their own — for example, standalone to-dos or items captured before you decide where they belong. Tasks have a bucket (status), and can be assigned to **routine blocks** on the week so your plan is schedulable and intentional.
+
+## When to use it
+
+- You need to capture and track discrete actions (e.g. "Write spec", "Book flight").
+- You want to plan the week by assigning tasks into time blocks (calendar) or sort unscheduled tasks (inbox).
+- You want to see progress in a list or kanban view, grouped by status, project, or container.
+
+## How it works
+
+Tasks can live inside projects or exist independently. They can be unscheduled (backlog), scheduled into a routine block for a given day/week, or marked done. The Tasks index supports list and kanban views, grouping, and filters. The **calendar** lets you pull tasks into the week and assign them to blocks; **My Inbox** helps you triage unscheduled tasks. Task detail pages show notes and a property sidebar (bucket, project, routine block, etc.).
+
+## How to use it
+
+1. Create a task from the **Tasks** index, a **project** detail page, or the **calendar** (e.g. from backlog).
+2. Optionally set a **project** (and thus container), choose a **bucket**, and fill in any other fields.
+3. To plan the week: open the **calendar**, choose a routine block and day, and move tasks from the left (upcoming) or right (backlog) into the block.
+4. Use **My Inbox** to triage unscheduled tasks: plan this week, leave in backlog, or reassign to another project.
+5. Use **list** or **kanban** on the Tasks index to review and bulk-edit status or project.
+
+## Key concepts / fields
+
+- **Project** — The parent project (optional); determines the container indirectly when set. Tasks without a project appear in "No project" groups.
+- **Bucket** — The task's workflow stage. The full set of buckets is: **Backlog**, **Shaping**, **Todo**, **In Progress**, **In Review**, **Done**, **Cancelled**. Buckets drive kanban columns, calendar sidebars, and filters.
+  - *Backlog* — captured but not yet in scope for the week.
+  - *Shaping* — being defined or scoped; not ready to start.
+  - *Todo* — ready to work on this week.
+  - *In Progress* — actively being worked on.
+  - *In Review* — work is done but awaiting review or sign-off.
+  - *Done* — completed.
+  - *Cancelled* — dropped or no longer relevant.
+- **Dates** — Due date, scheduled date, or both; used in calendar and list views.
+- **Routine block** — When scheduled, the block (and optionally day) the task is assigned to for the week.
+
+## Common workflows
+
+- **Capture and plan:** Add tasks to a project as they come up; each week pull from backlog into the calendar and assign to routine blocks.
+- **Inbox triage:** Open My Inbox, decide what's this week vs. backlog, and reassign any task that belongs to a different project.
+- **Kanban flow:** Use the Tasks kanban to move tasks through bucket columns across projects; group by project or container if you need context.
+- **Review and close:** After a review, mark tasks done, archive or delete completed ones, and move stray tasks to the right project.
+
+## Tips + gotchas
+
+- Keep tasks actionable (one clear action); split large items into multiple tasks.
+- Use My Inbox regularly so unscheduled tasks don't pile up and the backlog stays meaningful.
+- When moving a task to another project, check that the routine block still makes sense (allowed projects on the block).
+- Tasks without a project are still fully functional — you can schedule them, assign them to blocks, and move them through buckets. Assign a project when the task belongs to a clear effort.
+
+## Related pages
+
+- [Organisation](/organisation/01-organisation) — How the organisation layer works
+- [Containers](/organisation/02-containers) — Containers hold projects
+- [Projects](/organisation/03-projects) — Tasks can live inside projects
+- [Concepts](/getting-started/02-concepts) — Calendar, My Inbox, kanban, and routine blocks
+- [Conventions](/getting-started/03-conventions) — Index pages, detail pages, and property sidebar

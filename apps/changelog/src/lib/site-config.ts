@@ -1,0 +1,40 @@
+export const siteConfig = {
+  name: "Changelog - MONOid",
+  url: "https://changelog.usemonoid.com",
+  appUrl: "https://app.usemonoid.com",
+  productUrl: "https://usemonoid.com",
+  docsUrl: "https://docs.usemonoid.com",
+  pricingUrl: "https://pricing.usemonoid.com",
+  privacyUrl: "https://usemonoid.com/privacy",
+  termsUrl: "https://usemonoid.com/terms",
+  supportEmail: "support@usemonoid.com",
+  description:
+    "Stay up to date with the latest features, updates, and bug fixes for MONOid.",
+  links: {
+    x: "https://x.com/usemonoid",
+    linkedin: "https://www.linkedin.com/company/usemonoid",
+    tiktok: "https://www.tiktok.com/@usemonoid",
+    instagram: "https://www.instagram.com/usemonoid",
+  },
+  keywords: [
+    "Changelog",
+    "MONOid",
+    "MONOid changelog",
+    "MONOid updates",
+    "MONOid features",
+    "MONOid release notes",
+    "product updates",
+    "release notes",
+    "what's new",
+    "feature updates",
+    "software updates",
+    "product changelog",
+    "update log",
+    "version history",
+    "what's new in MONOid",
+    "MONOid latest features",
+    "MONOid product updates",
+  ],
+}
+
+export type SiteConfig = typeof siteConfig

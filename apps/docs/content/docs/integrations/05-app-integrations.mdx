@@ -1,0 +1,19 @@
+---
+title: App Integrations
+description: Connect Notion and Linear to MONOid — sync and automate tasks, projects, and containers
+icon: Plug
+---
+
+MONOid can connect to **Notion** and **Linear** so that work created or updated in those apps can automatically create or update tasks, projects, and containers in MONOid. You configure which sources (databases, teams) map to which entities and behaviours.
+
+## Available integrations
+
+- **[Notion](/integrations/06-notion)** — Connect your Notion account and choose databases. When a page is created in a linked database, MONOid can create a container, project, or task and attach a link back to the Notion page. Useful for turning Notion-backed work into planned items and keeping references in one place.
+- **[Linear](/integrations/07-linear)** — Connect Linear and select teams (or all teams). When issues or projects are created (or updated) in Linear, MONOid can create or update tasks, projects, or containers and optionally link them. Useful for keeping your week aligned with Linear backlogs and statuses.
+
+Both integrations use **incoming webhooks**: the provider sends events to MONOid, and your automation rules decide what to create or update. Setup is done in **Settings > Workspace > Integrations** (connect the app) and in the **Tasks**, **Containers**, and **Projects** areas where you configure which databases or teams trigger which MONOid entities.
+
+For details, setup steps, mapping options, and troubleshooting, see:
+
+- [Notion](/integrations/06-notion)
+- [Linear](/integrations/07-linear)

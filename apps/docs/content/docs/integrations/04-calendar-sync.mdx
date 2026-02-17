@@ -1,0 +1,54 @@
+---
+title: Calendar Sync
+description: Subscribe to external calendars via iCal URLs; sync frequency and supported providers
+icon: Calendar
+---
+
+You can bring external calendar events into MONOid by subscribing to **iCal URLs**. Events sync automatically about every hour and appear on your Calendar alongside your routine blocks and tasks.
+
+## Where to set it up
+
+Go to **Settings > Workspace > Calendars**. There you can add, edit, enable/disable, and remove calendar subscriptions.
+
+## How it works
+
+- **Add a subscription** — Enter a **name** (e.g. “Work Calendar”), the **iCal URL** (see below), and optionally pick a **color** so you can tell this calendar’s events apart on the Calendar view.
+- **Sync** — MONOid fetches events from the iCal URL automatically about **every hour**. No manual refresh is required; if you need events sooner, wait for the next sync or check back shortly.
+- **Per user** — Subscriptions are per user. You can turn a subscription **on or off** and control whether it’s **visible** on your Calendar without deleting it.
+
+After a sync, the last sync time (and any error message) is shown on the subscription so you can see if something failed (e.g. rate limit or invalid URL).
+
+## Finding your iCal URL
+
+MONOid accepts standard **iCal** URLs (`https://...` or `webcal://...`). Many calendar providers expose a “private” or “secret” iCal address for this.
+
+### Google Calendar
+
+1. Open [Google Calendar](https://calendar.google.com).
+2. Click the **three dots** next to the calendar you want → **Settings and sharing**.
+3. Scroll to **Integrate calendar**.
+4. Copy the **Secret address in iCal format**. It looks like `https://calendar.google.com/calendar/ical/.../basic.ics`.
+
+Use this URL in MONOid as the iCal URL for that calendar.
+
+### Outlook / Microsoft 365
+
+1. Go to [Outlook Calendar](https://outlook.live.com/calendar) or your Microsoft 365 calendar.
+2. Open **Settings** (gear) → **View all Outlook settings** → **Calendar** → **Shared calendars**.
+3. Under **Publish a calendar**, select the calendar and choose **Can view when I have time** (or similar), then get the **ICS** link.
+
+Use the ICS link as the iCal URL in MONOid.
+
+### Apple Calendar
+
+1. Open **Calendar** on Mac.
+2. Select the calendar in the sidebar → **File** → **New Calendar Subscription** (or right‑click the calendar → **Get Info**).
+3. Alternatively, in **Calendar** > **Preferences** > **Accounts**, select the account and look for a published or shared calendar URL.
+
+Use the subscription or feed URL (often `webcal://...`) in MONOid. If you only have `webcal://`, you can paste it as-is; MONOid will use it for syncing.
+
+## Tips
+
+- **Private links** — iCal URLs are often “secret” links. Don’t share them publicly; anyone with the link could see your events.
+- **Errors** — If a subscription shows a sync error, check that the URL is still valid, that the calendar is shared/published for integration, and that your network isn’t blocking the request. Disable and re-add the subscription if needed.
+- **Visibility** — Use the visibility toggle to hide a calendar’s events without removing the subscription.

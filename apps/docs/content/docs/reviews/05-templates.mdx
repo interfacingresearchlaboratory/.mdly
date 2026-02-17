@@ -1,0 +1,29 @@
+---
+title: Templates
+description: How review templates define structure — steps, embeds, and the layering model
+icon: FileStack
+---
+
+A **review template** is a reusable set of **steps** (prompts or to-dos) and optional **embeds** (Notion pages, Linear boards) that define the structure of a review. Templates are scoped to a **review type** (Daily, Weekly, Monthly, etc.) so each cadence has its own structure.
+
+## Templates are layered
+
+Each review is generated from up to three layers of templates:
+
+- **Personal** — yours, private by default. Created in Settings > Review Templates.
+- **Organisation** — shared across the org, managed by admins. Created in workspace settings.
+- **Container** — scoped to a specific container, if configured.
+
+When you create a review, the app **merges** applicable templates into one guided flow. Personal steps appear first, then organisation, then container. Each step is badged so you know its origin, and **response visibility follows the step's source** — org-step responses are visible to admins; personal-step responses are visible only to you.
+
+One template per type per scope can be set as **default**. Only defaults are included in the merge.
+
+For the full merging rules, see [How templates merge](/reviews/08-how-templates-merge). For visibility details, see [Responses and permissions](/reviews/10-responses-and-permissions).
+
+## Related pages
+
+- [Organisation templates](/reviews/06-organisation-templates) — Shared team templates
+- [Personal templates](/reviews/07-personal-templates) — Your own templates
+- [How templates merge](/reviews/08-how-templates-merge) — Ordering, conflicts, and versioning
+- [Review Steps and Interface](/reviews/09-review-steps-and-interface) — How the merged template appears at runtime
+- [Review Embeds](/reviews/11-review-embeds) — External resources in templates
