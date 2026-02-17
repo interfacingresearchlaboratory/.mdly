@@ -1,29 +1,27 @@
-# IRL Repo Template
+# Editor
 
-A template repository to start any project for IRL. Use this monorepo as the base for new apps and products.
+Shadcn implementation of the [Lexical](https://lexical.dev/) rich text editor in a [Turborepo](https://turborepo.dev/) monorepo. Built from [htmujahid/shadcn-editor](https://github.com/htmujahid/shadcn-editor) · [Demo](https://shadcn-editor.vercel.app)
 
 ## What's inside?
 
-This [Turborepo](https://turborepo.dev/) monorepo includes:
+This monorepo includes:
 
 ### Apps
 
-- **`apps/web`** – Next.js app (App Router), main web interface with Convex and Clerk auth
-
-You can add more apps later (e.g. docs, landing, Electron).
+- **`apps/web`** – Next.js (App Router), main web app, port 3000
+- **`apps/landing`** – Next.js landing, port 3001
+- **`apps/docs`** – Next.js docs (Fumadocs), port 3002
+- **`apps/changelog`** – Next.js changelog, port 3003
 
 ### Packages
 
-- **`@thisweek/ui`** – Shared React component library (Shadcn UI / Radix, Lexical editor, Tailwind)
-- **`@thisweek/backend`** – Convex backend (schema, serverless functions, auth)
-- **`@thisweek/eslint-config`** – Shared ESLint configs (Next.js, React, Turbo)
-- **`@thisweek/typescript-config`** – Shared `tsconfig` bases (Next.js, React library)
+- **`@editor/ui`** – Shared React component library with the Lexical-based rich text editor (shadcn/ui, Radix, Tailwind)
+- **`@editor/eslint-config`** – Shared ESLint configs (Next.js, React, Turbo)
+- **`@editor/typescript-config`** – Shared `tsconfig` bases (Next.js, React library)
 
 Everything is written in [TypeScript](https://www.typescriptlang.org/).
 
 ## Core stack
-
-Derived from the workspace `package.json` files:
 
 | Layer        | Technology |
 | ------------ | ---------- |
@@ -31,17 +29,14 @@ Derived from the workspace `package.json` files:
 | **Package manager** | [pnpm](https://pnpm.io/) 9 |
 | **Monorepo** | [Turborepo](https://turborepo.dev/) 2 |
 | **Frontend** | [Next.js](https://nextjs.org/) 16 (App Router), [React](https://react.dev/) 19 |
-| **Backend**  | [Convex](https://convex.dev/) (real-time DB + serverless functions) |
-| **Auth**     | [Clerk](https://clerk.com/) (in `apps/web`) |
+| **Editor**   | [Lexical](https://lexical.dev/) with [shadcn/ui](https://ui.shadcn.com/) |
 | **Styling**  | [Tailwind CSS](https://tailwindcss.com/) 4, [Shadcn UI](https://ui.shadcn.com/) / Radix UI |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) 5.9 |
 
 ### Development
 
-- [ESLint](https://eslint.org/) (shared config in `@thisweek/eslint-config`)
+- [ESLint](https://eslint.org/) (shared config in `@editor/eslint-config`)
 - [Prettier](https://prettier.io) for formatting
-
-For detailed setup (Convex, env vars, etc.), see [SETUP.md](./SETUP.md).
 
 ## Quick start
 
@@ -50,21 +45,12 @@ For detailed setup (Convex, env vars, etc.), see [SETUP.md](./SETUP.md).
    pnpm install
    ```
 
-2. **Set up Convex** (see [SETUP.md](./SETUP.md))
-   ```bash
-   cd packages/backend
-   npx convex dev
-   ```
-
-3. **Environment** – Create `apps/web/.env.local` with your Convex deployment URL:
-   ```bash
-   NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
-   ```
-
-4. **Run the app**
+2. **Run the app**
    ```bash
    pnpm dev
    ```
+
+   To run a single app: `pnpm dev --filter=web` (or `landing`, `docs`, `changelog`).
 
 ## Build
 
@@ -108,6 +94,6 @@ turbo link
 ## Useful links
 
 - [Turborepo docs](https://turborepo.dev/docs) – tasks, caching, filters, config
-- [Convex docs](https://docs.convex.dev)
+- [shadcn-editor](https://github.com/htmujahid/shadcn-editor) – upstream Lexical + shadcn/ui editor
+- [Lexical](https://lexical.dev/) – framework for building editors
 - [Next.js docs](https://nextjs.org/docs)
-- [SETUP.md](./SETUP.md) – detailed setup for this repo
