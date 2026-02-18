@@ -13,7 +13,7 @@ import type {
   Spread,
 } from "lexical"
 import { $applyNodeReplacement, createEditor, DecoratorNode, ParagraphNode, TextNode } from "lexical"
-import { LinkNode, AutoLinkNode } from "@lexical/link"
+import { CustomLinkNode, CustomAutoLinkNode } from "./link-node"
 import { AutocompleteNode } from "./autocomplete-node"
 import { MentionNode } from "./mention-node"
 import {
@@ -31,8 +31,8 @@ const SmartSectionComponent = React.lazy(
   () => import("../editor-ui/smart-section-component")
 )
 
-// Header editor nodes: only ParagraphNode, TextNode, LinkNode, AutoLinkNode, AutocompleteNode, MentionNode
-const headerNodes = [ParagraphNode, TextNode, LinkNode, AutoLinkNode, AutocompleteNode, MentionNode]
+// Header editor nodes: only ParagraphNode, TextNode, CustomLinkNode, CustomAutoLinkNode, AutocompleteNode, MentionNode
+const headerNodes = [ParagraphNode, TextNode, CustomLinkNode, CustomAutoLinkNode, AutocompleteNode, MentionNode]
 
 // Content editor nodes: full feature set
 const contentNodes = [
@@ -45,8 +45,8 @@ const contentNodes = [
   TableNode,
   TableCellNode,
   TableRowNode,
-  LinkNode,
-  AutoLinkNode,
+  CustomLinkNode,
+  CustomAutoLinkNode,
   ImageNode,
   InlineImageNode,
   AutocompleteNode,

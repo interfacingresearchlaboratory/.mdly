@@ -5,8 +5,8 @@ import {
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { CodeNode, CodeHighlightNode } from "@lexical/code"
-import { LinkNode } from "@lexical/link"
-import { AutoLinkNode } from "@lexical/link"
+import { LinkNode, AutoLinkNode } from "@lexical/link"
+import { CustomLinkNode, CustomAutoLinkNode } from "./nodes/link-node"
 import { ImageNode } from "./nodes/image-node"
 import { InlineImageNode } from "./nodes/inline-image-node"
 import { AutocompleteNode } from "./nodes/autocomplete-node"
@@ -24,8 +24,10 @@ export const nodes = [
   TableNode,
   TableCellNode,
   TableRowNode,
-  LinkNode,
-  AutoLinkNode,
+  CustomLinkNode,
+  { replace: LinkNode, with: (node: LinkNode) => new CustomLinkNode(node.getURL(), { rel: node.getRel(), target: node.getTarget(), title: node.getTitle() }) },
+  CustomAutoLinkNode,
+  { replace: AutoLinkNode, with: (node: AutoLinkNode) => new CustomAutoLinkNode(node.getURL(), { isUnlinked: node.getIsUnlinked(), rel: node.getRel(), target: node.getTarget(), title: node.getTitle() }) },
   ImageNode,
   InlineImageNode,
   AutocompleteNode,

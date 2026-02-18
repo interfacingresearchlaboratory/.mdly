@@ -2,6 +2,9 @@
 
 import { TableOfContents } from "@editor/ui/table-of-contents";
 import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
+import { ThemeToggle } from "../../components/theme-toggle";
+import { Button } from "@editor/ui/button";
+import { Github } from "lucide-react";
 
 const seedContent = {
   root: {
@@ -752,7 +755,20 @@ const seedContent = {
 
 export default function Home() {
   return (
-    <div className="flex gap-8 w-full" suppressHydrationWarning>
+    <div className="flex gap-8 w-full relative" suppressHydrationWarning>
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-1">
+        <ThemeToggle />
+        <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+          <a
+            href="https://github.com/interfacingresearchlaboratory/editor"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub repository"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+        </Button>
+      </div>
       <aside className="hidden md:block w-52 shrink-0 pt-20">
         <div className="sticky top-20">
           <TableOfContents contentSelector="[data-toc-content]" />
@@ -768,6 +784,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <aside className="hidden md:block w-52 shrink-0" aria-hidden="true" />
     </div>
   );
 }
