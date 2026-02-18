@@ -16,6 +16,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { ClickableLinkPlugin } from "./plugins/clickable-link-plugin";
 import {
   CHECK_LIST,
   ELEMENT_TRANSFORMERS,
@@ -182,6 +183,7 @@ export function ToolbarlessEditor({
 
                   <AutoLinkPlugin />
                   <LinkPlugin />
+                  <ClickableLinkPlugin />
                   <HistoryPlugin />
                   <ImagesPlugin />
                   <InlineImagePlugin />

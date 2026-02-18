@@ -8,6 +8,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin"
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin"
 import { AutoLinkPlugin } from "../plugins/auto-link-plugin"
+import { ClickableLinkPlugin } from "../plugins/clickable-link-plugin"
 import { AutocompletePlugin } from "../plugins/autocomplete-plugin"
 import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { SharedAutocompleteContext } from "../context/shared-autocomplete-context"
@@ -114,6 +115,7 @@ export default function SmartSectionComponent({
                 <HistoryPlugin />
                 <LinkPlugin />
                 <AutoLinkPlugin />
+                <ClickableLinkPlugin />
                 <AutocompletePlugin />
                 <MentionsPlugin />
               </MentionsContextProvider>
@@ -149,6 +151,7 @@ export default function SmartSectionComponent({
               <CheckListPlugin />
               <LinkPlugin />
               <AutoLinkPlugin />
+              <ClickableLinkPlugin />
               <ImagesPlugin />
               <InlineImagePlugin />
               <DropInsertImagePlugin />
