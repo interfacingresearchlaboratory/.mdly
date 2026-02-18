@@ -47,6 +47,7 @@ import { SlashCommandMenuPlugin } from "./plugins/slash-command-menu-plugin";
 import { CodeBlockLanguagePlugin } from "./plugins/code-block-language-plugin";
 import { CodeHighlightPlugin } from "./plugins/code-highlight-plugin";
 import { TabIndentationPlugin } from "./plugins/tab-indent-plugin";
+import { ListNumberingPlugin } from "./plugins/list-numbering-plugin";
 
 type Project = {
   _id: string;
@@ -181,6 +182,7 @@ export function ToolbarlessEditor({
                   <CodeHighlightPlugin />
                   <ListPlugin />
                   <CheckListPlugin />
+                  <ListNumberingPlugin />
                   <TabIndentationPlugin />
 
                   <AutoLinkPlugin />
