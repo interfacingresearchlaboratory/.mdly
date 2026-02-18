@@ -2,6 +2,8 @@
 
 Shadcn implementation of the [Lexical](https://lexical.dev/) rich text editor in a [Turborepo](https://turborepo.dev/) monorepo. Inspired by [htmujahid/shadcn-editor](https://github.com/htmujahid/shadcn-editor) · [Demo](https://shadcn-editor.vercel.app)
 
+![Editor preview](assets/editor-preview.png)
+
 ## What's inside?
 
 This monorepo includes:
