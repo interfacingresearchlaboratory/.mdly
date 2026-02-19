@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TableOfContents } from "@editor/ui/table-of-contents";
 import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
 import { ThemeToggle } from "../../components/theme-toggle";
+import { AppFontPicker } from "../../components/app-font-picker";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { TypographyPanel } from "./_components/typography-panel";
 import { Button } from "@editor/ui/button";
@@ -852,6 +853,7 @@ export default function Home() {
   return (
     <div className="flex gap-8 w-full relative" suppressHydrationWarning>
       <div className="fixed top-4 right-4 z-50 flex items-center gap-1">
+        <AppFontPicker />
         <ThemeToggle />
         <Dialog>
           <DialogTrigger asChild>

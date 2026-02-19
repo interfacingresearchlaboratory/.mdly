@@ -8,13 +8,34 @@ import {
   type FontWeightTypographyConfig,
   mergeFontWeightIntoTheme,
 } from "../../lib/typography/font-weight"
+import {
+  type FontFamilyTypographyConfig,
+  mergeFontFamilyIntoTheme,
+} from "../../lib/typography/font-family-slots"
+import {
+  type FontSizeTypographyConfig,
+  mergeFontSizeIntoTheme,
+} from "../../lib/typography/font-size"
 
-export type { LetterSpacingTypographyConfig, FontWeightTypographyConfig }
+export type {
+  LetterSpacingTypographyConfig,
+  FontWeightTypographyConfig,
+  FontFamilyTypographyConfig,
+  FontSizeTypographyConfig,
+}
 
-/** Combined typography config for document settings (letter spacing + font weight). */
+/** Combined typography config for document settings (letter spacing, font weight, font, size). */
 export interface TypographyConfig {
   letterSpacing?: LetterSpacingTypographyConfig
   fontWeight?: FontWeightTypographyConfig
+  /** Font family for the entire document. Applied to editor content wrapper. */
+  fontFamily?: string
+  /** Font size for the entire document (e.g. "16px" or "1rem"). Applied to editor content wrapper. */
+  fontSize?: string
+  /** Per-type font family overrides (Tailwind font class per slot). */
+  fontFamilySlots?: FontFamilyTypographyConfig
+  /** Per-type font size overrides (Tailwind text-* class per slot). */
+  fontSizeSlots?: FontSizeTypographyConfig
 }
 
 import "./editor-theme.css"
@@ -148,7 +169,7 @@ const baseEditorTheme: EditorThemeClasses = {
 export const editorTheme: EditorThemeClasses = baseEditorTheme
 
 /**
- * Returns the editor theme, optionally merged with typography config (letter spacing, then font weight).
+ * Returns the editor theme, optionally merged with typography config.
  * Use this when the editor accepts configurable typography (e.g. from document settings).
  */
 export function getEditorTheme(typography?: TypographyConfig): EditorThemeClasses {
@@ -159,6 +180,12 @@ export function getEditorTheme(typography?: TypographyConfig): EditorThemeClasse
   }
   if (typography.fontWeight && Object.keys(typography.fontWeight).length > 0) {
     theme = mergeFontWeightIntoTheme(theme, typography.fontWeight)
+  }
+  if (typography.fontFamilySlots && Object.keys(typography.fontFamilySlots).length > 0) {
+    theme = mergeFontFamilyIntoTheme(theme, typography.fontFamilySlots)
+  }
+  if (typography.fontSizeSlots && Object.keys(typography.fontSizeSlots).length > 0) {
+    theme = mergeFontSizeIntoTheme(theme, typography.fontSizeSlots)
   }
   return theme
 }

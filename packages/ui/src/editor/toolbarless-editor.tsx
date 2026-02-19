@@ -83,7 +83,7 @@ type ToolbarlessEditorProps = {
   onBlur?: () => void;
   projects?: Project[] | null;
   tasks?: Task[] | null;
-  /** Optional typography overrides (letter spacing, font weight) per block/format (e.g. from document settings). */
+  /** Optional typography overrides (letter spacing, font weight, document font) per block/format (e.g. from document settings). */
   typography?: TypographyConfig;
 };
 
@@ -162,7 +162,22 @@ export function ToolbarlessEditor({
                   <RichTextPlugin
                     contentEditable={
                       <div className="w-full">
-                        <div className="w-full pl-6" ref={onRef}>
+                        <div
+                          className="w-full pl-6"
+                          ref={onRef}
+                          style={
+                            typography?.fontFamily || typography?.fontSize
+                              ? {
+                                  ...(typography.fontFamily && {
+                                    fontFamily: typography.fontFamily,
+                                  }),
+                                  ...(typography.fontSize && {
+                                    fontSize: typography.fontSize,
+                                  }),
+                                }
+                              : undefined
+                          }
+                        >
                           <ContentEditable
                             placeholder={placeholder}
                             className="ContentEditable__root relative block min-h-[160px] w-full overflow-visible focus:outline-none"
