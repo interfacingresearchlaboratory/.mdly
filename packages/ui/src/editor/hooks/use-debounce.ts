@@ -26,16 +26,16 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-function debounce<T extends (...args: any[]) => void>(
-  func: T,
+function debounce<T extends readonly unknown[]>(
+  func: (...args: T) => void,
   wait: number,
   options?: { maxWait?: number }
-): T & { cancel: () => void } {
+): ((...args: T) => void) & { cancel: () => void } {
   let timeoutId: NodeJS.Timeout | undefined
   let maxTimeoutId: NodeJS.Timeout | undefined
   let lastCallTime: number | undefined
   let lastInvokeTime = 0
-  let lastArgs: Parameters<T> | undefined
+  let lastArgs: T | undefined
 
   const cancel = () => {
     if (timeoutId !== undefined) {
@@ -92,8 +92,8 @@ function debounce<T extends (...args: any[]) => void>(
     maxTimeoutId = undefined
   }
 
-  const debounced: T & { cancel: () => void } = (
-    (...args: Parameters<T>): void => {
+  const debounced: ((...args: T) => void) & { cancel: () => void } = (
+    (...args: T): void => {
       const time = Date.now()
       const isInvoking = shouldInvoke(time)
 
@@ -113,29 +113,29 @@ function debounce<T extends (...args: any[]) => void>(
         maxTimeoutId = setTimeout(maxTimerExpired, options.maxWait)
       }
     }
-  ) as T & { cancel: () => void }
+  ) as ((...args: T) => void) & { cancel: () => void }
 
   debounced.cancel = cancel
 
   return debounced
 }
 
-export function useDebounceCallback<T extends (...args: any[]) => void>(
-  fn: T,
+export function useDebounceCallback<T extends readonly unknown[]>(
+  fn: (...args: T) => void,
   ms: number,
   maxWait?: number
-) {
-  const funcRef = useRef<T | null>(null)
+): ((...args: T) => void) & { cancel: () => void } {
+  const funcRef = useRef<((...args: T) => void) | null>(null)
   funcRef.current = fn
 
   return useMemo(
     () =>
       debounce(
-        ((...args: Parameters<T>): void => {
+        (...args: T): void => {
           if (funcRef.current) {
             funcRef.current(...args)
           }
-        }) as T,
+        },
         ms,
         { maxWait }
       ),
