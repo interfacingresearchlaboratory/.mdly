@@ -164,6 +164,8 @@ const baseEditorTheme: EditorThemeClasses = {
   columns: "EditorTheme__columns",
   columnsCell: "EditorTheme__columnsCell",
   columnsDivider: "EditorTheme__columnsDivider",
+  horizontalSectionBlock: "EditorTheme__horizontalSectionBlock",
+  horizontalSectionBlockCard: "EditorTheme__horizontalSectionBlockCard",
   mention: "EditorTheme__mention",
   placeholder: "EditorTheme__placeholder",
 }

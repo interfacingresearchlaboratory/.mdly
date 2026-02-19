@@ -147,3 +147,9 @@
   text-decoration-style: dotted !important;
   text-underline-offset: 2px !important;
 }
+
+.EditorTheme__horizontalSectionBlock {
+  display: block;
+  min-height: 120px;
+  width: 100%;
+}

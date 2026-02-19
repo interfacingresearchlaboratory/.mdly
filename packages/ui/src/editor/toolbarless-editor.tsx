@@ -34,6 +34,7 @@ import { HORIZONTAL_RULE } from "./transformers/markdown-horizontal-rule-transfo
 import { SMART_SECTION } from "./transformers/markdown-smart-section-transformer";
 import { SmartSectionPlugin } from "./plugins/smart-section-plugin";
 import { ColumnsPlugin } from "./plugins/columns-plugin";
+import { HorizontalSectionBlockPlugin } from "./plugins/horizontal-section-block-plugin";
 import { ContentEditable } from "./editor-ui/content-editable";
 import { DraggableBlockPlugin } from "./plugins/draggable-block-plugin";
 import { TableActionMenuPlugin } from "./plugins/table-action-menu-plugin";
@@ -219,6 +220,7 @@ export function ToolbarlessEditor({
                   <DropInsertImagePlugin />
                   <SmartSectionPlugin />
                   <ColumnsPlugin />
+                  <HorizontalSectionBlockPlugin />
                   <SlashCommandMenuPlugin />
                   <MentionsPlugin />
                   <MarkdownShortcutPlugin
