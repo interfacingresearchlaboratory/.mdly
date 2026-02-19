@@ -1,6 +1,6 @@
 import * as React from "react"
 import { JSX, useCallback, useState, useEffect } from "react"
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Trash2 } from "lucide-react"
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary"
 import { LexicalNestedComposer } from "@lexical/react/LexicalNestedComposer"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
@@ -14,7 +14,7 @@ import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { SharedAutocompleteContext } from "../context/shared-autocomplete-context"
 import { MentionsContextProvider, useMentionsContext } from "../context/mentions-context"
 import type { LexicalEditor, NodeKey } from "lexical"
-import { $getNodeByKey } from "lexical"
+import { $createParagraphNode, $getNodeByKey } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { $isSmartSectionNode } from "../nodes/smart-section-node"
 import { ContentEditable } from "./content-editable"
@@ -67,10 +67,21 @@ export default function SmartSectionComponent({
     })
   }, [editor, nodeKey, isExpanded])
 
+  const deleteSection = useCallback(() => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey)
+      if ($isSmartSectionNode(node)) {
+        const paragraph = $createParagraphNode()
+        node.replace(paragraph)
+        paragraph.selectStart()
+      }
+    })
+  }, [editor, nodeKey])
+
   return (
     <div className="EditorTheme__smartSection border border-border rounded-lg mb-4 overflow-hidden">
       {/* Header */}
-      <div className="EditorTheme__smartSectionHeader flex items-center gap-2 px-2 py-1">
+      <div className="EditorTheme__smartSectionHeader group/header flex items-center gap-2 px-2 py-1">
         <div
           className="flex-shrink-0 cursor-pointer hover:bg-muted/50 rounded p-1 transition-colors"
           onClick={toggleExpanded}
@@ -92,7 +103,6 @@ export default function SmartSectionComponent({
         <div
           className="flex-1 min-w-0 cursor-text"
           onClick={(e) => {
-            // Focus the editor when clicking the header area (but not the chevron)
             e.stopPropagation()
             headerEditor.getRootElement()?.focus()
           }}
@@ -104,8 +114,8 @@ export default function SmartSectionComponent({
                   contentEditable={
                     <ContentEditable
                       placeholder="Click to edit header"
-                      className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
-                      placeholderClassName="text-muted-foreground pointer-events-none select-none"
+                      className="EditorTheme__smartSectionHeaderEditable relative outline-none min-h-[1.5rem] cursor-text"
+                      placeholderClassName="text-muted-foreground pointer-events-none select-none absolute top-0 left-0"
                     />
                   }
                   ErrorBoundary={LexicalErrorBoundary}
@@ -120,6 +130,21 @@ export default function SmartSectionComponent({
               </MentionsContextProvider>
             </SharedAutocompleteContext>
           </LexicalNestedComposer>
+        </div>
+        <div
+          className="flex-shrink-0 opacity-0 group-hover/header:opacity-100 transition-opacity cursor-pointer hover:bg-muted/50 rounded p-1"
+          onClick={deleteSection}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault()
+              deleteSection()
+            }
+          }}
+          title="Delete section"
+        >
+          <Trash2 className="w-4 h-4 text-muted-foreground" />
         </div>
       </div>
 
@@ -139,7 +164,7 @@ export default function SmartSectionComponent({
                   <ContentEditable
                     placeholder="Type here..."
                     className="EditorTheme__smartSectionContentEditable relative outline-none min-h-[100px] w-full"
-                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-4 left-4 text-sm select-none"
+                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 leading-7 select-none"
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}
