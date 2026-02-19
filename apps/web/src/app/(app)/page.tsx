@@ -5,14 +5,8 @@ import { TableOfContents } from "@editor/ui/table-of-contents";
 import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
 import { ThemeToggle } from "../../components/theme-toggle";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
-import { LetterSpacingPanel } from "./_components/letter-spacing-panel";
-import { FontWeightPanel } from "./_components/font-weight-panel";
+import { TypographyPanel } from "./_components/typography-panel";
 import { Button } from "@editor/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@editor/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@editor/ui/dialog";
-import { Github, ChevronDown, Type } from "lucide-react";
+import { Github, Type } from "lucide-react";
 import type { TypographyConfig } from "@editor/ui/editor/themes/editor-theme";
 
 type EditorContent = Parameters<
@@ -874,42 +868,7 @@ export default function Home() {
             <DialogHeader>
               <DialogTitle>Typography</DialogTitle>
             </DialogHeader>
-            <Collapsible defaultOpen className="w-full">
-              <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-left text-sm font-medium text-foreground hover:underline [&[data-state=open]>svg]:rotate-180">
-                Letter spacing
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <LetterSpacingPanel
-                  value={typography?.letterSpacing}
-                  onChange={(letterSpacing) =>
-                    setTypography((prev) => ({
-                      ...(prev ?? {}),
-                      letterSpacing,
-                    }))
-                  }
-                  showTitle={false}
-                />
-              </CollapsibleContent>
-            </Collapsible>
-            <Collapsible className="w-full">
-              <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-left text-sm font-medium text-foreground hover:underline [&[data-state=open]>svg]:rotate-180">
-                Font weight
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <FontWeightPanel
-                  value={typography?.fontWeight}
-                  onChange={(fontWeight) =>
-                    setTypography((prev) => ({
-                      ...(prev ?? {}),
-                      fontWeight,
-                    }))
-                  }
-                  showTitle={false}
-                />
-              </CollapsibleContent>
-            </Collapsible>
+            <TypographyPanel value={typography} onChange={setTypography} />
           </DialogContent>
         </Dialog>
         <Button variant="ghost" size="icon" className="h-8 w-8" asChild>

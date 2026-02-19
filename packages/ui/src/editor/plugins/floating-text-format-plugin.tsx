@@ -34,11 +34,13 @@ import {
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
+  Space,
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
   SquarePen,
   UnderlineIcon,
+  Weight,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
@@ -66,12 +68,10 @@ import { LETTER_SPACING_INLINE_PRESETS } from "../../lib/typography/letter-spaci
 import { FONT_WEIGHT_INLINE_PRESETS } from "../../lib/typography/font-weight";
 import { cn } from "../../lib/utils";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../popover";
 
 function FloatingTextFormat({
   editor,
@@ -362,80 +362,102 @@ function FloatingTextFormat({
             >
               <StrikethroughIcon className="h-4 w-4" />
             </Button>
-            <Select
-              value={
-                LETTER_SPACING_INLINE_PRESETS.some((p) => p.value === letterSpacingValue)
-                  ? letterSpacingValue === ""
-                    ? "__default__"
-                    : letterSpacingValue
-                  : "__default__"
-              }
-              onValueChange={(value) => {
-                const cssValue = value === "__default__" ? "" : value;
-                editor.update(() => {
-                  const selection = $getSelection();
-                  if (selection !== null) {
-                    $patchStyleText(selection, {
-                      "letter-spacing": cssValue,
-                    });
-                  }
-                });
-              }}
-            >
-              <SelectTrigger
-                className="h-8 w-[100px] border-input text-xs"
-                aria-label="Letter spacing"
-              >
-                <SelectValue placeholder="Spacing" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__default__">Default</SelectItem>
-                {LETTER_SPACING_INLINE_PRESETS.filter((p) => p.value !== "").map(
-                  ({ value, label }) => (
-                    <SelectItem key={value} value={value}>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    letterSpacingValue !== "" &&
+                      letterSpacingValue !== undefined &&
+                      "bg-accent"
+                  )}
+                  aria-label="Letter spacing"
+                >
+                  <Space className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <div className="grid gap-0.5">
+                  {LETTER_SPACING_INLINE_PRESETS.map(({ value, label }) => (
+                    <Button
+                      key={value || "__default__"}
+                      type="button"
+                      variant={
+                        (value === "" ? !letterSpacingValue : letterSpacingValue === value)
+                          ? "secondary"
+                          : "ghost"
+                      }
+                      size="sm"
+                      className="h-8 justify-start text-xs"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        const cssValue = value === "" ? "" : value;
+                        editor.update(() => {
+                          const selection = $getSelection();
+                          if (selection !== null) {
+                            $patchStyleText(selection, {
+                              "letter-spacing": cssValue,
+                            });
+                          }
+                        });
+                      }}
+                    >
                       {label}
-                    </SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
-            <Select
-              value={
-                FONT_WEIGHT_INLINE_PRESETS.some((p) => p.value === fontWeightValue)
-                  ? fontWeightValue === ""
-                    ? "__default__"
-                    : fontWeightValue
-                  : "__default__"
-              }
-              onValueChange={(value) => {
-                const cssValue = value === "__default__" ? "" : value;
-                editor.update(() => {
-                  const selection = $getSelection();
-                  if (selection !== null) {
-                    $patchStyleText(selection, {
-                      "font-weight": cssValue,
-                    });
-                  }
-                });
-              }}
-            >
-              <SelectTrigger
-                className="h-8 w-[100px] border-input text-xs"
-                aria-label="Font weight"
-              >
-                <SelectValue placeholder="Weight" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__default__">Default</SelectItem>
-                {FONT_WEIGHT_INLINE_PRESETS.filter((p) => p.value !== "").map(
-                  ({ value, label }) => (
-                    <SelectItem key={value} value={value}>
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    fontWeightValue !== "" &&
+                      fontWeightValue !== undefined &&
+                      "bg-accent"
+                  )}
+                  aria-label="Font weight"
+                >
+                  <Weight className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <div className="grid gap-0.5">
+                  {FONT_WEIGHT_INLINE_PRESETS.map(({ value, label }) => (
+                    <Button
+                      key={value || "__default__"}
+                      type="button"
+                      variant={
+                        (value === "" ? !fontWeightValue : fontWeightValue === value)
+                          ? "secondary"
+                          : "ghost"
+                      }
+                      size="sm"
+                      className="h-8 justify-start text-xs"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        const cssValue = value === "" ? "" : value;
+                        editor.update(() => {
+                          const selection = $getSelection();
+                          if (selection !== null) {
+                            $patchStyleText(selection, {
+                              "font-weight": cssValue,
+                            });
+                          }
+                        });
+                      }}
+                    >
                       {label}
-                    </SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
