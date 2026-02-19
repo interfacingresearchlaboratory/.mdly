@@ -9,6 +9,7 @@ import {
 } from "@editor/ui/select";
 import type { LetterSpacingTypographyConfig } from "@editor/ui/editor/themes/editor-theme";
 import { LETTER_SPACING_PRESETS } from "@editor/ui/lib/typography/letter-spacing";
+import { type SlotId, TYPOGRAPHY_SLOTS } from "./typography-slots";
 
 const DEFAULT_VALUE = "__default__";
 
@@ -21,37 +22,6 @@ const PRESET_OPTIONS = [
   { value: "wider", label: "Wider" },
   { value: "widest", label: "Widest" },
 ] as const;
-
-type SlotId =
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "h6"
-  | "paragraph"
-  | "quote"
-  | "code"
-  | "listitem"
-  | "tableCell"
-  | "tableCellHeader"
-  | "codeHighlight";
-
-const SLOTS: { id: SlotId; label: string }[] = [
-  { id: "h1", label: "Heading 1" },
-  { id: "h2", label: "Heading 2" },
-  { id: "h3", label: "Heading 3" },
-  { id: "h4", label: "Heading 4" },
-  { id: "h5", label: "Heading 5" },
-  { id: "h6", label: "Heading 6" },
-  { id: "paragraph", label: "Paragraph" },
-  { id: "quote", label: "Quote" },
-  { id: "code", label: "Code block" },
-  { id: "listitem", label: "List item" },
-  { id: "tableCell", label: "Table cell" },
-  { id: "tableCellHeader", label: "Table header" },
-  { id: "codeHighlight", label: "Code highlight" },
-];
 
 function configToPresetKey(config: LetterSpacingTypographyConfig | undefined): Record<SlotId, string> {
   const out = {} as Record<SlotId, string>;
@@ -144,7 +114,7 @@ export function LetterSpacingPanel({
         <h3 className="text-sm font-medium text-foreground">Letter spacing</h3>
       )}
       <div className="space-y-2">
-        {SLOTS.map(({ id, label }) => (
+        {TYPOGRAPHY_SLOTS.map(({ id, label }) => (
           <div key={id} className="flex flex-col gap-1">
             <label htmlFor={`letter-spacing-${id}`} className="text-xs text-muted-foreground">
               {label}

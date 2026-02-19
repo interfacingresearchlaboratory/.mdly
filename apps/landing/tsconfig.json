@@ -1,59 +1,14 @@
 {
+  "extends": "@editor/typescript-config/nextjs.json",
   "compilerOptions": {
+    "jsx": "preserve",
     "baseUrl": ".",
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@editor/ui/*": [
-        "../../packages/ui/src/*"
-      ],
-      "@editor/ui/utils": [
-        "../../packages/ui/src/lib/utils.ts"
-      ],
-      "fumadocs-mdx:collections/server": [
-        "./.source/index"
-      ],
-      "@changelog/source": [
-        "../changelog/.source/index"
-      ],
-      "mdx-components": [
-        "./mdx-components"
-      ]
-    }
+      "@/*": ["./src/*"],
+      "@editor/ui/*": ["../../packages/ui/src/*"]
+    },
+    "plugins": [{ "name": "next" }]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    ".source/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

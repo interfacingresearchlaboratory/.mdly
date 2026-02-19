@@ -1,12 +1,12 @@
 import * as React from "react"
 import { createContext, useContext, ReactNode } from "react"
 
-type Project = {
+export type Project = {
   _id: string
   title: string
 }
 
-type Task = {
+export type Task = {
   _id: string
   title: string
 }

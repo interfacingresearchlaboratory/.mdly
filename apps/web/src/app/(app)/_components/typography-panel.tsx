@@ -18,6 +18,7 @@ import { LETTER_SPACING_PRESETS } from "@editor/ui/lib/typography/letter-spacing
 import { FONT_WEIGHT_PRESETS } from "@editor/ui/lib/typography/font-weight";
 import { FONT_SIZE_PRESETS } from "@editor/ui/lib/typography/font-size";
 import { useCustomFonts } from "@/components/custom-fonts-provider";
+import { type SlotId, TYPOGRAPHY_SLOTS } from "./typography-slots";
 
 const DEFAULT_VALUE = "__default__";
 
@@ -75,36 +76,6 @@ const FONT_SIZE_SLOT_OPTIONS = [
   { value: "3xl", label: "3XL" },
 ] as const;
 
-type SlotId =
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "h6"
-  | "paragraph"
-  | "quote"
-  | "code"
-  | "listitem"
-  | "tableCell"
-  | "tableCellHeader"
-  | "codeHighlight";
-
-const SLOTS: { id: SlotId; label: string }[] = [
-  { id: "h1", label: "Heading 1" },
-  { id: "h2", label: "Heading 2" },
-  { id: "h3", label: "Heading 3" },
-  { id: "h4", label: "Heading 4" },
-  { id: "h5", label: "Heading 5" },
-  { id: "h6", label: "Heading 6" },
-  { id: "paragraph", label: "Paragraph" },
-  { id: "quote", label: "Quote" },
-  { id: "code", label: "Code block" },
-  { id: "listitem", label: "List item" },
-  { id: "tableCell", label: "Table cell" },
-  { id: "tableCellHeader", label: "Table header" },
-  { id: "codeHighlight", label: "Code highlight" },
-];
 
 function letterSpacingPresetKeyForSlot(
   config: LetterSpacingTypographyConfig | undefined,
@@ -396,7 +367,7 @@ export function TypographyPanel({ value, onChange }: TypographyPanelProps) {
           </tr>
         </thead>
         <tbody>
-          {SLOTS.map(({ id, label }) => {
+          {TYPOGRAPHY_SLOTS.map(({ id, label }) => {
             const slotFontValue = fontFamilyForSlot(value?.fontFamilySlots, id);
             const fontSelectValue =
               fontSlotOptions.some((o) => o.value === slotFontValue)

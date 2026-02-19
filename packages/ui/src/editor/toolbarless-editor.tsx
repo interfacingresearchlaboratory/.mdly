@@ -46,7 +46,7 @@ import { InlineImagePlugin } from "./plugins/inline-image-plugin";
 import { AutoLinkPlugin } from "./plugins/auto-link-plugin";
 import { DropInsertImagePlugin } from "./plugins/drop-insert-image-plugin";
 import { FloatingLinkContext } from "./context/floating-link-context";
-import { MentionsContextProvider } from "./context/mentions-context";
+import { MentionsContextProvider, type Project, type Task } from "./context/mentions-context";
 import { MentionsPlugin } from "./plugins/mentions-plugin";
 import { SlashCommandMenuPlugin } from "./plugins/slash-command-menu-plugin";
 import { CodeBlockLanguagePlugin } from "./plugins/code-block-language-plugin";
@@ -54,16 +54,6 @@ import { CodeHighlightPlugin } from "./plugins/code-highlight-plugin";
 import { TabIndentationPlugin } from "./plugins/tab-indent-plugin";
 import { ListNumberingPlugin } from "./plugins/list-numbering-plugin";
 import { PlaceholderFormatPlugin } from "./plugins/placeholder-format-plugin";
-
-type Project = {
-  _id: string;
-  title: string;
-};
-
-type Task = {
-  _id: string;
-  title: string;
-};
 
 /** Accepts Lexical state or a looser JSON shape (e.g. from API); validated at runtime. */
 type InitialContentInput = SerializedEditorState | { root?: unknown };
