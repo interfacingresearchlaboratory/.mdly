@@ -49,7 +49,7 @@ import {
   $isRangeSelection,
   $isTextNode,
 } from "lexical"
-import { ChevronDownIcon, PaintBucketIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 import { createPortal } from "react-dom"
 
 import { useEditorModal } from "../editor-hooks/use-modal"
@@ -147,10 +147,10 @@ function TableActionMenu({
     columns: 1,
     rows: 1,
   })
-  const [modal, showModal] = useEditorModal()
+  const [modal, _showModal] = useEditorModal()
   const [canMergeCells, setCanMergeCells] = useState(false)
   const [canUnmergeCell, setCanUnmergeCell] = useState(false)
-  const [backgroundColor, setBackgroundColor] = useState(
+  const [_backgroundColor, setBackgroundColor] = useState(
     () => currentCellBackgroundColor(editor) || ""
   )
 
@@ -449,7 +449,7 @@ function TableActionMenu({
     })
   }, [editor, tableCellNode, clearTableSelection, onClose])
 
-  const handleCellBackgroundColor = useCallback(
+  const _handleCellBackgroundColor = useCallback(
     (value: string) => {
       editor.update(() => {
         const selection = $getSelection()

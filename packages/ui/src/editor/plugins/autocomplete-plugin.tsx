@@ -150,7 +150,7 @@ export function AutocompletePlugin(): JSX.Element | null {
               updateAsyncSuggestion(searchPromise, newSuggestion)
             }
           })
-          .catch((e) => {
+          .catch(() => {
             // console.error(e)
           })
         lastMatch = match

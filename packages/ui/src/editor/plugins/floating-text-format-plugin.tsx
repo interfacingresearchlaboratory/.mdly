@@ -80,7 +80,7 @@ function FloatingTextFormat({
   isBold,
   isItalic,
   isUnderline,
-  isCode,
+  isCode: _isCode,
   isStrikethrough,
   isPlaceholder,
   isSubscript,
@@ -135,7 +135,7 @@ function FloatingTextFormat({
       }
     }
   }
-  function mouseUpListener(e: MouseEvent) {
+  function mouseUpListener(_e: MouseEvent) {
     if (popupCharStylesEditorRef?.current) {
       if (popupCharStylesEditorRef.current.style.pointerEvents !== "auto") {
         popupCharStylesEditorRef.current.style.pointerEvents = "auto";

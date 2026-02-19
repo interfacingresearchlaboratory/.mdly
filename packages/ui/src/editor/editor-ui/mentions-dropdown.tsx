@@ -24,7 +24,7 @@ export function MentionsDropdown({
   items,
   selectedIndex,
   onSelect,
-  onClose,
+  onClose: _onClose,
 }: MentionsDropdownProps): JSX.Element | null {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const selectedRef = useRef<HTMLButtonElement>(null)
@@ -76,7 +76,7 @@ export function MentionsDropdown({
           dropdownRef.current.style.top = `${rangeRect.bottom + 4}px`
           dropdownRef.current.style.left = `${rangeRect.left}px`
           dropdownRef.current.style.zIndex = "50"
-        } catch (e) {
+        } catch {
           // If positioning fails, silently continue
         }
       }

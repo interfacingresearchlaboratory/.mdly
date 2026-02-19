@@ -2,9 +2,10 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "This Week",
-    short_name: "This Week",
-    description: "This Week",
+    name: "Mdly",
+    short_name: "Mdly",
+    description:
+      "Open-source rich text editor built on Lexical and shadcn/ui. Distraction-free writing with typography control, slash commands, tables, images, and more.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

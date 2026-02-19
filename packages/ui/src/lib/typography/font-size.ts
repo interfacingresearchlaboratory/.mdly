@@ -21,7 +21,7 @@ export interface FontSizeTypographyConfig {
   codeHighlight?: string
 }
 
-function appendClass(base: string, extra: string): string {
+function _appendClass(base: string, extra: string): string {
   if (!extra.trim()) return base
   return base ? `${base} ${extra}` : extra
 }

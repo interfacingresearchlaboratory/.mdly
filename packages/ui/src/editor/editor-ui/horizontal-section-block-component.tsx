@@ -15,7 +15,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin"
 import { AutoLinkPlugin } from "../plugins/auto-link-plugin"
 import { ClickableLinkPlugin } from "../plugins/clickable-link-plugin"
-import type { LexicalEditor, NodeKey } from "lexical"
+import type { NodeKey } from "lexical"
 import { $getNodeByKey } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import {
@@ -275,11 +275,14 @@ export default function HorizontalSectionBlockComponent({
   const dragStartY = useRef(0)
   const dragStartHeight = useRef(0)
 
+  const cardHeightsKey = cards.map((c) => c.minHeightPx).join(",")
   useEffect(() => {
     setLocalHeights(
       cards.map((c) => c.minHeightPx ?? MIN_CARD_HEIGHT_PX)
     )
-  }, [cards.length, cards.map((c) => c.minHeightPx).join(",")])
+    // cards identity changes often; cardHeightsKey + cards.length avoid unnecessary runs
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards.length, cardHeightsKey])
 
   const updateCardHeight = useCallback(
     (index: number, heightPx: number) => {

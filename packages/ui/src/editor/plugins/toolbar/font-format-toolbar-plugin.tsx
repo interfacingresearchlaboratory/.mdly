@@ -36,7 +36,7 @@ export function FontFormatToolbarPlugin({
 
   const $updateToolbar = (selection: BaseSelection) => {
     if ($isRangeSelection(selection) || $isTableSelection(selection)) {
-      // @ts-ignore
+      // @ts-expect-error -- hasFormat expects full TextFormatType union; format is narrowed
       setIsSelected(selection.hasFormat(format as TextFormatType))
     }
   }

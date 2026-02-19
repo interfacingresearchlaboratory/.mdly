@@ -15,13 +15,14 @@ type PublishFn = (newSuggestion: Suggestion) => void
 type ContextShape = [SubscribeFn, PublishFn]
 type HookShape = [suggestion: Suggestion, setSuggestion: PublishFn]
 
+const noopUnsubscribe = () => () => {}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- default no-op
+const noopPublish = (_: Suggestion) => {
+  return
+}
 const Context: React.Context<ContextShape> = createContext([
-  (_cb) => () => {
-    return
-  },
-  (_newSuggestion: Suggestion) => {
-    return
-  },
+  noopUnsubscribe as SubscribeFn,
+  noopPublish as PublishFn,
 ])
 
 export function SharedAutocompleteContext({

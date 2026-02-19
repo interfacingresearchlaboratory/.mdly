@@ -1,12 +1,7 @@
 import * as React from "react"
 import { JSX, Suspense, useCallback, useEffect, useRef, useState } from "react"
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin"
 import { useCollaborationContext } from "../context/collaboration-context"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary"
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
-import { LexicalNestedComposer } from "@lexical/react/LexicalNestedComposer"
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { useLexicalEditable } from "@lexical/react/useLexicalEditable"
 import { useLexicalNodeSelection } from "@lexical/react/useLexicalNodeSelection"
 import { mergeRegister } from "@lexical/utils"
@@ -30,13 +25,9 @@ import {
   KEY_DELETE_COMMAND,
   KEY_ENTER_COMMAND,
   KEY_ESCAPE_COMMAND,
-  ParagraphNode,
-  RootNode,
   SELECTION_CHANGE_COMMAND,
-  TextNode,
 } from "lexical"
 
-import { ContentEditable } from "./content-editable"
 import { ImageResizer } from "./image-resizer"
 import { $isImageNode } from "../nodes/image-node"
 
@@ -122,7 +113,7 @@ export default function ImageComponent({
   resizable,
   showCaption,
   caption,
-  captionsEnabled,
+  captionsEnabled: _captionsEnabled,
 }: {
   altText: string
   caption: LexicalEditor
@@ -140,7 +131,7 @@ export default function ImageComponent({
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey)
   const [isResizing, setIsResizing] = useState<boolean>(false)
-  const { isCollabActive } = useCollaborationContext()
+  useCollaborationContext()
   const [editor] = useLexicalComposerContext()
   const [selection, setSelection] = useState<BaseSelection | null>(null)
   const activeEditorRef = useRef<LexicalEditor | null>(null)

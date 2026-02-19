@@ -14,7 +14,6 @@ import {
   KEY_ENTER_COMMAND,
   $getSelection,
   $isRangeSelection,
-  $isTextNode,
   $isParagraphNode,
   $getRoot,
   $getNodeByKey,
@@ -103,7 +102,7 @@ export function SmartSectionPlugin(): JSX.Element | null {
         COMMAND_PRIORITY_LOW
       ),
       // Listen for updates to detect and transform >>section pattern
-      editor.registerUpdateListener(({ editorState, prevEditorState }) => {
+      editor.registerUpdateListener(({ editorState }) => {
         let paragraphKeyToTransform: string | null = null;
 
         editorState.read(() => {

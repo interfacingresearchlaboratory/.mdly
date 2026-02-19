@@ -85,18 +85,18 @@ export class MentionNode extends DecoratorNode<JSX.Element> {
   }
 
   updateDOM(
-    prevNode: unknown,
-    dom: HTMLElement,
-    config: EditorConfig
+    _prevNode: unknown,
+    _dom: HTMLElement,
+    _config: EditorConfig
   ): boolean {
     return false
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(_config: EditorConfig): HTMLElement {
     return document.createElement("span")
   }
 
-  decorate(editor: LexicalEditor, config: EditorConfig): JSX.Element {
+  decorate(_editor: LexicalEditor, config: EditorConfig): JSX.Element {
     return (
       <MentionComponent
         id={this.__id}

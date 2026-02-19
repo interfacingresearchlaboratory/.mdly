@@ -2,7 +2,6 @@ import * as React from "react"
 import { JSX, Suspense } from "react"
 import type {
   DOMConversionMap,
-  DOMConversionOutput,
   DOMExportOutput,
   EditorConfig,
   LexicalEditor,

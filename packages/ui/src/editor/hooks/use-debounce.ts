@@ -26,7 +26,7 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-function debounce<T extends (...args: any[]) => void>(
+function debounce<T extends (...args: unknown[]) => void>(
   func: T,
   wait: number,
   options?: { maxWait?: number }
@@ -118,7 +118,7 @@ function debounce<T extends (...args: any[]) => void>(
   return debounced
 }
 
-export function useDebounceCallback<T extends (...args: any[]) => void>(
+export function useDebounceCallback<T extends (...args: unknown[]) => void>(
   fn: T,
   ms: number,
   maxWait?: number

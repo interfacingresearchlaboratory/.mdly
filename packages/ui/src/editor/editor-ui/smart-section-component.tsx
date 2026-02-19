@@ -16,10 +16,7 @@ import { MentionsContextProvider, useMentionsContext } from "../context/mentions
 import type { LexicalEditor, NodeKey } from "lexical"
 import { $getNodeByKey } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import {
-  $isSmartSectionNode,
-  SmartSectionNode,
-} from "../nodes/smart-section-node"
+import { $isSmartSectionNode } from "../nodes/smart-section-node"
 import { ContentEditable } from "./content-editable"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
