@@ -139,6 +139,7 @@ export function ToolbarlessEditor({
       ? { editorState: JSON.stringify(initialContent) }
       : {}),
   };
+  
 
   return (
     <div className={className}>
@@ -215,6 +216,7 @@ export function ToolbarlessEditor({
                 ignoreSelectionChange={true}
                 onChange={(editorState: EditorState) => {
                   const next = editorState.toJSON();
+                  console.log("editor state", next);
                   onChange?.(next);
                 }}
               />
