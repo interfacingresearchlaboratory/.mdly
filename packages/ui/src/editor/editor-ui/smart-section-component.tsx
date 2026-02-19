@@ -60,12 +60,12 @@ export default function SmartSectionComponent({
     editor.update(() => {
       const node = $getNodeByKey(nodeKey)
       if ($isSmartSectionNode(node)) {
-        const newExpanded = !isExpanded
+        const newExpanded = !node.getIsExpanded()
         node.setIsExpanded(newExpanded)
         setIsExpanded(newExpanded)
       }
     })
-  }, [editor, nodeKey, isExpanded])
+  }, [editor, nodeKey])
 
   const deleteSection = useCallback(() => {
     editor.update(() => {
@@ -84,7 +84,11 @@ export default function SmartSectionComponent({
       <div className="EditorTheme__smartSectionHeader group/header flex items-center gap-2 px-2 py-1">
         <div
           className="flex-shrink-0 cursor-pointer hover:bg-muted/50 rounded p-1 transition-colors"
-          onClick={toggleExpanded}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleExpanded()
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -113,9 +117,8 @@ export default function SmartSectionComponent({
                 <RichTextPlugin
                   contentEditable={
                     <ContentEditable
-                      placeholder="Click to edit header"
-                      className="EditorTheme__smartSectionHeaderEditable relative outline-none min-h-[1.5rem] cursor-text"
-                      placeholderClassName="text-muted-foreground pointer-events-none select-none absolute top-0 left-0"
+                      placeholder=""
+                      className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
                     />
                   }
                   ErrorBoundary={LexicalErrorBoundary}
@@ -162,9 +165,8 @@ export default function SmartSectionComponent({
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable
-                    placeholder="Type here..."
-                    className="EditorTheme__smartSectionContentEditable relative outline-none min-h-[100px] w-full px-4 py-3"
-                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 px-4 py-3 leading-7 select-none"
+                    placeholder=""
+                    className="EditorTheme__smartSectionContentEditable outline-none min-h-[100px] w-full px-4 py-3"
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}
