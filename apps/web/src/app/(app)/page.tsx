@@ -8,7 +8,7 @@ import { AppFontPicker } from "../../components/app-font-picker";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { TypographyDialog } from "./_components/typography-dialog";
 import { Button } from "@editor/ui/button";
-import { Github } from "lucide-react";
+import { Coffee, Github } from "lucide-react";
 import type { TypographyConfig } from "@editor/ui/editor/themes/editor-theme";
 import { seedContent } from "@/seed/editor-seed";
 
@@ -46,6 +46,16 @@ export default function Home() {
             aria-label="GitHub repository"
           >
             <Github className="h-4 w-4" />
+          </a>
+        </Button>
+        <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+          <a
+            href="https://buymeacoffee.com/irldevs"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buy Me a Coffee"
+          >
+            <Coffee className="h-4 w-4" />
           </a>
         </Button>
       </div>

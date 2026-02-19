@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
 
+**[Support the project](https://buymeacoffee.com/irldevs)**
+
 ## Getting Started
 
 First, run the development server:

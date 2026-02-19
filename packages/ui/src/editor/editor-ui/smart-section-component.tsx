@@ -157,14 +157,14 @@ export default function SmartSectionComponent({
             e.stopPropagation()
           }}
         >
-          <div className="px-4 py-3 border-t border-border relative">
+          <div className="border-t border-border">
             <LexicalNestedComposer initialEditor={contentEditor}>
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable
                     placeholder="Type here..."
-                    className="EditorTheme__smartSectionContentEditable relative outline-none min-h-[100px] w-full"
-                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 leading-7 select-none"
+                    className="EditorTheme__smartSectionContentEditable relative outline-none min-h-[100px] w-full px-4 py-3"
+                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 px-4 py-3 leading-7 select-none"
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}

@@ -2,7 +2,7 @@
 
 An open-source rich text editor built on [Lexical](https://lexical.dev/) and [shadcn/ui](https://ui.shadcn.com/). Distraction-free writing with full typography control, slash commands, tables, images, and more.
 
-**[Live demo](https://mdly.interfacingresearchlaboratory.com)**
+**[Live demo](https://mdly.interfacingresearchlaboratory.com)** · **[Buy Me a Coffee](https://buymeacoffee.com/irldevs)**
 
 Inspired by [htmujahid/shadcn-editor](https://github.com/htmujahid/shadcn-editor) ([Demo](https://shadcn-editor.vercel.app/)), Mdly extends the original with additional editor plugins, richer block types, and deeper typography and formatting controls. Use it as a starting point, reference, or fork it and make it your own.
 
