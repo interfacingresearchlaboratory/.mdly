@@ -3,6 +3,7 @@
 import { TableOfContents } from "@editor/ui/table-of-contents";
 import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
 import { ThemeToggle } from "../../components/theme-toggle";
+import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { Button } from "@editor/ui/button";
 import { Github } from "lucide-react";
 
@@ -853,6 +854,7 @@ export default function Home() {
         </div>
       </div>
       <aside className="hidden md:block w-52 shrink-0" aria-hidden="true" />
+      <ShortcutsDirectory />
     </div>
   );
 }
