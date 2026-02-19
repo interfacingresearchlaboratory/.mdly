@@ -161,6 +161,9 @@ const baseEditorTheme: EditorThemeClasses = {
   smartSection: "EditorTheme__smartSection",
   smartSectionHeader: "EditorTheme__smartSectionHeader",
   smartSectionContent: "EditorTheme__smartSectionContent",
+  columns: "EditorTheme__columns",
+  columnsCell: "EditorTheme__columnsCell",
+  columnsDivider: "EditorTheme__columnsDivider",
   mention: "EditorTheme__mention",
   placeholder: "EditorTheme__placeholder",
 }

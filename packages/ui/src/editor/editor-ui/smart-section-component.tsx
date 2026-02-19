@@ -36,6 +36,8 @@ import { ImagesPlugin } from "../plugins/images-plugin"
 import { InlineImagePlugin } from "../plugins/inline-image-plugin"
 import { DropInsertImagePlugin } from "../plugins/drop-insert-image-plugin"
 import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transformer"
+import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
+import { ColumnsPlugin } from "../plugins/columns-plugin"
 
 export default function SmartSectionComponent({
   headerEditor,
@@ -165,6 +167,8 @@ export default function SmartSectionComponent({
                   ...TEXT_MATCH_TRANSFORMERS,
                 ]}
               />
+              <SlashCommandMenuPlugin />
+              <ColumnsPlugin />
             </LexicalNestedComposer>
           </div>
         </div>

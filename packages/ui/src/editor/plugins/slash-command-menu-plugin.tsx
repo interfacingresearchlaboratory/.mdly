@@ -24,6 +24,7 @@ import {
 } from "lexical"
 import { createPortal } from "react-dom"
 import {
+  ColumnsIcon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
@@ -34,6 +35,7 @@ import {
 } from "lucide-react"
 
 import { Command, CommandItem, CommandList } from "../../command"
+import { INSERT_COLUMNS_COMMAND } from "./columns-plugin"
 
 type SlashCommandKey =
   | "table"
@@ -43,6 +45,9 @@ type SlashCommandKey =
   | "bulleted-list"
   | "numbered-list"
   | "quote"
+  | "columns-2"
+  | "columns-3"
+  | "columns-4"
 
 const SLASH_COMMANDS: ReadonlyArray<{
   key: SlashCommandKey
@@ -64,6 +69,21 @@ const SLASH_COMMANDS: ReadonlyArray<{
     icon: <ListOrderedIcon className="size-4" />,
   },
   { key: "quote", label: "Quote", icon: <QuoteIcon className="size-4" /> },
+  {
+    key: "columns-2",
+    label: "Columns 2",
+    icon: <ColumnsIcon className="size-4" />,
+  },
+  {
+    key: "columns-3",
+    label: "Columns 3",
+    icon: <ColumnsIcon className="size-4" />,
+  },
+  {
+    key: "columns-4",
+    label: "Columns 4",
+    icon: <ColumnsIcon className="size-4" />,
+  },
 ]
 
 class SlashCommandOption extends MenuOption {
@@ -143,6 +163,12 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
           editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
         } else if (key === "quote") {
           $setBlocksType(selection, () => $createQuoteNode())
+        } else if (key === "columns-2") {
+          editor.dispatchCommand(INSERT_COLUMNS_COMMAND, { columnCount: 2 })
+        } else if (key === "columns-3") {
+          editor.dispatchCommand(INSERT_COLUMNS_COMMAND, { columnCount: 3 })
+        } else if (key === "columns-4") {
+          editor.dispatchCommand(INSERT_COLUMNS_COMMAND, { columnCount: 4 })
         }
         closeMenu()
       })
@@ -160,11 +186,18 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
       ) => {
-        if (!anchorElementRef.current || options.length === 0) {
+        if (options.length === 0) {
+          return null
+        }
+        const portalTarget =
+          typeof document !== "undefined"
+            ? document.body
+            : anchorElementRef.current
+        if (!portalTarget) {
           return null
         }
         return createPortal(
-          <div className="fixed z-50 w-56 rounded-md border border-border bg-popover shadow-md overflow-auto max-h-80">
+          <div className="fixed left-1/2 top-[20%] z-100 w-56 -translate-x-1/2 rounded-md border border-border bg-popover shadow-md overflow-auto max-h-80">
             <Command
               onKeyDown={(e) => {
                 if (e.key === "ArrowUp") {
@@ -203,7 +236,7 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
               </CommandList>
             </Command>
           </div>,
-          anchorElementRef.current
+          portalTarget
         )
       }}
     />

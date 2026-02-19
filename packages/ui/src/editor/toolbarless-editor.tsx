@@ -33,6 +33,7 @@ import { nodes } from "./nodes";
 import { HORIZONTAL_RULE } from "./transformers/markdown-horizontal-rule-transformer";
 import { SMART_SECTION } from "./transformers/markdown-smart-section-transformer";
 import { SmartSectionPlugin } from "./plugins/smart-section-plugin";
+import { ColumnsPlugin } from "./plugins/columns-plugin";
 import { ContentEditable } from "./editor-ui/content-editable";
 import { DraggableBlockPlugin } from "./plugins/draggable-block-plugin";
 import { TableActionMenuPlugin } from "./plugins/table-action-menu-plugin";
@@ -217,6 +218,7 @@ export function ToolbarlessEditor({
                   <InlineImagePlugin />
                   <DropInsertImagePlugin />
                   <SmartSectionPlugin />
+                  <ColumnsPlugin />
                   <SlashCommandMenuPlugin />
                   <MentionsPlugin />
                   <MarkdownShortcutPlugin
