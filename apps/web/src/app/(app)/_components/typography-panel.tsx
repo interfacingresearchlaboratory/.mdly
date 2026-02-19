@@ -17,6 +17,7 @@ import type {
 import { LETTER_SPACING_PRESETS } from "@editor/ui/lib/typography/letter-spacing";
 import { FONT_WEIGHT_PRESETS } from "@editor/ui/lib/typography/font-weight";
 import { FONT_SIZE_PRESETS } from "@editor/ui/lib/typography/font-size";
+import { useCustomFonts } from "@/components/custom-fonts-provider";
 
 const DEFAULT_VALUE = "__default__";
 
@@ -298,11 +299,21 @@ export interface TypographyPanelProps {
 }
 
 export function TypographyPanel({ value, onChange }: TypographyPanelProps) {
+  const { customFonts } = useCustomFonts();
+
+  const documentFontOptions = [
+    ...DOCUMENT_FONT_OPTIONS,
+    ...customFonts.map((f) => ({ value: f.fontFamily, label: f.fontFamily })),
+  ];
   const documentFontValue =
-    value?.fontFamily &&
-    DOCUMENT_FONT_OPTIONS.some((o) => o.value === value.fontFamily)
+    value?.fontFamily && documentFontOptions.some((o) => o.value === value.fontFamily)
       ? value.fontFamily
       : "__default__";
+
+  const fontSlotOptions = [
+    ...FONT_SLOT_OPTIONS,
+    ...customFonts.map((f) => ({ value: f.id, label: f.fontFamily })),
+  ];
 
   const documentSizeValue =
     value?.fontSize &&
@@ -333,7 +344,7 @@ export function TypographyPanel({ value, onChange }: TypographyPanelProps) {
               <SelectValue placeholder="Default" />
             </SelectTrigger>
             <SelectContent>
-              {DOCUMENT_FONT_OPTIONS.map(({ value: v, label: l }) => (
+              {documentFontOptions.map(({ value: v, label: l }) => (
                 <SelectItem key={v} value={v}>
                   {l}
                 </SelectItem>
@@ -388,7 +399,7 @@ export function TypographyPanel({ value, onChange }: TypographyPanelProps) {
           {SLOTS.map(({ id, label }) => {
             const slotFontValue = fontFamilyForSlot(value?.fontFamilySlots, id);
             const fontSelectValue =
-              FONT_SLOT_OPTIONS.some((o) => o.value === slotFontValue)
+              fontSlotOptions.some((o) => o.value === slotFontValue)
                 ? slotFontValue
                 : "__default__";
             return (
@@ -466,7 +477,7 @@ export function TypographyPanel({ value, onChange }: TypographyPanelProps) {
                       <SelectValue placeholder="Default" />
                     </SelectTrigger>
                     <SelectContent>
-                      {FONT_SLOT_OPTIONS.map(({ value: v, label: l }) => (
+                      {fontSlotOptions.map(({ value: v, label: l }) => (
                         <SelectItem key={v} value={v}>
                           {l}
                         </SelectItem>

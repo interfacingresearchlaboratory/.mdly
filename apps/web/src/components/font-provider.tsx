@@ -12,48 +12,46 @@ import {
 import {
   APP_FONT_KEYS,
   APP_FONT_STORAGE_KEY,
-  APP_FONT_VARIABLES,
-  type AppFontKey,
+  getAppFontCssValue,
 } from "@/lib/app-fonts";
 
 interface FontContextValue {
-  fontKey: AppFontKey;
-  setFontKey: (key: AppFontKey) => void;
+  /** Stored value: "geist" | "inter" or custom font-family string. */
+  fontValue: string;
+  setFontValue: (value: string) => void;
 }
 
 const FontContext = createContext<FontContextValue | null>(null);
 
-function getStoredFontKey(): AppFontKey {
+function getStoredFontValue(): string {
   if (typeof window === "undefined") return "geist";
   const stored = localStorage.getItem(APP_FONT_STORAGE_KEY);
-  if (stored && APP_FONT_KEYS.includes(stored as AppFontKey)) {
-    return stored as AppFontKey;
-  }
+  if (stored) return stored;
   return "geist";
 }
 
 export function FontProvider({ children }: { children: ReactNode }) {
-  const [fontKey, setFontKeyState] = useState<AppFontKey>("geist");
+  const [fontValue, setFontValueState] = useState<string>("geist");
 
   useEffect(() => {
-    setFontKeyState(getStoredFontKey());
+    setFontValueState(getStoredFontValue());
   }, []);
 
   useEffect(() => {
-    const value = APP_FONT_VARIABLES[fontKey];
-    document.body.style.setProperty("--font-app", value);
-  }, [fontKey]);
+    const cssValue = getAppFontCssValue(fontValue);
+    document.body.style.setProperty("--font-app", cssValue);
+  }, [fontValue]);
 
-  const setFontKey = useCallback((key: AppFontKey) => {
-    setFontKeyState(key);
+  const setFontValue = useCallback((value: string) => {
+    setFontValueState(value);
     if (typeof window !== "undefined") {
-      localStorage.setItem(APP_FONT_STORAGE_KEY, key);
+      localStorage.setItem(APP_FONT_STORAGE_KEY, value);
     }
   }, []);
 
   const value = useMemo(
-    () => ({ fontKey, setFontKey }),
-    [fontKey, setFontKey]
+    () => ({ fontValue, setFontValue }),
+    [fontValue, setFontValue]
   );
 
   return (

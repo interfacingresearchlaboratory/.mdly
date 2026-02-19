@@ -8,15 +8,17 @@ import {
   SelectValue,
 } from "@editor/ui/select";
 import { useAppFont } from "./font-provider";
-import { APP_FONT_KEYS, APP_FONT_LABELS, type AppFontKey } from "@/lib/app-fonts";
+import { useCustomFonts } from "./custom-fonts-provider";
+import { APP_FONT_KEYS, APP_FONT_LABELS } from "@/lib/app-fonts";
 
 export function AppFontPicker() {
-  const { fontKey, setFontKey } = useAppFont();
+  const { fontValue, setFontValue } = useAppFont();
+  const { customFonts } = useCustomFonts();
 
   return (
     <Select
-      value={fontKey}
-      onValueChange={(v) => setFontKey(v as AppFontKey)}
+      value={fontValue}
+      onValueChange={setFontValue}
       aria-label="App font"
     >
       <SelectTrigger className="h-8 w-28">
@@ -26,6 +28,11 @@ export function AppFontPicker() {
         {APP_FONT_KEYS.map((key) => (
           <SelectItem key={key} value={key}>
             {APP_FONT_LABELS[key]}
+          </SelectItem>
+        ))}
+        {customFonts.map((f) => (
+          <SelectItem key={f.id} value={f.fontFamily}>
+            {f.fontFamily}
           </SelectItem>
         ))}
       </SelectContent>

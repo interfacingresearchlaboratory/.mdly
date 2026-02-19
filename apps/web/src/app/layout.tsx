@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
+import { CustomFontsProvider } from "../components/custom-fonts-provider";
 import { FontProvider } from "../components/font-provider";
 import { Toaster } from "sonner";
 
@@ -39,10 +40,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}
       >
         <ThemeProvider>
-          <FontProvider>
-            {children}
-            <Toaster />
-          </FontProvider>
+          <CustomFontsProvider>
+            <FontProvider>
+              {children}
+              <Toaster />
+            </FontProvider>
+          </CustomFontsProvider>
         </ThemeProvider>
       </body>
     </html>
