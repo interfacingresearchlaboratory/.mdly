@@ -195,122 +195,190 @@ const seedContent = {
         type: "paragraph",
         version: 1,
       },
-      // Bullet list
+      // Placeholder text example
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: "normal",
+            style: "",
+            text: "Add your thoughts here…",
+            type: "placeholder-text",
+            version: 1,
+          },
+        ],
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "paragraph",
+        version: 1,
+      },
+      // Bullet list (with indented sub-list under "Parent topic")
       {
         children: [
           {
             children: [
               {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Headings (H1–H3), paragraphs, and block types",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Headings (H1–H3), paragraphs, and block types",
+                type: "text",
                 version: 1,
               },
             ],
             direction: "ltr",
+            format: "",
             indent: 0,
             type: "listitem",
-            value: 1,
             version: 1,
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Bulleted, numbered, and check lists",
+                type: "text",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "listitem",
+            version: 1,
+            value: null,
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Code blocks with syntax highlighting",
+                type: "text",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "listitem",
+            version: 1,
+            value: null,
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Tables, quotes, and horizontal rules",
+                type: "text",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "listitem",
+            version: 1,
+            value: null,
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Parent topic",
+                type: "text",
+                version: 1,
+              },
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "listitem",
+            version: 1,
+            value: null,
           },
           {
             children: [
               {
                 children: [
                   {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Bulleted, numbered, and check lists",
-                    type: "text",
+                    children: [
+                      {
+                        detail: 0,
+                        format: 0,
+                        mode: "normal",
+                        style: "",
+                        text: "Sub-point A",
+                        type: "text",
+                        version: 1,
+                      },
+                    ],
+                    direction: "ltr",
+                    format: "",
+                    indent: 1,
+                    type: "listitem",
                     version: 1,
+                    value: 1,
                   },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            indent: 0,
-            type: "listitem",
-            value: 2,
-            version: 1,
-          },
-          {
-            children: [
-              {
-                children: [
                   {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Code blocks with syntax highlighting",
-                    type: "text",
+                    children: [
+                      {
+                        detail: 0,
+                        format: 0,
+                        mode: "normal",
+                        style: "",
+                        text: "Sub-point B",
+                        type: "text",
+                        version: 1,
+                      },
+                    ],
+                    direction: "ltr",
+                    format: "",
+                    indent: 1,
+                    type: "listitem",
                     version: 1,
+                    value: 2,
                   },
+              
                 ],
-                direction: "ltr",
+                direction: null,
                 format: "",
                 indent: 0,
-                type: "paragraph",
+                type: "list",
                 version: 1,
+                listType: "bullet",
+                start: 1,
+                tag: "ul",
               },
             ],
-            direction: "ltr",
+            direction: null,
+            format: "",
             indent: 0,
             type: "listitem",
-            value: 3,
             version: 1,
-          },
-          {
-            children: [
-              {
-                children: [
-                  {
-                    detail: 0,
-                    format: 0,
-                    mode: "normal",
-                    style: "",
-                    text: "Tables, quotes, and horizontal rules",
-                    type: "text",
-                    version: 1,
-                  },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-              },
-            ],
-            direction: "ltr",
-            indent: 0,
-            type: "listitem",
-            value: 4,
-            version: 1,
+            value: null,
           },
         ],
         direction: "ltr",
-        listType: "bullet",
+        format: "",
         type: "list",
         version: 1,
+        listType: "bullet",
+        tag: "ul",
       },
       // Numbered list — Quick start
       {
@@ -769,12 +837,12 @@ export default function Home() {
           </a>
         </Button>
       </div>
-      <aside className="hidden md:block w-52 shrink-0 pt-20">
+      <aside className="hidden md:block w-52 shrink-0">
         <div className="sticky top-20">
           <TableOfContents contentSelector="[data-toc-content]" />
         </div>
       </aside>
-      <div className="min-w-0 flex-1 flex justify-center">
+      <div className="min-w-0 flex-1 flex justify-center pt-12 pb-20">
         <div className="w-full max-w-2xl px-4 py-6 space-y-8">
           <div data-toc-content>
             <ToolbarlessEditor

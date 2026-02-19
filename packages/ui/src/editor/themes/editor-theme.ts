@@ -29,10 +29,10 @@ export const editorTheme: EditorThemeClasses = {
     ol: "my-2 m-0 p-0 list-decimal list-outside [&>li]:mt-2",
     olDepth: [
       "list-outside !list-decimal",
-      "list-outside !list-[upper-roman]",
+      "list-outside !list-[lower-alpha]",
       "list-outside !list-[lower-roman]",
       "list-outside !list-[upper-alpha]",
-      "list-outside !list-[lower-alpha]",
+      "list-outside !list-[upper-roman]",
     ],
     ul: "m-0 p-0 list-disc list-outside",
   },
@@ -124,4 +124,5 @@ export const editorTheme: EditorThemeClasses = {
   smartSectionHeader: "EditorTheme__smartSectionHeader",
   smartSectionContent: "EditorTheme__smartSectionContent",
   mention: "EditorTheme__mention",
+  placeholder: "EditorTheme__placeholder",
 }

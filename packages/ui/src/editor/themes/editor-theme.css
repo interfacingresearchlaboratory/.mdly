@@ -140,3 +140,10 @@
 .EditorTheme__mention:not([href]) {
   cursor: default;
 }
+
+.EditorTheme__placeholder {
+  color: color-mix(in oklch, var(--muted-foreground) 80%, transparent) !important;
+  text-decoration-line: underline !important;
+  text-decoration-style: dotted !important;
+  text-underline-offset: 2px !important;
+}
