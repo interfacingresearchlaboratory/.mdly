@@ -23,7 +23,7 @@ export type SerializedHorizontalRuleNode = Spread<
   SerializedElementNode<SerializedLexicalNode>
 >
 
-function $convertHorizontalRuleElement(domNode: Node): DOMConversionOutput {
+function $convertHorizontalRuleElement(_domNode: Node): DOMConversionOutput {
   const node = $createHorizontalRuleNode()
   return { node }
 }
@@ -38,7 +38,7 @@ export class HorizontalRuleNode extends ElementNode {
   }
 
   static importJSON(
-    serializedNode: SerializedHorizontalRuleNode
+    _serializedNode: SerializedHorizontalRuleNode
   ): HorizontalRuleNode {
     return $createHorizontalRuleNode()
   }

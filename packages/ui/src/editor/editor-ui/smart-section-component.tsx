@@ -1,6 +1,6 @@
 import * as React from "react"
 import { JSX, useCallback, useState, useEffect } from "react"
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Trash2 } from "lucide-react"
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary"
 import { LexicalNestedComposer } from "@lexical/react/LexicalNestedComposer"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
@@ -14,12 +14,9 @@ import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { SharedAutocompleteContext } from "../context/shared-autocomplete-context"
 import { MentionsContextProvider, useMentionsContext } from "../context/mentions-context"
 import type { LexicalEditor, NodeKey } from "lexical"
-import { $getNodeByKey } from "lexical"
+import { $createParagraphNode, $getNodeByKey } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import {
-  $isSmartSectionNode,
-  SmartSectionNode,
-} from "../nodes/smart-section-node"
+import { $isSmartSectionNode } from "../nodes/smart-section-node"
 import { ContentEditable } from "./content-editable"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
@@ -36,6 +33,8 @@ import { ImagesPlugin } from "../plugins/images-plugin"
 import { InlineImagePlugin } from "../plugins/inline-image-plugin"
 import { DropInsertImagePlugin } from "../plugins/drop-insert-image-plugin"
 import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transformer"
+import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
+import { ColumnsPlugin } from "../plugins/columns-plugin"
 
 export default function SmartSectionComponent({
   headerEditor,
@@ -61,20 +60,35 @@ export default function SmartSectionComponent({
     editor.update(() => {
       const node = $getNodeByKey(nodeKey)
       if ($isSmartSectionNode(node)) {
-        const newExpanded = !isExpanded
+        const newExpanded = !node.getIsExpanded()
         node.setIsExpanded(newExpanded)
         setIsExpanded(newExpanded)
       }
     })
-  }, [editor, nodeKey, isExpanded])
+  }, [editor, nodeKey])
+
+  const deleteSection = useCallback(() => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey)
+      if ($isSmartSectionNode(node)) {
+        const paragraph = $createParagraphNode()
+        node.replace(paragraph)
+        paragraph.selectStart()
+      }
+    })
+  }, [editor, nodeKey])
 
   return (
     <div className="EditorTheme__smartSection border border-border rounded-lg mb-4 overflow-hidden">
       {/* Header */}
-      <div className="EditorTheme__smartSectionHeader flex items-center gap-2 px-2 py-1">
+      <div className="EditorTheme__smartSectionHeader group/header flex items-center gap-2 px-2 py-1">
         <div
           className="flex-shrink-0 cursor-pointer hover:bg-muted/50 rounded p-1 transition-colors"
-          onClick={toggleExpanded}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleExpanded()
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -93,7 +107,6 @@ export default function SmartSectionComponent({
         <div
           className="flex-1 min-w-0 cursor-text"
           onClick={(e) => {
-            // Focus the editor when clicking the header area (but not the chevron)
             e.stopPropagation()
             headerEditor.getRootElement()?.focus()
           }}
@@ -104,9 +117,8 @@ export default function SmartSectionComponent({
                 <RichTextPlugin
                   contentEditable={
                     <ContentEditable
-                      placeholder="Click to edit header"
+                      placeholder=""
                       className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
-                      placeholderClassName="text-muted-foreground pointer-events-none select-none"
                     />
                   }
                   ErrorBoundary={LexicalErrorBoundary}
@@ -122,6 +134,21 @@ export default function SmartSectionComponent({
             </SharedAutocompleteContext>
           </LexicalNestedComposer>
         </div>
+        <div
+          className="flex-shrink-0 opacity-0 group-hover/header:opacity-100 transition-opacity cursor-pointer hover:bg-muted/50 rounded p-1"
+          onClick={deleteSection}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault()
+              deleteSection()
+            }
+          }}
+          title="Delete section"
+        >
+          <Trash2 className="w-4 h-4 text-muted-foreground" />
+        </div>
       </div>
 
       {/* Content */}
@@ -133,14 +160,13 @@ export default function SmartSectionComponent({
             e.stopPropagation()
           }}
         >
-          <div className="px-4 py-3 border-t border-border relative">
+          <div className="border-t border-border">
             <LexicalNestedComposer initialEditor={contentEditor}>
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable
-                    placeholder="Type here..."
-                    className="EditorTheme__smartSectionContentEditable relative outline-none min-h-[100px] w-full"
-                    placeholderClassName="text-muted-foreground pointer-events-none absolute top-4 left-4 text-sm select-none"
+                    placeholder=""
+                    className="EditorTheme__smartSectionContentEditable outline-none min-h-[100px] w-full px-4 py-3"
                   />
                 }
                 ErrorBoundary={LexicalErrorBoundary}
@@ -165,6 +191,8 @@ export default function SmartSectionComponent({
                   ...TEXT_MATCH_TRANSFORMERS,
                 ]}
               />
+              <SlashCommandMenuPlugin />
+              <ColumnsPlugin />
             </LexicalNestedComposer>
           </div>
         </div>

@@ -1,101 +1,138 @@
-# Editor
+# Mdly
 
-Shadcn implementation of the [Lexical](https://lexical.dev/) rich text editor in a [Turborepo](https://turborepo.dev/) monorepo. Inspired by [htmujahid/shadcn-editor](https://github.com/htmujahid/shadcn-editor) · [Demo](https://shadcn-editor.vercel.app)
+An open-source rich text editor built on [Lexical](https://lexical.dev/) and [shadcn/ui](https://ui.shadcn.com/). Distraction-free writing with full typography control, slash commands, tables, images, and more.
 
-![Editor preview](assets/editor-preview.png)
+**[Live demo](https://mdly.interfacingresearchlaboratory.com)** · **[Buy Me a Coffee](https://buymeacoffee.com/irldevs)**
 
-## What's inside?
+Inspired by [htmujahid/shadcn-editor](https://github.com/htmujahid/shadcn-editor) ([Demo](https://shadcn-editor.vercel.app/)), Mdly extends the original with additional editor plugins, richer block types, and deeper typography and formatting controls. Use it as a starting point, reference, or fork it and make it your own.
 
-This monorepo includes:
+Contributions, ideas, and feedback are all welcome — see [Contributing](#contributing).
 
-### Apps
+## Features
 
-- **`apps/web`** – Next.js (App Router), main web app, port 3000
-- **`apps/landing`** – Next.js landing, port 3001
-- **`apps/docs`** – Next.js docs (Fumadocs), port 3002
-- **`apps/changelog`** – Next.js changelog, port 3003
+- **Distraction-free writing** — Toolbarless editor that stays out of your way. Floating toolbar appears on text selection.
+- **Slash commands** — Type `/` to insert headings, lists, tables, images, code blocks, and more.
+- **Typography control** — Customize fonts, font weights, and letter spacing per heading and body text.
+- **Table of contents** — Auto-generated from your headings, always visible in the sidebar.
+- **Rich block types** — Headings, lists (bullet, numbered, checklist), blockquotes, code blocks with syntax highlighting, horizontal rules, tables, images, columns, cards, and more.
+- **Dark and light mode** — System-aware theme toggle powered by `next-themes`.
+- **Keyboard shortcuts** — Built-in shortcuts directory for fast editing.
+- **Drag and drop** — Reorder blocks by dragging.
+- **Mentions and autocomplete** — @-mention support with configurable data sources.
 
-### Packages
+## Tech stack
 
-- **`@editor/ui`** – Shared React component library with the Lexical-based rich text editor (shadcn/ui, Radix, Tailwind)
-- **`@editor/eslint-config`** – Shared ESLint configs (Next.js, React, Turbo)
-- **`@editor/typescript-config`** – Shared `tsconfig` bases (Next.js, React library)
+| Layer | Technology |
+|-------|-----------|
+| Editor framework | [Lexical](https://lexical.dev/) (Meta) |
+| UI components | [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/) |
+| Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
+| Language | [TypeScript 5.9](https://www.typescriptlang.org/) |
+| Monorepo | [Turborepo 2](https://turborepo.dev/) + [pnpm 9](https://pnpm.io/) |
+| React | [React 19](https://react.dev/) |
 
-Everything is written in [TypeScript](https://www.typescriptlang.org/).
+## Project structure
 
-## Core stack
+```
+mdly/
+├── apps/
+│   └── web/              # Next.js app — the editor interface
+├── packages/
+│   ├── ui/               # @editor/ui — shared component library (Lexical + shadcn/ui + Radix)
+│   ├── eslint-config/    # Shared ESLint configuration
+│   └── typescript-config/ # Shared TypeScript configuration
+├── turbo.json
+└── package.json
+```
 
-| Layer        | Technology |
-| ------------ | ---------- |
-| **Runtime**  | [Node.js](https://nodejs.org/) ≥ 18 |
-| **Package manager** | [pnpm](https://pnpm.io/) 9 |
-| **Monorepo** | [Turborepo](https://turborepo.dev/) 2 |
-| **Frontend** | [Next.js](https://nextjs.org/) 16 (App Router), [React](https://react.dev/) 19 |
-| **Editor**   | [Lexical](https://lexical.dev/) with [shadcn/ui](https://ui.shadcn.com/) |
-| **Styling**  | [Tailwind CSS](https://tailwindcss.com/) 4, [Shadcn UI](https://ui.shadcn.com/) / Radix UI |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) 5.9 |
+### `apps/web`
+
+The main Next.js application. Renders the editor with a table of contents sidebar, typography controls, theme toggle, and keyboard shortcuts panel.
+
+### `packages/ui`
+
+The shared component library (`@editor/ui`). Contains all editor components (nodes, plugins, toolbar, slash commands), plus general UI primitives (buttons, dialogs, popovers, etc.) built on Radix and styled with Tailwind.
+
+## Getting started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 18
+- [pnpm](https://pnpm.io/) 9
+
+### Installation
+
+```bash
+git clone https://github.com/interfacingresearchlaboratory/editor.git
+cd editor
+pnpm install
+```
 
 ### Development
 
-- [ESLint](https://eslint.org/) (shared config in `@editor/eslint-config`)
-- [Prettier](https://prettier.io) for formatting
-
-## Quick start
-
-1. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
-
-2. **Run the app**
-   ```bash
-   pnpm dev
-   ```
-
-   To run a single app: `pnpm dev --filter=web` (or `landing`, `docs`, `changelog`).
-
-## Build
-
 ```bash
-turbo build
-# or
-pnpm exec turbo build
+pnpm dev
 ```
 
-Build a single app or package with a filter:
+Opens Mdly at [http://localhost:3000](http://localhost:3000).
+
+### Build
 
 ```bash
-turbo build --filter=web
-pnpm exec turbo build --filter=web
+pnpm build
 ```
 
-## Develop
+### Lint and type-check
 
 ```bash
-turbo dev
-# or
-pnpm exec turbo dev
+pnpm lint
+pnpm check-types
 ```
 
-With a filter:
+## Editor plugins
 
-```bash
-turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+The editor ships with a rich set of Lexical plugins:
 
-## Remote caching
+| Plugin | Description |
+|--------|-------------|
+| Slash command menu | Type `/` to insert any block type |
+| Floating text format | Bold, italic, underline, code, link on selection |
+| Draggable blocks | Drag handles to reorder content |
+| Tables | Insert and resize tables with action menus |
+| Images | Insert, resize, and drag-drop images |
+| Inline images | Images that flow with text |
+| Code blocks | Syntax-highlighted code with language picker |
+| Columns | Multi-column layouts |
+| Links | Auto-link detection and link editing |
+| Mentions | @-mention with dropdown suggestions |
+| Autocomplete | Inline text completions |
+| Placeholders | Styled placeholder text nodes within content |
+| Cards | Structured card blocks for callouts and highlights |
+| Markdown toggle | Switch between rich text and Markdown source |
+| Smart sections | Dropdown collapsible content sections |
 
-Turborepo can use [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) (e.g. [Vercel](https://vercel.com)) to share build caches:
+## Contributing
 
-```bash
-turbo login
-turbo link
-```
+This is an open-source project and contributions are very welcome — whether it's bug fixes, new plugins, UI improvements, documentation, or ideas in the issue tracker.
 
-## Useful links
+1. Fork the repository
+2. Create your feature branch (`git checkout -b my-feature`)
+3. Make your changes
+4. Run lint and type-check (`pnpm lint && pnpm check-types`)
+5. Commit your changes (`git commit -m "Add my feature"`)
+6. Push to your branch (`git push origin my-feature`)
+7. Open a pull request
 
-- [Turborepo docs](https://turborepo.dev/docs) – tasks, caching, filters, config
-- [shadcn-editor](https://github.com/htmujahid/shadcn-editor) – upstream Lexical + shadcn/ui editor
-- [Lexical](https://lexical.dev/) – framework for building editors
-- [Next.js docs](https://nextjs.org/docs)
+Not sure where to start? Open an issue to discuss your idea first, or look for issues tagged **good first issue**.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- [shadcn-editor](https://github.com/htmujahid/shadcn-editor) — the upstream Lexical + shadcn/ui editor this project is based on
+- [Lexical](https://lexical.dev/) — the extensible text editor framework by Meta
+- [shadcn/ui](https://ui.shadcn.com/) — beautifully designed components built on Radix UI
+- [Radix UI](https://www.radix-ui.com/) — accessible, unstyled UI primitives

@@ -45,6 +45,8 @@ export function MarkdownTogglePlugin({
         }
       }
     })
+  // transformers is stable; including it can cause unnecessary re-runs
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, shouldPreserveNewLinesInMarkdown])
 
   return (

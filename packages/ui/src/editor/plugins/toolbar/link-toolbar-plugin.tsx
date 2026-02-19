@@ -14,12 +14,11 @@ import { useFloatingLinkContext } from "../../context/floating-link-context"
 import { useToolbarContext } from "../../context/toolbar-context"
 import { useUpdateToolbarHandler } from "../../editor-hooks/use-update-toolbar"
 import { getSelectedNode } from "../../utils/get-selected-node"
-import { sanitizeUrl } from "../../utils/url"
 import { Toggle } from "../../../toggle"
 
 export function LinkToolbarPlugin() {
   const { activeEditor } = useToolbarContext()
-  const { setIsLinkEditMode } = useFloatingLinkContext()
+  const { setIsLinkEditMode, openLinkDialog } = useFloatingLinkContext()
   const [isLink, setIsLink] = useState(false)
 
   const $updateToolbar = (selection: BaseSelection) => {
@@ -45,31 +44,32 @@ export function LinkToolbarPlugin() {
 
         if (code === "KeyK" && (ctrlKey || metaKey)) {
           event.preventDefault()
-          let url: string | null
           if (!isLink) {
-            setIsLinkEditMode(true)
-            url = sanitizeUrl("https://")
+            openLinkDialog((url) => {
+              activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, url)
+            })
           } else {
             setIsLinkEditMode(false)
-            url = null
+            activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
           }
-          return activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, url)
+          return true
         }
         return false
       },
       COMMAND_PRIORITY_NORMAL
     )
-  }, [activeEditor, isLink, setIsLinkEditMode])
+  }, [activeEditor, isLink, setIsLinkEditMode, openLinkDialog])
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      setIsLinkEditMode(true)
-      activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"))
+      openLinkDialog((url) => {
+        activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, url)
+      })
     } else {
       setIsLinkEditMode(false)
       activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
     }
-  }, [activeEditor, isLink, setIsLinkEditMode])
+  }, [activeEditor, isLink, setIsLinkEditMode, openLinkDialog])
 
   return (
     <Toggle

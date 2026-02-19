@@ -1,8 +1,46 @@
 import { EditorThemeClasses } from "lexical"
 
+import {
+  type LetterSpacingTypographyConfig,
+  mergeLetterSpacingIntoTheme,
+} from "../../lib/typography/letter-spacing"
+import {
+  type FontWeightTypographyConfig,
+  mergeFontWeightIntoTheme,
+} from "../../lib/typography/font-weight"
+import {
+  type FontFamilyTypographyConfig,
+  mergeFontFamilyIntoTheme,
+} from "../../lib/typography/font-family-slots"
+import {
+  type FontSizeTypographyConfig,
+  mergeFontSizeIntoTheme,
+} from "../../lib/typography/font-size"
+
+export type {
+  LetterSpacingTypographyConfig,
+  FontWeightTypographyConfig,
+  FontFamilyTypographyConfig,
+  FontSizeTypographyConfig,
+}
+
+/** Combined typography config for document settings (letter spacing, font weight, font, size). */
+export interface TypographyConfig {
+  letterSpacing?: LetterSpacingTypographyConfig
+  fontWeight?: FontWeightTypographyConfig
+  /** Font family for the entire document. Applied to editor content wrapper. */
+  fontFamily?: string
+  /** Font size for the entire document (e.g. "16px" or "1rem"). Applied to editor content wrapper. */
+  fontSize?: string
+  /** Per-type font family overrides (Tailwind font class per slot). */
+  fontFamilySlots?: FontFamilyTypographyConfig
+  /** Per-type font size overrides (Tailwind text-* class per slot). */
+  fontSizeSlots?: FontSizeTypographyConfig
+}
+
 import "./editor-theme.css"
 
-export const editorTheme: EditorThemeClasses = {
+const baseEditorTheme: EditorThemeClasses = {
   ltr: "text-left",
   rtl: "text-right",
   heading: {
@@ -38,14 +76,14 @@ export const editorTheme: EditorThemeClasses = {
   },
   hashtag: "text-blue-600 bg-blue-100 rounded-md px-1",
   text: {
-    bold: "font-medium",
-    code: "bg-muted text-foreground p-1 rounded-md",
-    italic: "italic",
-    strikethrough: "line-through",
+    bold: "font-medium tracking-normal",
+    code: "bg-muted text-foreground p-1 rounded-md tracking-normal",
+    italic: "italic tracking-normal",
+    strikethrough: "line-through tracking-normal",
     subscript: "sub",
     superscript: "sup",
-    underline: "underline",
-    underlineStrikethrough: "underline line-through",
+    underline: "underline tracking-normal",
+    underlineStrikethrough: "underline line-through tracking-normal",
   },
   image: "relative inline-block user-select-none cursor-default editor-image",
   inlineImage:
@@ -53,36 +91,36 @@ export const editorTheme: EditorThemeClasses = {
   keyword: "text-purple-900 font-medium",
   code: "EditorTheme__code border border-border rounded-lg bg-muted/50",
   codeHighlight: {
-    atrule: "EditorTheme__tokenAttr",
-    attr: "EditorTheme__tokenAttr",
-    boolean: "EditorTheme__tokenProperty",
-    builtin: "EditorTheme__tokenSelector",
-    cdata: "EditorTheme__tokenComment",
-    char: "EditorTheme__tokenSelector",
-    class: "EditorTheme__tokenFunction",
-    "class-name": "EditorTheme__tokenFunction",
-    comment: "EditorTheme__tokenComment",
-    constant: "EditorTheme__tokenProperty",
-    deleted: "EditorTheme__tokenProperty",
-    doctype: "EditorTheme__tokenComment",
-    entity: "EditorTheme__tokenOperator",
-    function: "EditorTheme__tokenFunction",
-    important: "EditorTheme__tokenVariable",
-    inserted: "EditorTheme__tokenSelector",
-    keyword: "EditorTheme__tokenAttr",
-    namespace: "EditorTheme__tokenVariable",
-    number: "EditorTheme__tokenProperty",
-    operator: "EditorTheme__tokenOperator",
-    prolog: "EditorTheme__tokenComment",
-    property: "EditorTheme__tokenProperty",
-    punctuation: "EditorTheme__tokenPunctuation",
-    regex: "EditorTheme__tokenVariable",
-    selector: "EditorTheme__tokenSelector",
-    string: "EditorTheme__tokenSelector",
-    symbol: "EditorTheme__tokenProperty",
-    tag: "EditorTheme__tokenProperty",
-    url: "EditorTheme__tokenOperator",
-    variable: "EditorTheme__tokenVariable",
+    atrule: "EditorTheme__tokenAttr tracking-normal",
+    attr: "EditorTheme__tokenAttr tracking-normal",
+    boolean: "EditorTheme__tokenProperty tracking-normal",
+    builtin: "EditorTheme__tokenSelector tracking-normal",
+    cdata: "EditorTheme__tokenComment tracking-normal",
+    char: "EditorTheme__tokenSelector tracking-normal",
+    class: "EditorTheme__tokenFunction tracking-normal",
+    "class-name": "EditorTheme__tokenFunction tracking-normal",
+    comment: "EditorTheme__tokenComment tracking-normal",
+    constant: "EditorTheme__tokenProperty tracking-normal",
+    deleted: "EditorTheme__tokenProperty tracking-normal",
+    doctype: "EditorTheme__tokenComment tracking-normal",
+    entity: "EditorTheme__tokenOperator tracking-normal",
+    function: "EditorTheme__tokenFunction tracking-normal",
+    important: "EditorTheme__tokenVariable tracking-normal",
+    inserted: "EditorTheme__tokenSelector tracking-normal",
+    keyword: "EditorTheme__tokenAttr tracking-normal",
+    namespace: "EditorTheme__tokenVariable tracking-normal",
+    number: "EditorTheme__tokenProperty tracking-normal",
+    operator: "EditorTheme__tokenOperator tracking-normal",
+    prolog: "EditorTheme__tokenComment tracking-normal",
+    property: "EditorTheme__tokenProperty tracking-normal",
+    punctuation: "EditorTheme__tokenPunctuation tracking-normal",
+    regex: "EditorTheme__tokenVariable tracking-normal",
+    selector: "EditorTheme__tokenSelector tracking-normal",
+    string: "EditorTheme__tokenSelector tracking-normal",
+    symbol: "EditorTheme__tokenProperty tracking-normal",
+    tag: "EditorTheme__tokenProperty tracking-normal",
+    url: "EditorTheme__tokenOperator tracking-normal",
+    variable: "EditorTheme__tokenVariable tracking-normal",
   },
   characterLimit: "!bg-destructive/50",
   table: "EditorTheme__table w-fit overflow-scroll border-collapse",
@@ -123,6 +161,36 @@ export const editorTheme: EditorThemeClasses = {
   smartSection: "EditorTheme__smartSection",
   smartSectionHeader: "EditorTheme__smartSectionHeader",
   smartSectionContent: "EditorTheme__smartSectionContent",
+  columns: "EditorTheme__columns",
+  columnsCell: "EditorTheme__columnsCell",
+  columnsDivider: "EditorTheme__columnsDivider",
+  horizontalSectionBlock: "EditorTheme__horizontalSectionBlock",
+  horizontalSectionBlockCard: "EditorTheme__horizontalSectionBlockCard",
   mention: "EditorTheme__mention",
   placeholder: "EditorTheme__placeholder",
+}
+
+/** Base theme (no typography overrides). */
+export const editorTheme: EditorThemeClasses = baseEditorTheme
+
+/**
+ * Returns the editor theme, optionally merged with typography config.
+ * Use this when the editor accepts configurable typography (e.g. from document settings).
+ */
+export function getEditorTheme(typography?: TypographyConfig): EditorThemeClasses {
+  if (!typography) return baseEditorTheme
+  let theme = baseEditorTheme
+  if (typography.letterSpacing && Object.keys(typography.letterSpacing).length > 0) {
+    theme = mergeLetterSpacingIntoTheme(theme, typography.letterSpacing)
+  }
+  if (typography.fontWeight && Object.keys(typography.fontWeight).length > 0) {
+    theme = mergeFontWeightIntoTheme(theme, typography.fontWeight)
+  }
+  if (typography.fontFamilySlots && Object.keys(typography.fontFamilySlots).length > 0) {
+    theme = mergeFontFamilyIntoTheme(theme, typography.fontFamilySlots)
+  }
+  if (typography.fontSizeSlots && Object.keys(typography.fontSizeSlots).length > 0) {
+    theme = mergeFontSizeIntoTheme(theme, typography.fontSizeSlots)
+  }
+  return theme
 }

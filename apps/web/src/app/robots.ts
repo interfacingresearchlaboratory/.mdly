@@ -1,12 +1,14 @@
 import { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://placeholder.com";
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  "https://mdly.interfacingresearchlaboratory.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      disallow: "/",
+      allow: "/",
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

@@ -1,4 +1,11 @@
-function extractTextFromLexicalNode(node: any): string {
+interface LexicalTextNode {
+  text?: string;
+  children?: LexicalNode[];
+}
+
+type LexicalNode = string | LexicalTextNode;
+
+function extractTextFromLexicalNode(node: LexicalNode): string {
   if (typeof node === "string") return node;
   if (node?.text) return node.text;
   if (node?.children) {
@@ -7,7 +14,7 @@ function extractTextFromLexicalNode(node: any): string {
   return "";
 }
 
-function extractTextForPreview(node: any): string {
+function extractTextForPreview(node: LexicalNode): string {
   if (typeof node === "string") return node;
   if (node?.text) return node.text;
   if (node?.children) {
@@ -16,7 +23,7 @@ function extractTextForPreview(node: any): string {
   return "";
 }
 
-export function extractTextPreview(lexicalJson: { root?: any } | undefined): string {
+export function extractTextPreview(lexicalJson: { root?: LexicalNode } | undefined): string {
   if (!lexicalJson?.root) return "No description";
 
   const text = extractTextForPreview(lexicalJson.root);
@@ -24,7 +31,7 @@ export function extractTextPreview(lexicalJson: { root?: any } | undefined): str
 }
 
 /** Returns true if the Lexical state has meaningful content (non-empty text). */
-export function hasLexicalContent(lexicalJson: { root?: any } | undefined): boolean {
+export function hasLexicalContent(lexicalJson: { root?: LexicalNode } | undefined): boolean {
   if (!lexicalJson?.root) return false;
   const text = extractTextFromLexicalNode(lexicalJson.root);
   return text.trim().length > 0;
@@ -58,7 +65,7 @@ export function getDescriptionPreview(
 ): string {
   if (!description?.trim()) return "—";
   try {
-    const parsed = JSON.parse(description) as { root?: unknown };
+    const parsed = JSON.parse(description) as { root?: LexicalNode };
     const text = extractTextPreview(parsed);
     if (text === "No description") return "—";
     if (text.length <= maxLength) return text;

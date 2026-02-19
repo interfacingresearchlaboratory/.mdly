@@ -8,7 +8,11 @@ import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
 } from "@lexical/list";
-import { $setBlocksType } from "@lexical/selection";
+import {
+  $getSelectionStyleValueForProperty,
+  $patchStyleText,
+  $setBlocksType,
+} from "@lexical/selection";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
 import {
@@ -30,11 +34,13 @@ import {
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
+  Space,
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
   SquarePen,
   UnderlineIcon,
+  Weight,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
@@ -42,7 +48,7 @@ import {
 } from "lucide-react";
 import { createPortal } from "react-dom";
 
-import { useFloatingLinkContext } from "../context/floating-link-context";
+import { useFloatingLinkContext } from "../context/floating-link-context"
 import { getDOMRangeRect } from "../utils/get-dom-range-rect";
 import { getSelectedNode } from "../utils/get-selected-node";
 import { setFloatingElemPosition } from "../utils/set-floating-elem-position";
@@ -58,7 +64,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../tooltip";
+import { LETTER_SPACING_INLINE_PRESETS } from "../../lib/typography/letter-spacing";
+import { FONT_WEIGHT_INLINE_PRESETS } from "../../lib/typography/font-weight";
 import { cn } from "../../lib/utils";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../popover";
 
 function FloatingTextFormat({
   editor,
@@ -67,12 +80,14 @@ function FloatingTextFormat({
   isBold,
   isItalic,
   isUnderline,
-  isCode,
+  isCode: _isCode,
   isStrikethrough,
   isPlaceholder,
   isSubscript,
   isSuperscript,
   headingLevel,
+  letterSpacingValue,
+  fontWeightValue,
   setIsLinkEditMode,
 }: {
   editor: LexicalEditor;
@@ -87,19 +102,23 @@ function FloatingTextFormat({
   isSuperscript: boolean;
   isUnderline: boolean;
   headingLevel: "paragraph" | "h1" | "h2" | "h3" | "h4";
+  letterSpacingValue: string;
+  fontWeightValue: string;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
+  const { openLinkDialog } = useFloatingLinkContext()
   const insertLink = useCallback(() => {
     if (!isLink) {
-      setIsLinkEditMode(true);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
+      openLinkDialog((url) => {
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, url)
+      })
     } else {
-      setIsLinkEditMode(false);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+      setIsLinkEditMode(false)
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
     }
-  }, [editor, isLink, setIsLinkEditMode]);
+  }, [editor, isLink, setIsLinkEditMode, openLinkDialog])
 
   function mouseMoveListener(e: MouseEvent) {
     if (
@@ -118,7 +137,7 @@ function FloatingTextFormat({
       }
     }
   }
-  function mouseUpListener(e: MouseEvent) {
+  function mouseUpListener(_e: MouseEvent) {
     if (popupCharStylesEditorRef?.current) {
       if (popupCharStylesEditorRef.current.style.pointerEvents !== "auto") {
         popupCharStylesEditorRef.current.style.pointerEvents = "auto";
@@ -345,6 +364,102 @@ function FloatingTextFormat({
             >
               <StrikethroughIcon className="h-4 w-4" />
             </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    letterSpacingValue !== "" &&
+                      letterSpacingValue !== undefined &&
+                      "bg-accent"
+                  )}
+                  aria-label="Letter spacing"
+                >
+                  <Space className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <div className="grid gap-0.5">
+                  {LETTER_SPACING_INLINE_PRESETS.map(({ value, label }) => (
+                    <Button
+                      key={value || "__default__"}
+                      type="button"
+                      variant={
+                        (value === "" ? !letterSpacingValue : letterSpacingValue === value)
+                          ? "secondary"
+                          : "ghost"
+                      }
+                      size="sm"
+                      className="h-8 justify-start text-xs"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        const cssValue = value === "" ? "" : value;
+                        editor.update(() => {
+                          const selection = $getSelection();
+                          if (selection !== null) {
+                            $patchStyleText(selection, {
+                              "letter-spacing": cssValue,
+                            });
+                          }
+                        });
+                      }}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    fontWeightValue !== "" &&
+                      fontWeightValue !== undefined &&
+                      "bg-accent"
+                  )}
+                  aria-label="Font weight"
+                >
+                  <Weight className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <div className="grid gap-0.5">
+                  {FONT_WEIGHT_INLINE_PRESETS.map(({ value, label }) => (
+                    <Button
+                      key={value || "__default__"}
+                      type="button"
+                      variant={
+                        (value === "" ? !fontWeightValue : fontWeightValue === value)
+                          ? "secondary"
+                          : "ghost"
+                      }
+                      size="sm"
+                      className="h-8 justify-start text-xs"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        const cssValue = value === "" ? "" : value;
+                        editor.update(() => {
+                          const selection = $getSelection();
+                          if (selection !== null) {
+                            $patchStyleText(selection, {
+                              "font-weight": cssValue,
+                            });
+                          }
+                        });
+                      }}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -511,6 +626,8 @@ function useFloatingTextFormatToolbar(
   const [headingLevel, setHeadingLevel] = useState<
     "paragraph" | "h1" | "h2" | "h3" | "h4"
   >("paragraph");
+  const [letterSpacingValue, setLetterSpacingValue] = useState("");
+  const [fontWeightValue, setFontWeightValue] = useState("");
 
   const updatePopup = useCallback(() => {
     editor.getEditorState().read(() => {
@@ -547,6 +664,19 @@ function useFloatingTextFormatToolbar(
       setIsSuperscript(selection.hasFormat("superscript"));
       setIsCode(selection.hasFormat("code"));
       setIsPlaceholder(selection.getNodes().some($isPlaceholderTextNode));
+
+      const letterSpacing = $getSelectionStyleValueForProperty(
+        selection,
+        "letter-spacing",
+        ""
+      );
+      setLetterSpacingValue(letterSpacing ?? "");
+      const fontWeight = $getSelectionStyleValueForProperty(
+        selection,
+        "font-weight",
+        ""
+      );
+      setFontWeightValue(fontWeight ?? "");
 
       // Update heading level
       const blockParent = node.getTopLevelElementOrThrow();
@@ -627,6 +757,8 @@ function useFloatingTextFormatToolbar(
       isUnderline={isUnderline}
       isCode={isCode}
       headingLevel={headingLevel}
+      letterSpacingValue={letterSpacingValue}
+      fontWeightValue={fontWeightValue}
       setIsLinkEditMode={setIsLinkEditMode}
     />,
     anchorElem

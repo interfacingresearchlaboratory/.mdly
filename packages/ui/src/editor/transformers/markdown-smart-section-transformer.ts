@@ -23,7 +23,7 @@ export const SMART_SECTION: ElementTransformer = {
     return `>>section\n${headerText}\n${contentText}`
   },
   regExp: /^>>section\s*$/,
-  replace: (parentNode, _children, match) => {
+  replace: (parentNode, _children, _match) => {
 
 
     // Check that the paragraph text content matches our pattern

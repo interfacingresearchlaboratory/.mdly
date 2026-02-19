@@ -12,6 +12,8 @@ import { InlineImageNode } from "./nodes/inline-image-node"
 import { AutocompleteNode } from "./nodes/autocomplete-node"
 import { HorizontalRuleNode } from "./nodes/horizontal-rule-node"
 import { SmartSectionNode } from "./nodes/smart-section-node"
+import { ColumnsNode } from "./nodes/columns-node"
+import { HorizontalSectionBlockNode } from "./nodes/horizontal-section-block-node"
 import { MentionNode } from "./nodes/mention-node"
 import { PlaceholderTextNode } from "./nodes/placeholder-text-node"
 
@@ -34,6 +36,8 @@ export const nodes = [
   AutocompleteNode,
   HorizontalRuleNode,
   SmartSectionNode,
+  ColumnsNode,
+  HorizontalSectionBlockNode,
   MentionNode,
   PlaceholderTextNode,
 ]

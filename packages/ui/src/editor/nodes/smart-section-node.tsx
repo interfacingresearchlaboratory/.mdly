@@ -2,7 +2,6 @@ import * as React from "react"
 import { JSX, Suspense } from "react"
 import type {
   DOMConversionMap,
-  DOMConversionOutput,
   DOMExportOutput,
   EditorConfig,
   LexicalEditor,
@@ -13,6 +12,7 @@ import type {
   Spread,
 } from "lexical"
 import { $applyNodeReplacement, createEditor, DecoratorNode, ParagraphNode, TextNode } from "lexical"
+import { LinkNode, AutoLinkNode } from "@lexical/link"
 import { CustomLinkNode, CustomAutoLinkNode } from "./link-node"
 import { AutocompleteNode } from "./autocomplete-node"
 import { MentionNode } from "./mention-node"
@@ -26,13 +26,40 @@ import { CodeNode, CodeHighlightNode } from "@lexical/code"
 import { ImageNode } from "./image-node"
 import { InlineImageNode } from "./inline-image-node"
 import { HorizontalRuleNode } from "./horizontal-rule-node"
+import { ColumnsNode } from "./columns-node"
 
 const SmartSectionComponent = React.lazy(
   () => import("../editor-ui/smart-section-component")
 )
 
 // Header editor nodes: only ParagraphNode, TextNode, CustomLinkNode, CustomAutoLinkNode, AutocompleteNode, MentionNode
-const headerNodes = [ParagraphNode, TextNode, CustomLinkNode, CustomAutoLinkNode, AutocompleteNode, MentionNode]
+const headerNodes = [
+  ParagraphNode,
+  TextNode,
+  CustomLinkNode,
+  {
+    replace: LinkNode,
+    with: (node: LinkNode) =>
+      new CustomLinkNode(node.getURL(), {
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      }),
+  },
+  CustomAutoLinkNode,
+  {
+    replace: AutoLinkNode,
+    with: (node: AutoLinkNode) =>
+      new CustomAutoLinkNode(node.getURL(), {
+        isUnlinked: node.getIsUnlinked(),
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      }),
+  },
+  AutocompleteNode,
+  MentionNode,
+]
 
 // Content editor nodes: full feature set
 const contentNodes = [
@@ -46,11 +73,31 @@ const contentNodes = [
   TableCellNode,
   TableRowNode,
   CustomLinkNode,
+  {
+    replace: LinkNode,
+    with: (node: LinkNode) =>
+      new CustomLinkNode(node.getURL(), {
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      }),
+  },
   CustomAutoLinkNode,
+  {
+    replace: AutoLinkNode,
+    with: (node: AutoLinkNode) =>
+      new CustomAutoLinkNode(node.getURL(), {
+        isUnlinked: node.getIsUnlinked(),
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      }),
+  },
   ImageNode,
   InlineImageNode,
   AutocompleteNode,
   HorizontalRuleNode,
+  ColumnsNode,
 ]
 
 export interface SmartSectionPayload {

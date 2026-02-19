@@ -75,10 +75,11 @@ export function InsertInlineImageDialog({
 
   const isDisabled = src === ""
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleShowCaptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowCaption(e.target.checked)
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPosition(e.target.value as Position)
   }
