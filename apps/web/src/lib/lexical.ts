@@ -65,7 +65,7 @@ export function getDescriptionPreview(
 ): string {
   if (!description?.trim()) return "—";
   try {
-    const parsed = JSON.parse(description) as { root?: unknown };
+    const parsed = JSON.parse(description) as { root?: LexicalNode };
     const text = extractTextPreview(parsed);
     if (text === "No description") return "—";
     if (text.length <= maxLength) return text;

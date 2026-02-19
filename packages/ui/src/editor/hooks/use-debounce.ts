@@ -118,7 +118,7 @@ function debounce<T extends (...args: unknown[]) => void>(
   return debounced
 }
 
-export function useDebounceCallback<T extends (...args: unknown[]) => void>(
+export function useDebounceCallback<T extends (...args: any[]) => void>(
   fn: T,
   ms: number,
   maxWait?: number

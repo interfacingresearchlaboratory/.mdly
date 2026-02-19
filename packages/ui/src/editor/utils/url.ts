@@ -6,25 +6,55 @@ const SUPPORTED_URL_PROTOCOLS = new Set([
   "tel:",
 ])
 
+/**
+ * Returns whether a URL has meaningful content (host for http(s), path/opaque for others).
+ * Rejects protocol-only or empty URLs like "https://" or "".
+ */
+function isUrlWithContent(parsed: URL): boolean {
+  if (SUPPORTED_URL_PROTOCOLS.has(parsed.protocol)) {
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return parsed.hostname.length > 0
+    }
+    // mailto:, tel:, sms: — require non-empty pathname or meaningful href after protocol
+    const afterProtocol = parsed.href.slice(parsed.protocol.length).replace(/^\/+/, "")
+    return afterProtocol.length > 0
+  }
+  return false
+}
+
 export function sanitizeUrl(url: string): string {
+  const trimmed = url.trim()
+  if (trimmed === "") return "about:blank"
   try {
-    const parsedUrl = new URL(url)
-     
+    const parsedUrl = new URL(trimmed)
     if (!SUPPORTED_URL_PROTOCOLS.has(parsedUrl.protocol)) {
       return "about:blank"
     }
+    if (!isUrlWithContent(parsedUrl)) {
+      return "about:blank"
+    }
   } catch {
-    return url
+    return "about:blank"
   }
-  return url
+  return trimmed
 }
 
 // Source: https://stackoverflow.com/a/8234912/2013580
 const urlRegExp = new RegExp(
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/
 )
+
 export function validateUrl(url: string): boolean {
-  // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
-  // Maybe show a dialog where they user can type the URL before inserting it.
-  return url === "https://" || urlRegExp.test(url)
+  const trimmed = url.trim()
+  if (trimmed === "") return false
+  if (trimmed === "https://" || trimmed === "http://") return false
+  if (!urlRegExp.test(trimmed)) return false
+  try {
+    const parsed = new URL(trimmed)
+    return (
+      SUPPORTED_URL_PROTOCOLS.has(parsed.protocol) && isUrlWithContent(parsed)
+    )
+  } catch {
+    return false
+  }
 }
