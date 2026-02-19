@@ -24,6 +24,7 @@ import {
 } from "lexical"
 import { createPortal } from "react-dom"
 import {
+  ChevronRightIcon,
   ColumnsIcon,
   Heading1Icon,
   Heading2Icon,
@@ -38,6 +39,7 @@ import {
 import { Command, CommandItem, CommandList } from "../../command"
 import { INSERT_COLUMNS_COMMAND } from "./columns-plugin"
 import { INSERT_HORIZONTAL_SECTION_BLOCK_COMMAND } from "./horizontal-section-block-plugin"
+import { INSERT_SMART_SECTION_COMMAND } from "./smart-section-plugin"
 
 type SlashCommandKey =
   | "table"
@@ -51,6 +53,7 @@ type SlashCommandKey =
   | "columns-3"
   | "columns-4"
   | "horizontal-section"
+  | "collapsible-section"
 
 const SLASH_COMMANDS: ReadonlyArray<{
   key: SlashCommandKey
@@ -91,6 +94,11 @@ const SLASH_COMMANDS: ReadonlyArray<{
     key: "horizontal-section",
     label: "Card section",
     icon: <LayoutIcon className="size-4" />,
+  },
+  {
+    key: "collapsible-section",
+    label: "Collapsible section",
+    icon: <ChevronRightIcon className="size-4" />,
   },
 ]
 
@@ -179,6 +187,8 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
           editor.dispatchCommand(INSERT_COLUMNS_COMMAND, { columnCount: 4 })
         } else if (key === "horizontal-section") {
           editor.dispatchCommand(INSERT_HORIZONTAL_SECTION_BLOCK_COMMAND, undefined)
+        } else if (key === "collapsible-section") {
+          editor.dispatchCommand(INSERT_SMART_SECTION_COMMAND, { isExpanded: true })
         }
         closeMenu()
       })
@@ -199,15 +209,12 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
         if (options.length === 0) {
           return null
         }
-        const portalTarget =
-          typeof document !== "undefined"
-            ? document.body
-            : anchorElementRef.current
+        const portalTarget = anchorElementRef.current
         if (!portalTarget) {
           return null
         }
         return createPortal(
-          <div className="fixed left-1/2 top-[20%] z-100 w-56 -translate-x-1/2 rounded-md border border-border bg-popover shadow-md overflow-auto max-h-80">
+          <div className="w-56 z-50 rounded-md border border-border bg-popover shadow-md overflow-auto max-h-80">
             <Command
               onKeyDown={(e) => {
                 if (e.key === "ArrowUp") {
