@@ -48,7 +48,7 @@ import {
 } from "lucide-react";
 import { createPortal } from "react-dom";
 
-import { useFloatingLinkContext } from "../context/floating-link-context";
+import { useFloatingLinkContext } from "../context/floating-link-context"
 import { getDOMRangeRect } from "../utils/get-dom-range-rect";
 import { getSelectedNode } from "../utils/get-selected-node";
 import { setFloatingElemPosition } from "../utils/set-floating-elem-position";
@@ -108,15 +108,17 @@ function FloatingTextFormat({
 }): JSX.Element {
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
+  const { openLinkDialog } = useFloatingLinkContext()
   const insertLink = useCallback(() => {
     if (!isLink) {
-      setIsLinkEditMode(true);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
+      openLinkDialog((url) => {
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, url)
+      })
     } else {
-      setIsLinkEditMode(false);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+      setIsLinkEditMode(false)
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
     }
-  }, [editor, isLink, setIsLinkEditMode]);
+  }, [editor, isLink, setIsLinkEditMode, openLinkDialog])
 
   function mouseMoveListener(e: MouseEvent) {
     if (

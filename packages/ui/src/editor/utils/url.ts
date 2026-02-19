@@ -48,12 +48,15 @@ export function validateUrl(url: string): boolean {
   const trimmed = url.trim()
   if (trimmed === "") return false
   if (trimmed === "https://" || trimmed === "http://") return false
-  if (!urlRegExp.test(trimmed)) return false
   try {
     const parsed = new URL(trimmed)
-    return (
-      SUPPORTED_URL_PROTOCOLS.has(parsed.protocol) && isUrlWithContent(parsed)
-    )
+    if (!SUPPORTED_URL_PROTOCOLS.has(parsed.protocol)) return false
+    if (!isUrlWithContent(parsed)) return false
+    // For http(s), also require regex match to avoid overly permissive input
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return urlRegExp.test(trimmed)
+    }
+    return true
   } catch {
     return false
   }
