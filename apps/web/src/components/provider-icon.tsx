@@ -1,15 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@editor/ui/utils";
 
 function createProviderImgIcon(src: string) {
   return function ProviderImgIcon({ className }: { className?: string }) {
     return (
-      <img
+      <Image
         src={src}
         alt=""
         role="img"
         aria-hidden
+        width={14}
+        height={14}
         className={cn("size-3.5 shrink-0", className)}
       />
     );

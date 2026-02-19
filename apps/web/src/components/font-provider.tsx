@@ -10,7 +10,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  APP_FONT_KEYS,
   APP_FONT_STORAGE_KEY,
   getAppFontCssValue,
 } from "@/lib/app-fonts";

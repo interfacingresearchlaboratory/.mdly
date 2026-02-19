@@ -133,6 +133,7 @@ export const DEFAULT_CARD_STYLE: CardStyle = {
   cornerType: "rounded",
   borderWeight: "super-fine",
   bgColor: "grey",
+  paddingInner: 12,
 }
 
 const DEFAULT_MIN_HEIGHT_PX = 120

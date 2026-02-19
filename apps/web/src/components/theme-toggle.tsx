@@ -5,7 +5,7 @@ import { Kbd } from "@editor/ui/kbd"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@editor/ui/tooltip"
 import { Sun, Moon, Monitor } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface ThemeToggleProps {
   buttonClassName?: string
@@ -20,7 +20,7 @@ export function ThemeToggle({ buttonClassName, iconSize = "h-4 w-4" }: ThemeTogg
     setMounted(true)
   }, [])
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const current = theme || "system"
     if (current === "light") {
       setTheme("dark")
@@ -29,7 +29,7 @@ export function ThemeToggle({ buttonClassName, iconSize = "h-4 w-4" }: ThemeTogg
     } else {
       setTheme("light")
     }
-  }
+  }, [theme, setTheme])
 
   // Hotkey: x toggles theme (avoids inputs)
   useEffect(() => {
@@ -49,7 +49,7 @@ export function ThemeToggle({ buttonClassName, iconSize = "h-4 w-4" }: ThemeTogg
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [theme, setTheme])
+  }, [theme, setTheme, toggleTheme])
 
   if (!mounted) {
     return null

@@ -16,7 +16,6 @@ type ContextShape = [SubscribeFn, PublishFn]
 type HookShape = [suggestion: Suggestion, setSuggestion: PublishFn]
 
 const noopUnsubscribe = () => () => {}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- default no-op
 const noopPublish = (_: Suggestion) => {
   return
 }
