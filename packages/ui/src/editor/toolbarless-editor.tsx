@@ -25,7 +25,10 @@ import {
   TEXT_MATCH_TRANSFORMERS,
 } from "@lexical/markdown";
 
-import { editorTheme } from "./themes/editor-theme";
+import {
+  getEditorTheme,
+  type LetterSpacingTypographyConfig,
+} from "./themes/editor-theme";
 import { nodes } from "./nodes";
 import { HORIZONTAL_RULE } from "./transformers/markdown-horizontal-rule-transformer";
 import { SMART_SECTION } from "./transformers/markdown-smart-section-transformer";
@@ -80,11 +83,12 @@ type ToolbarlessEditorProps = {
   onBlur?: () => void;
   projects?: Project[] | null;
   tasks?: Task[] | null;
+  /** Optional letter-spacing overrides per block/format (e.g. from document settings). */
+  typography?: LetterSpacingTypographyConfig;
 };
 
-const editorConfig: InitialConfigType = {
+const baseEditorConfig: Omit<InitialConfigType, "theme"> = {
   namespace: "ThemeDescriptionEditor",
-  theme: editorTheme,
   nodes,
   onError: (error: Error) => {
     console.error(error);
@@ -121,6 +125,7 @@ export function ToolbarlessEditor({
   onBlur,
   projects,
   tasks,
+  typography,
 }: ToolbarlessEditorProps) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -134,7 +139,8 @@ export function ToolbarlessEditor({
   // Only set editorState if initialContent is valid (has root with children)
   // Otherwise, let Lexical initialize with a default empty state
   const initialConfig: InitialConfigType = {
-    ...editorConfig,
+    ...baseEditorConfig,
+    theme: getEditorTheme(typography),
     ...(initialContent && isValidEditorState(initialContent)
       ? { editorState: JSON.stringify(initialContent) }
       : {}),

@@ -8,7 +8,11 @@ import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
 } from "@lexical/list";
-import { $setBlocksType } from "@lexical/selection";
+import {
+  $getSelectionStyleValueForProperty,
+  $patchStyleText,
+  $setBlocksType,
+} from "@lexical/selection";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
 import {
@@ -58,7 +62,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../tooltip";
+import { LETTER_SPACING_INLINE_PRESETS } from "../../lib/typography/letter-spacing";
 import { cn } from "../../lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../select";
 
 function FloatingTextFormat({
   editor,
@@ -73,6 +85,7 @@ function FloatingTextFormat({
   isSubscript,
   isSuperscript,
   headingLevel,
+  letterSpacingValue,
   setIsLinkEditMode,
 }: {
   editor: LexicalEditor;
@@ -87,6 +100,7 @@ function FloatingTextFormat({
   isSuperscript: boolean;
   isUnderline: boolean;
   headingLevel: "paragraph" | "h1" | "h2" | "h3" | "h4";
+  letterSpacingValue: string;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
@@ -345,6 +359,43 @@ function FloatingTextFormat({
             >
               <StrikethroughIcon className="h-4 w-4" />
             </Button>
+            <Select
+              value={
+                LETTER_SPACING_INLINE_PRESETS.some((p) => p.value === letterSpacingValue)
+                  ? letterSpacingValue === ""
+                    ? "__default__"
+                    : letterSpacingValue
+                  : "__default__"
+              }
+              onValueChange={(value) => {
+                const cssValue = value === "__default__" ? "" : value;
+                editor.update(() => {
+                  const selection = $getSelection();
+                  if (selection !== null) {
+                    $patchStyleText(selection, {
+                      "letter-spacing": cssValue,
+                    });
+                  }
+                });
+              }}
+            >
+              <SelectTrigger
+                className="h-8 w-[100px] border-input text-xs"
+                aria-label="Letter spacing"
+              >
+                <SelectValue placeholder="Spacing" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__default__">Default</SelectItem>
+                {LETTER_SPACING_INLINE_PRESETS.filter((p) => p.value !== "").map(
+                  ({ value, label }) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -511,6 +562,7 @@ function useFloatingTextFormatToolbar(
   const [headingLevel, setHeadingLevel] = useState<
     "paragraph" | "h1" | "h2" | "h3" | "h4"
   >("paragraph");
+  const [letterSpacingValue, setLetterSpacingValue] = useState("");
 
   const updatePopup = useCallback(() => {
     editor.getEditorState().read(() => {
@@ -547,6 +599,13 @@ function useFloatingTextFormatToolbar(
       setIsSuperscript(selection.hasFormat("superscript"));
       setIsCode(selection.hasFormat("code"));
       setIsPlaceholder(selection.getNodes().some($isPlaceholderTextNode));
+
+      const letterSpacing = $getSelectionStyleValueForProperty(
+        selection,
+        "letter-spacing",
+        ""
+      );
+      setLetterSpacingValue(letterSpacing ?? "");
 
       // Update heading level
       const blockParent = node.getTopLevelElementOrThrow();
@@ -627,6 +686,7 @@ function useFloatingTextFormatToolbar(
       isUnderline={isUnderline}
       isCode={isCode}
       headingLevel={headingLevel}
+      letterSpacingValue={letterSpacingValue}
       setIsLinkEditMode={setIsLinkEditMode}
     />,
     anchorElem
