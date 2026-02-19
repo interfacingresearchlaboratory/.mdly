@@ -142,13 +142,8 @@
 }
 
 .EditorTheme__placeholder {
-  color: hsl(var(--muted-foreground) / 0.8);
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 2px;
-}
-
-[data-placeholder-editing] .EditorTheme__placeholder {
-  color: hsl(var(--foreground));
-  text-decoration: none;
+  color: color-mix(in oklch, var(--muted-foreground) 80%, transparent) !important;
+  text-decoration-line: underline !important;
+  text-decoration-style: dotted !important;
+  text-underline-offset: 2px !important;
 }
