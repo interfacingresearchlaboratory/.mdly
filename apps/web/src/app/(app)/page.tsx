@@ -6,6 +6,7 @@ import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
 import { ThemeToggle } from "../../components/theme-toggle";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { LetterSpacingPanel } from "./_components/letter-spacing-panel";
+import { FontWeightPanel } from "./_components/font-weight-panel";
 import { Button } from "@editor/ui/button";
 import {
   Collapsible,
@@ -20,7 +21,7 @@ import {
   DialogTrigger,
 } from "@editor/ui/dialog";
 import { Github, ChevronDown, Type } from "lucide-react";
-import type { LetterSpacingTypographyConfig } from "@editor/ui/editor/themes/editor-theme";
+import type { TypographyConfig } from "@editor/ui/editor/themes/editor-theme";
 
 type EditorContent = Parameters<
   NonNullable<React.ComponentProps<typeof ToolbarlessEditor>["onChange"]>
@@ -842,16 +843,17 @@ const seedContent = {
 } as const;
 
 export default function Home() {
-  const [typography, setTypography] = useState<
-    LetterSpacingTypographyConfig | undefined
-  >(undefined);
+  const [typography, setTypography] = useState<TypographyConfig | undefined>(
+    undefined
+  );
   const [lastEditorState, setLastEditorState] = useState<
     EditorContent | undefined
   >(undefined);
 
-  const editorResetKey = typography
-    ? JSON.stringify(typography)
-    : "toolbarless-editor";
+  const editorResetKey =
+    typography && Object.keys(typography).length > 0
+      ? JSON.stringify(typography)
+      : "toolbarless-editor";
 
   return (
     <div className="flex gap-8 w-full relative" suppressHydrationWarning>
@@ -879,8 +881,31 @@ export default function Home() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <LetterSpacingPanel
-                  value={typography}
-                  onChange={setTypography}
+                  value={typography?.letterSpacing}
+                  onChange={(letterSpacing) =>
+                    setTypography((prev) => ({
+                      ...(prev ?? {}),
+                      letterSpacing,
+                    }))
+                  }
+                  showTitle={false}
+                />
+              </CollapsibleContent>
+            </Collapsible>
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-left text-sm font-medium text-foreground hover:underline [&[data-state=open]>svg]:rotate-180">
+                Font weight
+                <ChevronDown className="h-4 w-4 shrink-0 transition-transform" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <FontWeightPanel
+                  value={typography?.fontWeight}
+                  onChange={(fontWeight) =>
+                    setTypography((prev) => ({
+                      ...(prev ?? {}),
+                      fontWeight,
+                    }))
+                  }
                   showTitle={false}
                 />
               </CollapsibleContent>

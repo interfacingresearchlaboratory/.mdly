@@ -63,6 +63,7 @@ import {
   TooltipTrigger,
 } from "../../tooltip";
 import { LETTER_SPACING_INLINE_PRESETS } from "../../lib/typography/letter-spacing";
+import { FONT_WEIGHT_INLINE_PRESETS } from "../../lib/typography/font-weight";
 import { cn } from "../../lib/utils";
 import {
   Select,
@@ -86,6 +87,7 @@ function FloatingTextFormat({
   isSuperscript,
   headingLevel,
   letterSpacingValue,
+  fontWeightValue,
   setIsLinkEditMode,
 }: {
   editor: LexicalEditor;
@@ -101,6 +103,7 @@ function FloatingTextFormat({
   isUnderline: boolean;
   headingLevel: "paragraph" | "h1" | "h2" | "h3" | "h4";
   letterSpacingValue: string;
+  fontWeightValue: string;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
@@ -396,6 +399,43 @@ function FloatingTextFormat({
                 )}
               </SelectContent>
             </Select>
+            <Select
+              value={
+                FONT_WEIGHT_INLINE_PRESETS.some((p) => p.value === fontWeightValue)
+                  ? fontWeightValue === ""
+                    ? "__default__"
+                    : fontWeightValue
+                  : "__default__"
+              }
+              onValueChange={(value) => {
+                const cssValue = value === "__default__" ? "" : value;
+                editor.update(() => {
+                  const selection = $getSelection();
+                  if (selection !== null) {
+                    $patchStyleText(selection, {
+                      "font-weight": cssValue,
+                    });
+                  }
+                });
+              }}
+            >
+              <SelectTrigger
+                className="h-8 w-[100px] border-input text-xs"
+                aria-label="Font weight"
+              >
+                <SelectValue placeholder="Weight" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__default__">Default</SelectItem>
+                {FONT_WEIGHT_INLINE_PRESETS.filter((p) => p.value !== "").map(
+                  ({ value, label }) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -563,6 +603,7 @@ function useFloatingTextFormatToolbar(
     "paragraph" | "h1" | "h2" | "h3" | "h4"
   >("paragraph");
   const [letterSpacingValue, setLetterSpacingValue] = useState("");
+  const [fontWeightValue, setFontWeightValue] = useState("");
 
   const updatePopup = useCallback(() => {
     editor.getEditorState().read(() => {
@@ -606,6 +647,12 @@ function useFloatingTextFormatToolbar(
         ""
       );
       setLetterSpacingValue(letterSpacing ?? "");
+      const fontWeight = $getSelectionStyleValueForProperty(
+        selection,
+        "font-weight",
+        ""
+      );
+      setFontWeightValue(fontWeight ?? "");
 
       // Update heading level
       const blockParent = node.getTopLevelElementOrThrow();
@@ -687,6 +734,7 @@ function useFloatingTextFormatToolbar(
       isCode={isCode}
       headingLevel={headingLevel}
       letterSpacingValue={letterSpacingValue}
+      fontWeightValue={fontWeightValue}
       setIsLinkEditMode={setIsLinkEditMode}
     />,
     anchorElem

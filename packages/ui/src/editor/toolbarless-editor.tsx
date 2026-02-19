@@ -27,7 +27,7 @@ import {
 
 import {
   getEditorTheme,
-  type LetterSpacingTypographyConfig,
+  type TypographyConfig,
 } from "./themes/editor-theme";
 import { nodes } from "./nodes";
 import { HORIZONTAL_RULE } from "./transformers/markdown-horizontal-rule-transformer";
@@ -83,8 +83,8 @@ type ToolbarlessEditorProps = {
   onBlur?: () => void;
   projects?: Project[] | null;
   tasks?: Task[] | null;
-  /** Optional letter-spacing overrides per block/format (e.g. from document settings). */
-  typography?: LetterSpacingTypographyConfig;
+  /** Optional typography overrides (letter spacing, font weight) per block/format (e.g. from document settings). */
+  typography?: TypographyConfig;
 };
 
 const baseEditorConfig: Omit<InitialConfigType, "theme"> = {
@@ -140,7 +140,7 @@ export function ToolbarlessEditor({
   // Otherwise, let Lexical initialize with a default empty state
   const initialConfig: InitialConfigType = {
     ...baseEditorConfig,
-    theme: getEditorTheme(typography),
+    theme: getEditorTheme(typography ?? undefined),
     ...(initialContent && isValidEditorState(initialContent)
       ? { editorState: JSON.stringify(initialContent) }
       : {}),

@@ -4,8 +4,18 @@ import {
   type LetterSpacingTypographyConfig,
   mergeLetterSpacingIntoTheme,
 } from "../../lib/typography/letter-spacing"
+import {
+  type FontWeightTypographyConfig,
+  mergeFontWeightIntoTheme,
+} from "../../lib/typography/font-weight"
 
-export type { LetterSpacingTypographyConfig }
+export type { LetterSpacingTypographyConfig, FontWeightTypographyConfig }
+
+/** Combined typography config for document settings (letter spacing + font weight). */
+export interface TypographyConfig {
+  letterSpacing?: LetterSpacingTypographyConfig
+  fontWeight?: FontWeightTypographyConfig
+}
 
 import "./editor-theme.css"
 
@@ -138,13 +148,17 @@ const baseEditorTheme: EditorThemeClasses = {
 export const editorTheme: EditorThemeClasses = baseEditorTheme
 
 /**
- * Returns the editor theme, optionally merged with letter-spacing typography config.
+ * Returns the editor theme, optionally merged with typography config (letter spacing, then font weight).
  * Use this when the editor accepts configurable typography (e.g. from document settings).
  */
-export function getEditorTheme(
-  typography?: LetterSpacingTypographyConfig
-): EditorThemeClasses {
-  return typography
-    ? mergeLetterSpacingIntoTheme(baseEditorTheme, typography)
-    : baseEditorTheme
+export function getEditorTheme(typography?: TypographyConfig): EditorThemeClasses {
+  if (!typography) return baseEditorTheme
+  let theme = baseEditorTheme
+  if (typography.letterSpacing && Object.keys(typography.letterSpacing).length > 0) {
+    theme = mergeLetterSpacingIntoTheme(theme, typography.letterSpacing)
+  }
+  if (typography.fontWeight && Object.keys(typography.fontWeight).length > 0) {
+    theme = mergeFontWeightIntoTheme(theme, typography.fontWeight)
+  }
+  return theme
 }
