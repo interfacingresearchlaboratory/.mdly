@@ -1,4 +1,4 @@
-# Mdly
+# .mdly
 
 An open-source rich text editor built on [Lexical](https://lexical.dev/) and [shadcn/ui](https://ui.shadcn.com/). Distraction-free writing with full typography control, slash commands, tables, images, and more.
 
