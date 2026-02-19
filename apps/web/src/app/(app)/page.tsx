@@ -7,7 +7,19 @@ import { ThemeToggle } from "../../components/theme-toggle";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { LetterSpacingPanel } from "./_components/letter-spacing-panel";
 import { Button } from "@editor/ui/button";
-import { Github } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@editor/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@editor/ui/dialog";
+import { Github, ChevronDown, Type } from "lucide-react";
 import type { LetterSpacingTypographyConfig } from "@editor/ui/editor/themes/editor-theme";
 
 type EditorContent = Parameters<
@@ -845,6 +857,36 @@ export default function Home() {
     <div className="flex gap-8 w-full relative" suppressHydrationWarning>
       <div className="fixed top-4 right-4 z-50 flex items-center gap-1">
         <ThemeToggle />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Letter spacing"
+            >
+              <Type className="h-4 w-4" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Typography</DialogTitle>
+            </DialogHeader>
+            <Collapsible defaultOpen className="w-full">
+              <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-left text-sm font-medium text-foreground hover:underline [&[data-state=open]>svg]:rotate-180">
+                Letter spacing
+                <ChevronDown className="h-4 w-4 shrink-0 transition-transform" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <LetterSpacingPanel
+                  value={typography}
+                  onChange={setTypography}
+                  showTitle={false}
+                />
+              </CollapsibleContent>
+            </Collapsible>
+          </DialogContent>
+        </Dialog>
         <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
           <a
             href="https://github.com/interfacingresearchlaboratory/editor"
@@ -857,9 +899,8 @@ export default function Home() {
         </Button>
       </div>
       <aside className="hidden md:block w-52 shrink-0">
-        <div className="sticky top-20 space-y-0">
+        <div className="sticky top-20">
           <TableOfContents contentSelector="[data-toc-content]" />
-          <LetterSpacingPanel value={typography} onChange={setTypography} />
         </div>
       </aside>
       <div className="min-w-0 flex-1 flex justify-center pt-12 pb-20">

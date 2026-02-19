@@ -116,9 +116,15 @@ function buildConfigFromPresetKeys(keys: Record<SlotId, string>): LetterSpacingT
 export interface LetterSpacingPanelProps {
   value: LetterSpacingTypographyConfig | undefined;
   onChange: (config: LetterSpacingTypographyConfig | undefined) => void;
+  /** Show "Letter spacing" heading (e.g. false when used inside a dialog with its own title). */
+  showTitle?: boolean;
 }
 
-export function LetterSpacingPanel({ value, onChange }: LetterSpacingPanelProps) {
+export function LetterSpacingPanel({
+  value,
+  onChange,
+  showTitle = true,
+}: LetterSpacingPanelProps) {
   const presetKeys = configToPresetKey(value);
 
   const handleSlotChange = (slotId: SlotId, value: string) => {
@@ -133,8 +139,10 @@ export function LetterSpacingPanel({ value, onChange }: LetterSpacingPanelProps)
   };
 
   return (
-    <div className="space-y-3 pt-6">
-      <h3 className="text-sm font-medium text-foreground">Letter spacing</h3>
+    <div className={showTitle ? "space-y-3 pt-6" : "space-y-3"}>
+      {showTitle && (
+        <h3 className="text-sm font-medium text-foreground">Letter spacing</h3>
+      )}
       <div className="space-y-2">
         {SLOTS.map(({ id, label }) => (
           <div key={id} className="flex flex-col gap-1">
