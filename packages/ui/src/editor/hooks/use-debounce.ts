@@ -92,26 +92,28 @@ function debounce<T extends (...args: unknown[]) => void>(
     maxTimeoutId = undefined
   }
 
-  const debounced = ((...args: Parameters<T>) => {
-    const time = Date.now()
-    const isInvoking = shouldInvoke(time)
+  const debounced: T & { cancel: () => void } = (
+    (...args: Parameters<T>): void => {
+      const time = Date.now()
+      const isInvoking = shouldInvoke(time)
 
-    lastCallTime = time
-    lastArgs = args
+      lastCallTime = time
+      lastArgs = args
 
-    if (isInvoking && timeoutId === undefined) {
-      invokeFunc(time)
-      timeoutId = setTimeout(timerExpired, wait)
-    } else {
-      if (timeoutId === undefined) {
+      if (isInvoking && timeoutId === undefined) {
+        invokeFunc(time)
         timeoutId = setTimeout(timerExpired, wait)
+      } else {
+        if (timeoutId === undefined) {
+          timeoutId = setTimeout(timerExpired, wait)
+        }
+      }
+
+      if (options?.maxWait !== undefined && maxTimeoutId === undefined) {
+        maxTimeoutId = setTimeout(maxTimerExpired, options.maxWait)
       }
     }
-
-    if (options?.maxWait !== undefined && maxTimeoutId === undefined) {
-      maxTimeoutId = setTimeout(maxTimerExpired, options.maxWait)
-    }
-  }) as T & { cancel: () => void }
+  ) as T & { cancel: () => void }
 
   debounced.cancel = cancel
 
@@ -129,7 +131,7 @@ export function useDebounceCallback<T extends (...args: unknown[]) => void>(
   return useMemo(
     () =>
       debounce(
-        ((...args: Parameters<T>) => {
+        ((...args: Parameters<T>): void => {
           if (funcRef.current) {
             funcRef.current(...args)
           }
