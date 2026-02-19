@@ -34,11 +34,15 @@ export class CustomLinkNode extends LinkNode {
   }
 
   static clone(node: CustomLinkNode): CustomLinkNode {
-    return new CustomLinkNode(node.getURL(), {
-      rel: node.getRel(),
-      target: node.getTarget(),
-      title: node.getTitle(),
-    })
+    return new CustomLinkNode(
+      node.getURL(),
+      {
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      },
+      node.getKey()
+    )
   }
 
   static importJSON(serializedNode: SerializedLinkNode & { type: string }): CustomLinkNode {
@@ -82,12 +86,16 @@ export class CustomAutoLinkNode extends AutoLinkNode {
   }
 
   static clone(node: CustomAutoLinkNode): CustomAutoLinkNode {
-    return new CustomAutoLinkNode(node.getURL(), {
-      isUnlinked: node.getIsUnlinked(),
-      rel: node.getRel(),
-      target: node.getTarget(),
-      title: node.getTitle(),
-    })
+    return new CustomAutoLinkNode(
+      node.getURL(),
+      {
+        isUnlinked: node.getIsUnlinked(),
+        rel: node.getRel(),
+        target: node.getTarget(),
+        title: node.getTitle(),
+      },
+      node.getKey()
+    )
   }
 
   static importJSON(serializedNode: SerializedAutoLinkNode & { type: string }): CustomAutoLinkNode {

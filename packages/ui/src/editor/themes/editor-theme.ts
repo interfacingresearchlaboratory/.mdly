@@ -124,4 +124,5 @@ export const editorTheme: EditorThemeClasses = {
   smartSectionHeader: "EditorTheme__smartSectionHeader",
   smartSectionContent: "EditorTheme__smartSectionContent",
   mention: "EditorTheme__mention",
+  placeholder: "EditorTheme__placeholder",
 }

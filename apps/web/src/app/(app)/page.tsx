@@ -769,12 +769,12 @@ export default function Home() {
           </a>
         </Button>
       </div>
-      <aside className="hidden md:block w-52 shrink-0 pt-20">
+      <aside className="hidden md:block w-52 shrink-0">
         <div className="sticky top-20">
           <TableOfContents contentSelector="[data-toc-content]" />
         </div>
       </aside>
-      <div className="min-w-0 flex-1 flex justify-center">
+      <div className="min-w-0 flex-1 flex justify-center pt-12 pb-20">
         <div className="w-full max-w-2xl px-4 py-6 space-y-8">
           <div data-toc-content>
             <ToolbarlessEditor

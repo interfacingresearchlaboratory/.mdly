@@ -140,3 +140,15 @@
 .EditorTheme__mention:not([href]) {
   cursor: default;
 }
+
+.EditorTheme__placeholder {
+  color: hsl(var(--muted-foreground) / 0.8);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+
+[data-placeholder-editing] .EditorTheme__placeholder {
+  color: hsl(var(--foreground));
+  text-decoration: none;
+}

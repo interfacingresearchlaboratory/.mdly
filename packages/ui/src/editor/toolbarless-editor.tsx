@@ -48,6 +48,7 @@ import { CodeBlockLanguagePlugin } from "./plugins/code-block-language-plugin";
 import { CodeHighlightPlugin } from "./plugins/code-highlight-plugin";
 import { TabIndentationPlugin } from "./plugins/tab-indent-plugin";
 import { ListNumberingPlugin } from "./plugins/list-numbering-plugin";
+import { PlaceholderFormatPlugin } from "./plugins/placeholder-format-plugin";
 
 type Project = {
   _id: string;
@@ -184,6 +185,7 @@ export function ToolbarlessEditor({
                   <CheckListPlugin />
                   <ListNumberingPlugin />
                   <TabIndentationPlugin />
+                  <PlaceholderFormatPlugin />
 
                   <AutoLinkPlugin />
                   <LinkPlugin />

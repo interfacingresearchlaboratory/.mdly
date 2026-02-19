@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "IRL",
-  description: "",
+  title: "Editor",
+  description: "This is a Lexical-based rich text editor built with shadcn/ui, in a Turborepo monorepo.",
   manifest: "/manifest.json",
 };
 

@@ -13,6 +13,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { mergeRegister } from "@lexical/utils";
 import {
   $createParagraphNode,
+  $createTextNode,
   $getSelection,
   $isParagraphNode,
   $isRangeSelection,
@@ -32,6 +33,7 @@ import {
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
+  SquarePen,
   UnderlineIcon,
   Heading1Icon,
   Heading2Icon,
@@ -44,8 +46,18 @@ import { useFloatingLinkContext } from "../context/floating-link-context";
 import { getDOMRangeRect } from "../utils/get-dom-range-rect";
 import { getSelectedNode } from "../utils/get-selected-node";
 import { setFloatingElemPosition } from "../utils/set-floating-elem-position";
+import {
+  $createPlaceholderTextNode,
+  $isPlaceholderTextNode,
+} from "../nodes/placeholder-text-node";
 import { Separator } from "../../separator";
 import { Button } from "../../button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../tooltip";
 import { cn } from "../../lib/utils";
 
 function FloatingTextFormat({
@@ -57,6 +69,7 @@ function FloatingTextFormat({
   isUnderline,
   isCode,
   isStrikethrough,
+  isPlaceholder,
   isSubscript,
   isSuperscript,
   headingLevel,
@@ -68,6 +81,7 @@ function FloatingTextFormat({
   isCode: boolean;
   isItalic: boolean;
   isLink: boolean;
+  isPlaceholder: boolean;
   isStrikethrough: boolean;
   isSubscript: boolean;
   isSuperscript: boolean;
@@ -331,6 +345,65 @@ function FloatingTextFormat({
             >
               <StrikethroughIcon className="h-4 w-4" />
             </Button>
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    variant={isPlaceholder ? "default" : "outline"}
+                    size="sm"
+                    aria-label="Toggle placeholder"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      editor.update(() => {
+                        const selection = $getSelection();
+                        if (!$isRangeSelection(selection)) return;
+                        if (selection.isCollapsed()) return;
+
+                        const extracted = selection.extract();
+                        if (extracted.length === 0) return;
+
+                        const allPlaceholders = extracted.every(
+                          $isPlaceholderTextNode
+                        );
+
+                        if (allPlaceholders) {
+                          for (const node of extracted) {
+                            if ($isPlaceholderTextNode(node)) {
+                              const textNode = $createTextNode(
+                                node.getTextContent()
+                              );
+                              textNode.setFormat(node.getFormat());
+                              node.replace(textNode);
+                              textNode.select();
+                            }
+                          }
+                        } else {
+                          for (const node of extracted) {
+                            if (
+                              $isTextNode(node) &&
+                              !$isPlaceholderTextNode(node)
+                            ) {
+                              const placeholder =
+                                $createPlaceholderTextNode(
+                                  node.getTextContent()
+                                );
+                              placeholder.setFormat(node.getFormat());
+                              node.replace(placeholder);
+                            }
+                          }
+                        }
+                      });
+                    }}
+                  >
+                    <SquarePen className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Placeholder</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Separator orientation="vertical" />
 
             {/* Link */}
@@ -431,6 +504,7 @@ function useFloatingTextFormatToolbar(
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
+  const [isPlaceholder, setIsPlaceholder] = useState(false);
   const [isSubscript, setIsSubscript] = useState(false);
   const [isSuperscript, setIsSuperscript] = useState(false);
   const [isCode, setIsCode] = useState(false);
@@ -472,6 +546,7 @@ function useFloatingTextFormatToolbar(
       setIsSubscript(selection.hasFormat("subscript"));
       setIsSuperscript(selection.hasFormat("superscript"));
       setIsCode(selection.hasFormat("code"));
+      setIsPlaceholder(selection.getNodes().some($isPlaceholderTextNode));
 
       // Update heading level
       const blockParent = node.getTopLevelElementOrThrow();
@@ -546,6 +621,7 @@ function useFloatingTextFormatToolbar(
       isBold={isBold}
       isItalic={isItalic}
       isStrikethrough={isStrikethrough}
+      isPlaceholder={isPlaceholder}
       isSubscript={isSubscript}
       isSuperscript={isSuperscript}
       isUnderline={isUnderline}
