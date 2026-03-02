@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@editor/ui/select";
-import type { FontWeightTypographyConfig } from "@editor/ui/editor/themes/editor-theme";
-import { FONT_WEIGHT_PRESETS } from "@editor/ui/lib/typography/font-weight";
+import type { FontWeightTypographyConfig } from "mdly/editor";
+import { FONT_WEIGHT_PRESETS } from "mdly/lib/typography/font-weight";
 import { type SlotId, TYPOGRAPHY_SLOTS } from "./typography-slots";
 
 const DEFAULT_VALUE = "__default__";

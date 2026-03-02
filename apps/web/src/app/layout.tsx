@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "mdly/editor/themes/editor-theme.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { CustomFontsProvider } from "../components/custom-fonts-provider";
 import { FontProvider } from "../components/font-provider";

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
-import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor"
+import { ToolbarlessEditor } from "mdly/editor"
 
 describe("Editor smoke", () => {
   it("renders toolbarless editor with placeholder", () => {

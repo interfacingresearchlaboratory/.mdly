@@ -12,7 +12,7 @@ import { Kbd, KbdGroup } from "@editor/ui/kbd";
 import {
   EDITOR_SHORTCUT_GROUPS,
   type ShortcutEntry,
-} from "@editor/ui/editor/shortcuts";
+} from "mdly/editor";
 import { cn } from "@editor/ui/lib/utils";
 
 function formatKeyDisplay(key: string): string {

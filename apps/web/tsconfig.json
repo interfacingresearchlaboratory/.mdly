@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@editor/ui/*": ["../../packages/ui/src/*"]
+      "@editor/ui/*": ["../../packages/ui/src/*"],
+      "mdly/*": ["../../packages/mdly/src/*"]
     },
     "plugins": [
       {

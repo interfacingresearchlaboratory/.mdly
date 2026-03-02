@@ -85,6 +85,7 @@ export function FindInFilePlugin({ paneId }: { paneId: string }): ReactNode {
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
   const isActive = findContext != null && findContext.focusedPaneId === paneId && findContext.isOpen;
+  const currentIndex = findContext?.currentIndex ?? -1;
 
   const updateMatches = useCallback(() => {
     if (!findContext || !isActive || findContext.query.length === 0) {
@@ -188,9 +189,9 @@ export function FindInFilePlugin({ paneId }: { paneId: string }): ReactNode {
   // Only select and scroll when user navigates (prev/next), not when query changes.
   // Running on every keystroke would steal focus from the find input.
   useEffect(() => {
-    if (!findContext || !isActive || findContext.query.length === 0) return;
+    if (!isActive) return;
     const matches = matchesRef.current;
-    const idx = findContext.currentIndex;
+    const idx = currentIndex;
     if (idx < 0 || idx >= matches.length) return;
     const match = matches[idx];
     if (!match) return;
@@ -213,7 +214,7 @@ export function FindInFilePlugin({ paneId }: { paneId: string }): ReactNode {
     if (el) {
       el.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
-  }, [editor, findContext?.currentIndex, isActive]);
+  }, [editor, currentIndex, isActive]);
 
   if (!findContext || !isActive) return null;
 
