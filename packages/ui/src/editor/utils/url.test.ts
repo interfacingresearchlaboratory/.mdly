@@ -27,6 +27,11 @@ describe("validateUrl", () => {
     expect(validateUrl("javascript:alert(1)")).toBe(false)
     expect(validateUrl("data:text/html,<script>")).toBe(false)
   })
+
+  it("accepts vellum-file: wiki-style file links", () => {
+    expect(validateUrl("vellum-file:readme.md")).toBe(true)
+    expect(validateUrl("vellum-file:docs/page.md")).toBe(true)
+  })
 })
 
 describe("sanitizeUrl", () => {
@@ -47,5 +52,9 @@ describe("sanitizeUrl", () => {
   it("returns trimmed URL for valid http/https with host", () => {
     expect(sanitizeUrl("https://example.com")).toBe("https://example.com")
     expect(sanitizeUrl("  https://example.com  ")).toBe("https://example.com")
+  })
+
+  it("returns URL as-is for vellum-file: wiki file links", () => {
+    expect(sanitizeUrl("vellum-file:readme.md")).toBe("vellum-file:readme.md")
   })
 })

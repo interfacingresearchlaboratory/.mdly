@@ -237,15 +237,27 @@ function TableHoverActionsContainer({
         </button>
       )}
       {isShownColumn && (
-        <button
-          className={
-            "EditorTheme__tableAddColumns bg-accent hover:bg-accent/80 absolute flex w-[calc(100%-25px)] cursor-pointer items-center justify-center border-0"
-          }
-          style={{ ...position }}
-          onClick={() => insertAction(false)}
-        >
-          <PlusIcon className="h-4 w-4" />
-        </button>
+        <>
+          {/* Vertical line at table right edge so the border is visible next to the + button */}
+          <div
+            className="EditorTheme__tableRightEdgeLine absolute top-0 w-px bg-border pointer-events-none"
+            style={{
+              left: (position as { left?: number }).left! - 5,
+              top: (position as { top?: number }).top,
+              height: (position as { height?: number }).height,
+            }}
+            aria-hidden
+          />
+          <button
+            className={
+              "EditorTheme__tableAddColumns bg-accent hover:bg-accent/80 absolute flex w-[calc(100%-25px)] cursor-pointer items-center justify-center border-0"
+            }
+            style={{ ...position }}
+            onClick={() => insertAction(false)}
+          >
+            <PlusIcon className="h-4 w-4" />
+          </button>
+        </>
       )}
     </>
   )

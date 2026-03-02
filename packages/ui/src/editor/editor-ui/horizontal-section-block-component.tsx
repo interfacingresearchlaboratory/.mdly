@@ -44,6 +44,7 @@ import { DropInsertImagePlugin } from "../plugins/drop-insert-image-plugin"
 import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transformer"
 import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
 import { ColumnsPlugin } from "../plugins/columns-plugin"
+import { FloatingTextFormatToolbarPlugin } from "../plugins/floating-text-format-plugin"
 import {
   Settings2Icon,
   PlusIcon,
@@ -250,6 +251,55 @@ function CardSettingsForm({
           }
         />
       </div>
+    </div>
+  )
+}
+
+function CardContentEditor({
+  editor,
+}: {
+  editor: HorizontalSectionCard["editor"]
+}): JSX.Element {
+  const [anchorElem, setAnchorElem] = useState<HTMLDivElement | null>(null)
+
+  return (
+    <div ref={setAnchorElem} className="relative">
+      <LexicalNestedComposer initialEditor={editor}>
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable
+              placeholder="Type here…"
+              className="EditorTheme__horizontalSectionBlockCardEditable relative min-h-[60px] w-full outline-none"
+              placeholderClassName="text-muted-foreground pointer-events-none absolute left-0 top-0 text-sm select-none"
+            />
+          }
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <HistoryPlugin />
+        <TablePlugin />
+        <ListPlugin />
+        <CheckListPlugin />
+        <ListExitPlugin />
+        <LinkPlugin />
+        <AutoLinkPlugin />
+        <ClickableLinkPlugin />
+        <ImagesPlugin />
+        <InlineImagePlugin />
+        <DropInsertImagePlugin />
+        <MarkdownShortcutPlugin
+          transformers={[
+            CHECK_LIST,
+            HORIZONTAL_RULE,
+            ...ELEMENT_TRANSFORMERS,
+            ...MULTILINE_ELEMENT_TRANSFORMERS,
+            ...TEXT_FORMAT_TRANSFORMERS,
+            ...TEXT_MATCH_TRANSFORMERS,
+          ]}
+        />
+        <SlashCommandMenuPlugin />
+        <ColumnsPlugin />
+        <FloatingTextFormatToolbarPlugin anchorElem={anchorElem} />
+      </LexicalNestedComposer>
     </div>
   )
 }
@@ -524,41 +574,7 @@ export default function HorizontalSectionBlockComponent({
                       />
                     </PopoverContent>
                   </Popover>
-                  <LexicalNestedComposer initialEditor={card.editor}>
-                    <RichTextPlugin
-                      contentEditable={
-                        <ContentEditable
-                          placeholder="Type here…"
-                          className="EditorTheme__horizontalSectionBlockCardEditable relative min-h-[60px] w-full outline-none"
-                          placeholderClassName="text-muted-foreground pointer-events-none absolute left-0 top-0 text-sm select-none"
-                        />
-                      }
-                      ErrorBoundary={LexicalErrorBoundary}
-                    />
-                    <HistoryPlugin />
-                    <TablePlugin />
-                    <ListPlugin />
-                    <CheckListPlugin />
-                    <ListExitPlugin />
-                    <LinkPlugin />
-                    <AutoLinkPlugin />
-                    <ClickableLinkPlugin />
-                    <ImagesPlugin />
-                    <InlineImagePlugin />
-                    <DropInsertImagePlugin />
-                    <MarkdownShortcutPlugin
-                      transformers={[
-                        CHECK_LIST,
-                        HORIZONTAL_RULE,
-                        ...ELEMENT_TRANSFORMERS,
-                        ...MULTILINE_ELEMENT_TRANSFORMERS,
-                        ...TEXT_FORMAT_TRANSFORMERS,
-                        ...TEXT_MATCH_TRANSFORMERS,
-                      ]}
-                    />
-                    <SlashCommandMenuPlugin />
-                    <ColumnsPlugin />
-                  </LexicalNestedComposer>
+                  <CardContentEditor editor={card.editor} />
                 </div>
               </div>
             </div>

@@ -22,7 +22,6 @@ import { CodeNode, CodeHighlightNode } from "@lexical/code"
 import { ImageNode } from "./image-node"
 import { InlineImageNode } from "./inline-image-node"
 import { HorizontalRuleNode } from "./horizontal-rule-node"
-import { MentionNode } from "./mention-node"
 
 const ColumnsComponent = React.lazy(
   () => import("../editor-ui/columns-component")
@@ -67,7 +66,6 @@ const contentNodesBase = [
   InlineImageNode,
   AutocompleteNode,
   HorizontalRuleNode,
-  MentionNode,
 ]
 
 function defaultWidths(count: 1 | 2 | 3 | 4): number[] {

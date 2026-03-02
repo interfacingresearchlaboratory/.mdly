@@ -5,8 +5,16 @@ import { LinkNode, AutoLinkNode } from "@lexical/link"
 import type { SerializedLinkNode, SerializedAutoLinkNode } from "@lexical/link"
 import { isHTMLAnchorElement } from "@lexical/utils"
 
+import { VELLUM_FILE_LINK_PREFIX } from "../utils/vellum-file-constants"
+
+export const VELLUM_FILE_PATH_ATTR = "data-vellum-file-path"
+
 function isExternalUrl(url: string): boolean {
   return url.startsWith("http://") || url.startsWith("https://")
+}
+
+function isVellumFileUrl(url: string): boolean {
+  return url.startsWith(VELLUM_FILE_LINK_PREFIX)
 }
 
 function applyExternalLinkAttributes(anchor: HTMLAnchorElement, url: string): void {
@@ -17,6 +25,13 @@ function applyExternalLinkAttributes(anchor: HTMLAnchorElement, url: string): vo
     anchor.removeAttribute("target")
     anchor.removeAttribute("rel")
   }
+}
+
+function applyVellumFileAttributes(anchor: HTMLAnchorElement, url: string): void {
+  if (!isVellumFileUrl(url)) return
+  const path = url.slice(VELLUM_FILE_LINK_PREFIX.length)
+  anchor.href = "#"
+  anchor.setAttribute(VELLUM_FILE_PATH_ATTR, path)
 }
 
 type LinkHTMLElementType = HTMLAnchorElement | HTMLSpanElement
@@ -71,8 +86,27 @@ export class CustomLinkNode extends LinkNode {
   ): void {
     super.updateLinkDOM(prevNode as this | null, anchor, config)
     if (isHTMLAnchorElement(anchor)) {
-      applyExternalLinkAttributes(anchor, this.getURL())
+      const url = this.getURL()
+      if (isVellumFileUrl(url)) {
+        applyVellumFileAttributes(anchor, url)
+      } else {
+        anchor.removeAttribute(VELLUM_FILE_PATH_ATTR)
+        applyExternalLinkAttributes(anchor, url)
+      }
     }
+  }
+
+  override createDOM(config: EditorConfig): LinkHTMLElementType {
+    const element = super.createDOM(config)
+    if (isHTMLAnchorElement(element)) {
+      const url = this.getURL()
+      if (isVellumFileUrl(url)) {
+        applyVellumFileAttributes(element, url)
+      } else {
+        applyExternalLinkAttributes(element, url)
+      }
+    }
+    return element
   }
 }
 

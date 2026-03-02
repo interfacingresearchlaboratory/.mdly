@@ -50,8 +50,7 @@ export function MentionsPlugin(): JSX.Element | null {
 
   const options = useMemo(() => {
     const query = (queryString ?? "").trim().toLowerCase()
-    // Search by name (label) only
-    let filtered = entities.filter((e) =>
+    const filtered = entities.filter((e) =>
       e.label.toLowerCase().includes(query)
     )
 

@@ -7,7 +7,6 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import * as React from "react"
 import {
   JSX,
   ReactPortal,
@@ -449,6 +448,7 @@ function TableActionMenu({
     })
   }, [editor, tableCellNode, clearTableSelection, onClose])
 
+  // Reserved for future cell background color UI
   const _handleCellBackgroundColor = useCallback(
     (value: string) => {
       editor.update(() => {
@@ -474,6 +474,7 @@ function TableActionMenu({
     },
     [editor]
   )
+  void _handleCellBackgroundColor
 
   let mergeCellButton: null | JSX.Element = null
   if (cellMerge) {

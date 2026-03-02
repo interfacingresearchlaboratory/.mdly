@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   $getListDepth,
@@ -6,9 +6,9 @@ import {
   $isListNode,
   REMOVE_LIST_COMMAND,
   type ListItemNode,
-} from "@lexical/list";
-import { $findMatchingParent, mergeRegister } from "@lexical/utils";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+} from "@lexical/list"
+import { $findMatchingParent, mergeRegister } from "@lexical/utils"
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import {
   $getSelection,
   $isRangeSelection,
@@ -17,78 +17,78 @@ import {
   INSERT_PARAGRAPH_COMMAND,
   KEY_ENTER_COMMAND,
   OUTDENT_CONTENT_COMMAND,
-} from "lexical";
-import { useEffect } from "react";
-import type { JSX } from "react";
+} from "lexical"
+import { useEffect } from "react"
+import type { JSX } from "react"
 
 function $isEmptyListItem(listItem: ListItemNode): boolean {
-  const size = listItem.getChildrenSize();
-  if (size === 0) return true;
-  const children = listItem.getChildren();
+  const size = listItem.getChildrenSize()
+  if (size === 0) return true
+  const children = listItem.getChildren()
   return children.every(
     (node) => $isTextNode(node) && node.getTextContent().trim() === ""
-  );
+  )
 }
 
 export function ListExitPlugin(): JSX.Element | null {
-  const [editor] = useLexicalComposerContext();
+  const [editor] = useLexicalComposerContext()
 
   useEffect(() => {
     return mergeRegister(
       editor.registerCommand<KeyboardEvent | null>(
         KEY_ENTER_COMMAND,
         () => {
-          let handled = false;
+          let handled = false
           editor.update(() => {
-            const selection = $getSelection();
+            const selection = $getSelection()
             if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
-              return;
+              return
             }
-            const anchorNode = selection.anchor.getNode();
-            const listItem = $findMatchingParent(anchorNode, $isListItemNode);
+            const anchorNode = selection.anchor.getNode()
+            const listItem = $findMatchingParent(anchorNode, $isListItemNode)
             if (listItem === null || !$isEmptyListItem(listItem)) {
-              return;
+              return
             }
-            editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
-            handled = true;
-          });
-          return handled;
+            editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined)
+            handled = true
+          })
+          return handled
         },
         COMMAND_PRIORITY_EDITOR
       ),
       editor.registerCommand(
         OUTDENT_CONTENT_COMMAND,
         () => {
-          let handled = false;
+          let handled = false
           editor.update(() => {
-            const selection = $getSelection();
+            const selection = $getSelection()
             if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
-              return;
+              return
             }
-            const anchorNode = selection.anchor.getNode();
-            const listItem = $findMatchingParent(anchorNode, $isListItemNode);
+            const anchorNode = selection.anchor.getNode()
+            const listItem = $findMatchingParent(anchorNode, $isListItemNode)
             if (listItem === null || !$isEmptyListItem(listItem)) {
-              return;
+              return
             }
-            const parent = listItem.getParent();
+            const parent = listItem.getParent()
             const depth =
               parent !== null && $isListNode(parent)
                 ? $getListDepth(parent)
-                : 0;
+                : 0
             if (depth === 0) {
-              editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-              handled = true;
+              editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
+              handled = true
             } else {
-              listItem.setIndent(listItem.getIndent() - 1);
-              handled = true;
+              listItem.setIndent(listItem.getIndent() - 1)
+              handled = true
             }
-          });
-          return handled;
+          })
+          return handled
         },
         COMMAND_PRIORITY_EDITOR
       )
-    );
-  }, [editor]);
+    )
+  }, [editor])
 
-  return null;
+  return null
 }

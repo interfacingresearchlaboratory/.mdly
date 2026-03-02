@@ -1,4 +1,3 @@
-import * as React from "react"
 import { createContext, useContext, ReactNode } from "react"
 
 export type MentionEntity = {
@@ -7,14 +6,28 @@ export type MentionEntity = {
   label: string
 }
 
-export type MentionsContextValue = {
+export type Project = {
+  _id: string
+  title: string
+}
+
+export type Task = {
+  _id: string
+  title: string
+}
+
+type MentionsContextValue = {
   entities: MentionEntity[]
   getHref?: (type: string, id: string) => string | undefined
   renderIcon?: (type: string) => ReactNode
+  projects: Project[] | null | undefined
+  tasks: Task[] | null | undefined
 }
 
 const MentionsContext = createContext<MentionsContextValue>({
   entities: [],
+  projects: null,
+  tasks: null,
 })
 
 export function MentionsContextProvider({
@@ -22,18 +35,20 @@ export function MentionsContextProvider({
   entities = [],
   getHref,
   renderIcon,
+  projects,
+  tasks,
 }: {
   children: ReactNode
   entities?: MentionEntity[]
   getHref?: (type: string, id: string) => string | undefined
   renderIcon?: (type: string) => ReactNode
+  projects?: Project[] | null
+  tasks?: Task[] | null
 }) {
-  const value = React.useMemo<MentionsContextValue>(
-    () => ({ entities, getHref, renderIcon }),
-    [entities, getHref, renderIcon]
-  )
   return (
-    <MentionsContext.Provider value={value}>
+    <MentionsContext.Provider
+      value={{ entities, getHref, renderIcon, projects, tasks }}
+    >
       {children}
     </MentionsContext.Provider>
   )

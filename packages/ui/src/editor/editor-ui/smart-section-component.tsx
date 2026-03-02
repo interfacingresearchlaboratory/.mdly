@@ -35,6 +35,8 @@ import { DropInsertImagePlugin } from "../plugins/drop-insert-image-plugin"
 import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transformer"
 import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
 import { ColumnsPlugin } from "../plugins/columns-plugin"
+import { FloatingTextFormatToolbarPlugin } from "../plugins/floating-text-format-plugin"
+import { cn } from "../../lib/utils"
 
 export default function SmartSectionComponent({
   headerEditor,
@@ -49,22 +51,25 @@ export default function SmartSectionComponent({
 }): JSX.Element {
   const [editor] = useLexicalComposerContext()
   const [isExpanded, setIsExpanded] = useState(initialIsExpanded)
+  const [headerAnchorElem, setHeaderAnchorElem] = useState<HTMLDivElement | null>(null)
+  const [contentAnchorElem, setContentAnchorElem] = useState<HTMLDivElement | null>(null)
 
   // Sync state with node
   useEffect(() => {
     setIsExpanded(initialIsExpanded)
   }, [initialIsExpanded])
 
-  const toggleExpanded = useCallback(() => {
+  const toggleExpanded = useCallback((nextExpanded?: boolean) => {
+    const newExpanded = nextExpanded ?? !isExpanded
+    // Update local UI state first so collapse/expand responds immediately.
+    setIsExpanded(newExpanded)
     editor.update(() => {
       const node = $getNodeByKey(nodeKey)
       if ($isSmartSectionNode(node)) {
-        const newExpanded = !node.getIsExpanded()
         node.setIsExpanded(newExpanded)
-        setIsExpanded(newExpanded)
       }
     })
-  }, [editor, nodeKey])
+  }, [editor, isExpanded, nodeKey])
 
   const deleteSection = useCallback(() => {
     editor.update(() => {
@@ -78,16 +83,19 @@ export default function SmartSectionComponent({
   }, [editor, nodeKey])
 
   return (
-    <div className="EditorTheme__smartSection border border-border rounded-lg mb-4 overflow-hidden">
+    <div className="EditorTheme__smartSection border border-border rounded-lg mb-4 overflow-visible">
       {/* Header */}
       <div className="EditorTheme__smartSectionHeader group/header flex items-center gap-2 px-2 py-1">
         <div
           className="flex-shrink-0 cursor-pointer hover:bg-muted/50 rounded p-1 transition-colors"
           onClick={(e) => {
             e.stopPropagation()
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
             toggleExpanded()
           }}
-          onMouseDown={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -110,26 +118,29 @@ export default function SmartSectionComponent({
             headerEditor.getRootElement()?.focus()
           }}
         >
-          <LexicalNestedComposer initialEditor={headerEditor}>
-            <SharedAutocompleteContext>
-              <RichTextPlugin
-                contentEditable={
-                  <ContentEditable
-                    placeholder=""
-                    className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
-                  />
-                }
-                ErrorBoundary={LexicalErrorBoundary}
-              />
-              <AutoFocusPlugin />
-              <HistoryPlugin />
-              <LinkPlugin />
-              <AutoLinkPlugin />
-              <ClickableLinkPlugin />
-              <AutocompletePlugin />
-              <MentionsPlugin />
-            </SharedAutocompleteContext>
-          </LexicalNestedComposer>
+          <div ref={setHeaderAnchorElem} className="relative">
+            <LexicalNestedComposer initialEditor={headerEditor}>
+              <SharedAutocompleteContext>
+                <RichTextPlugin
+                  contentEditable={
+                    <ContentEditable
+                      placeholder=""
+                      className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
+                    />
+                  }
+                  ErrorBoundary={LexicalErrorBoundary}
+                />
+                <AutoFocusPlugin />
+                <HistoryPlugin />
+                <LinkPlugin />
+                <AutoLinkPlugin />
+                <ClickableLinkPlugin />
+                <AutocompletePlugin />
+                <MentionsPlugin />
+                <FloatingTextFormatToolbarPlugin anchorElem={headerAnchorElem} />
+              </SharedAutocompleteContext>
+            </LexicalNestedComposer>
+          </div>
         </div>
         <div
           className="flex-shrink-0 opacity-0 group-hover/header:opacity-100 transition-opacity cursor-pointer hover:bg-muted/50 rounded p-1"
@@ -149,15 +160,18 @@ export default function SmartSectionComponent({
       </div>
 
       {/* Content */}
-      {isExpanded && (
-        <div
-          className="EditorTheme__smartSectionContent animate-accordion-down overflow-hidden"
-          onClick={(e) => {
-            // Stop propagation so clicking the editor doesn't toggle expand
-            e.stopPropagation()
-          }}
-        >
-          <div className="border-t border-border">
+      <div
+        className={cn(
+          "EditorTheme__smartSectionContent grid overflow-visible transition-[grid-template-rows,opacity] duration-250 ease-in-out",
+          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-70"
+        )}
+        onClick={(e) => {
+          // Stop propagation so clicking the editor doesn't toggle expand
+          e.stopPropagation()
+        }}
+      >
+        <div className="overflow-hidden border-t border-border">
+          <div ref={setContentAnchorElem} className="relative">
             <LexicalNestedComposer initialEditor={contentEditor}>
               <RichTextPlugin
                 contentEditable={
@@ -192,10 +206,11 @@ export default function SmartSectionComponent({
               />
               <SlashCommandMenuPlugin />
               <ColumnsPlugin />
+              <FloatingTextFormatToolbarPlugin anchorElem={contentAnchorElem} />
             </LexicalNestedComposer>
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

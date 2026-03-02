@@ -110,15 +110,15 @@ export function UpdateInlineImageDialog({
   const [showCaption, setShowCaption] = useState(node.getShowCaption())
   const [position, setPosition] = useState<Position>(node.getPosition())
 
-  // Handlers reserved for future caption/position UI
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleShowCaptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handlers reserved for future caption/position UI (prefixed to satisfy noUnusedLocals)
+  const _handleShowCaptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowCaption(e.target.checked)
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const _handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPosition(e.target.value as Position)
   }
+  void _handleShowCaptionChange
+  void _handlePositionChange
 
   const handleOnConfirm = () => {
     const payload = { altText, position, showCaption }

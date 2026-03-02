@@ -167,6 +167,7 @@ const baseEditorTheme: EditorThemeClasses = {
   horizontalSectionBlock: "EditorTheme__horizontalSectionBlock",
   horizontalSectionBlockCard: "EditorTheme__horizontalSectionBlockCard",
   mention: "EditorTheme__mention",
+  backlink: "EditorTheme__backlink text-blue-600 underline cursor-pointer",
   placeholder: "EditorTheme__placeholder",
 }
 

@@ -144,6 +144,17 @@
   cursor: default;
 }
 
+.EditorTheme__backlink {
+  display: inline;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.EditorTheme__wikiLinkUnresolved {
+  opacity: 0.7;
+  cursor: default;
+}
+
 .EditorTheme__placeholder {
   color: color-mix(in oklch, var(--muted-foreground) 80%, transparent) !important;
   text-decoration-line: underline !important;

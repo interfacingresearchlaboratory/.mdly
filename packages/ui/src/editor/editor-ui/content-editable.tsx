@@ -5,6 +5,8 @@ type Props = {
   placeholder: string
   className?: string
   placeholderClassName?: string
+  /** Optional inline style for the placeholder div (e.g. to position within page margins). */
+  placeholderStyle?: React.CSSProperties
   onFocus?: FocusEventHandler<HTMLDivElement>
   onBlur?: FocusEventHandler<HTMLDivElement>
 }
@@ -13,6 +15,7 @@ export function ContentEditable({
   placeholder,
   className,
   placeholderClassName,
+  placeholderStyle,
   onFocus,
   onBlur,
 }: Props): JSX.Element {
@@ -31,6 +34,7 @@ export function ContentEditable({
             placeholderClassName ??
             `text-muted-foreground pointer-events-none absolute top-0 left-0 overflow-hidden px-8 py-[18px] text-ellipsis select-none`
           }
+          style={placeholderStyle}
         >
           {placeholder}
         </div>

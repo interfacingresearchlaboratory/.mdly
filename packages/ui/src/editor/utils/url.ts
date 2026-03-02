@@ -4,6 +4,7 @@ const SUPPORTED_URL_PROTOCOLS = new Set([
   "mailto:",
   "sms:",
   "tel:",
+  "vellum-file:", // wiki-style file links [[filename]]; handled by host on click
 ])
 
 /**
@@ -15,7 +16,7 @@ function isUrlWithContent(parsed: URL): boolean {
     if (parsed.protocol === "http:" || parsed.protocol === "https:") {
       return parsed.hostname.length > 0
     }
-    // mailto:, tel:, sms: — require non-empty pathname or meaningful href after protocol
+    // mailto:, tel:, sms:, vellum-file: — require non-empty path or meaningful href after protocol
     const afterProtocol = parsed.href.slice(parsed.protocol.length).replace(/^\/+/, "")
     return afterProtocol.length > 0
   }

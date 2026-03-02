@@ -14,7 +14,8 @@ import { useMentionsContext } from "../context/mentions-context"
 export type SerializedMentionNode = Spread<
   {
     id: string
-    entityType: string
+    entityType?: string
+    mentionType?: string
     label: string
   },
   SerializedLexicalNode
@@ -34,7 +35,8 @@ export class MentionNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedMentionNode): MentionNode {
-    const { id, entityType, label } = serializedNode
+    const { id, label } = serializedNode
+    const entityType = serializedNode.entityType ?? serializedNode.mentionType ?? "mention"
     return $createMentionNode(id, entityType, label)
   }
 
@@ -44,6 +46,7 @@ export class MentionNode extends DecoratorNode<JSX.Element> {
       type: "mention",
       id: this.__id,
       entityType: this.__entityType,
+      mentionType: this.__entityType,
       label: this.__label,
       version: 1,
     }
@@ -84,14 +87,18 @@ export class MentionNode extends DecoratorNode<JSX.Element> {
   }
 
   updateDOM(
-    _prevNode: unknown,
-    _dom: HTMLElement,
-    _config: EditorConfig
+    prevNode: unknown,
+    dom: HTMLElement,
+    config: EditorConfig
   ): boolean {
+    void prevNode
+    void dom
+    void config
     return false
   }
 
-  createDOM(_config: EditorConfig): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
+    void config
     return document.createElement("span")
   }
 

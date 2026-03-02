@@ -1,4 +1,3 @@
-import * as React from "react"
 import { JSX, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { useCollaborationContext } from "../context/collaboration-context"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"

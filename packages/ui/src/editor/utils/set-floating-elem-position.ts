@@ -1,6 +1,5 @@
 const VERTICAL_GAP = 10
 const HORIZONTAL_OFFSET = 5
-const VIEWPORT_MARGIN = 8
 
 export function setFloatingElemPosition(
   targetRect: DOMRect | null,
@@ -36,14 +35,6 @@ export function setFloatingElemPosition(
   if (left + floatingElemRect.width > editorScrollerRect.right) {
     left = editorScrollerRect.right - floatingElemRect.width - horizontalOffset
   }
-
-  // Clamp to viewport so the toolbar is not cut off by the page
-  const viewportLeft = VIEWPORT_MARGIN
-  const viewportRight = window.innerWidth - VIEWPORT_MARGIN
-  const viewportTop = VIEWPORT_MARGIN
-  const viewportBottom = window.innerHeight - VIEWPORT_MARGIN
-  left = Math.max(viewportLeft, Math.min(left, viewportRight - floatingElemRect.width))
-  top = Math.max(viewportTop, Math.min(top, viewportBottom - floatingElemRect.height))
 
   top -= anchorElementRect.top
   left -= anchorElementRect.left
