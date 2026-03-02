@@ -1,37 +1,39 @@
 import * as React from "react"
 import { createContext, useContext, ReactNode } from "react"
 
-export type Project = {
-  _id: string
-  title: string
+export type MentionEntity = {
+  id: string
+  type: string
+  label: string
 }
 
-export type Task = {
-  _id: string
-  title: string
-}
-
-type MentionsContextValue = {
-  projects: Project[] | null | undefined
-  tasks: Task[] | null | undefined
+export type MentionsContextValue = {
+  entities: MentionEntity[]
+  getHref?: (type: string, id: string) => string | undefined
+  renderIcon?: (type: string) => ReactNode
 }
 
 const MentionsContext = createContext<MentionsContextValue>({
-  projects: null,
-  tasks: null,
+  entities: [],
 })
 
 export function MentionsContextProvider({
   children,
-  projects,
-  tasks,
+  entities = [],
+  getHref,
+  renderIcon,
 }: {
   children: ReactNode
-  projects?: Project[] | null
-  tasks?: Task[] | null
+  entities?: MentionEntity[]
+  getHref?: (type: string, id: string) => string | undefined
+  renderIcon?: (type: string) => ReactNode
 }) {
+  const value = React.useMemo<MentionsContextValue>(
+    () => ({ entities, getHref, renderIcon }),
+    [entities, getHref, renderIcon]
+  )
   return (
-    <MentionsContext.Provider value={{ projects, tasks }}>
+    <MentionsContext.Provider value={value}>
       {children}
     </MentionsContext.Provider>
   )

@@ -98,6 +98,7 @@ const contentNodes = [
   AutocompleteNode,
   HorizontalRuleNode,
   ColumnsNode,
+  MentionNode,
 ]
 
 export interface SmartSectionPayload {

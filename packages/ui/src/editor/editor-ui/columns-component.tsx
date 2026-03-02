@@ -23,6 +23,7 @@ import { ContentEditable } from "./content-editable"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin"
+import { ListExitPlugin } from "../plugins/list-exit-plugin"
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin"
 import {
   CHECK_LIST,
@@ -36,17 +37,75 @@ import { InlineImagePlugin } from "../plugins/inline-image-plugin"
 import { DropInsertImagePlugin } from "../plugins/drop-insert-image-plugin"
 import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transformer"
 import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
+import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { ColumnsPlugin } from "../plugins/columns-plugin"
+import { FloatingTextFormatToolbarPlugin } from "../plugins/floating-text-format-plugin"
 import { Trash2Icon } from "lucide-react"
 
 const MIN_COLUMN_FRACTION = 0.15
-const DIVIDER_WIDTH_PX = 10
+const DIVIDER_WIDTH_PX = 2
 
 function normalizeWidths(widths: number[], minFrac: number): number[] {
   const clamped = widths.map((w) => Math.max(minFrac, Math.min(1, w)))
   const sum = clamped.reduce((a, b) => a + b, 0)
   if (sum <= 0) return widths.map(() => 1 / widths.length)
   return clamped.map((w) => w / sum)
+}
+
+function ColumnCellContent({
+  columnEditor,
+  onWrapperClick,
+}: {
+  columnEditor: LexicalEditor
+  onWrapperClick: (e: React.MouseEvent) => void
+}): JSX.Element {
+  const [anchorElem, setAnchorElem] = useState<HTMLDivElement | null>(null)
+
+  return (
+    <div
+      ref={(el) => { if (el) setAnchorElem(el); }}
+      className="p-3 h-full min-h-[120px] relative"
+      onClick={onWrapperClick}
+    >
+      <LexicalNestedComposer initialEditor={columnEditor}>
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable
+              placeholder="Type here…"
+              className="EditorTheme__columnsCellEditable relative outline-none min-h-[80px] w-full"
+              placeholderClassName="text-muted-foreground pointer-events-none absolute top-3 left-3 text-sm select-none"
+            />
+          }
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <HistoryPlugin />
+        <TablePlugin />
+        <ListPlugin />
+        <CheckListPlugin />
+        <ListExitPlugin />
+        <LinkPlugin />
+        <AutoLinkPlugin />
+        <ClickableLinkPlugin />
+        <ImagesPlugin />
+        <InlineImagePlugin />
+        <DropInsertImagePlugin />
+        <MarkdownShortcutPlugin
+          transformers={[
+            CHECK_LIST,
+            HORIZONTAL_RULE,
+            ...ELEMENT_TRANSFORMERS,
+            ...MULTILINE_ELEMENT_TRANSFORMERS,
+            ...TEXT_FORMAT_TRANSFORMERS,
+            ...TEXT_MATCH_TRANSFORMERS,
+          ]}
+        />
+        <SlashCommandMenuPlugin />
+        <MentionsPlugin />
+        <ColumnsPlugin />
+        <FloatingTextFormatToolbarPlugin anchorElem={anchorElem} />
+      </LexicalNestedComposer>
+    </div>
+  )
 }
 
 export default function ColumnsComponent({
@@ -168,13 +227,13 @@ export default function ColumnsComponent({
     <div
       ref={containerRef}
       contentEditable={false}
-      className="EditorTheme__columns flex w-full gap-0 my-4 rounded-lg border border-border overflow-hidden bg-muted/20"
+      className="EditorTheme__columns flex w-full gap-0 my-4 rounded-lg border border-border overflow-visible bg-muted/20"
       style={{ userSelect: draggingIndex !== null ? "none" : undefined }}
     >
       {editors.slice(0, columnCount).map((columnEditor, i) => (
         <React.Fragment key={i}>
           <div
-            className="EditorTheme__columnsCell group/cell relative flex flex-col min-w-0 flex-1 overflow-hidden"
+            className="EditorTheme__columnsCell group/cell relative flex flex-col min-w-0 flex-1 overflow-visible"
             style={{
               flex: `${columnWidths[i]} ${columnWidths[i]} 0`,
               minWidth: 0,
@@ -195,45 +254,10 @@ export default function ColumnsComponent({
                 <Trash2Icon className="size-4 text-muted-foreground hover:text-destructive" />
               </button>
             )}
-            <div
-              className="p-3 h-full min-h-[120px]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <LexicalNestedComposer initialEditor={columnEditor}>
-                <RichTextPlugin
-                  contentEditable={
-                    <ContentEditable
-                      placeholder="Type here…"
-                      className="EditorTheme__columnsCellEditable relative outline-none min-h-[80px] w-full"
-                      placeholderClassName="text-muted-foreground pointer-events-none absolute top-3 left-3 text-sm select-none"
-                    />
-                  }
-                  ErrorBoundary={LexicalErrorBoundary}
-                />
-                <HistoryPlugin />
-                <TablePlugin />
-                <ListPlugin />
-                <CheckListPlugin />
-                <LinkPlugin />
-                <AutoLinkPlugin />
-                <ClickableLinkPlugin />
-                <ImagesPlugin />
-                <InlineImagePlugin />
-                <DropInsertImagePlugin />
-                <MarkdownShortcutPlugin
-                  transformers={[
-                    CHECK_LIST,
-                    HORIZONTAL_RULE,
-                    ...ELEMENT_TRANSFORMERS,
-                    ...MULTILINE_ELEMENT_TRANSFORMERS,
-                    ...TEXT_FORMAT_TRANSFORMERS,
-                    ...TEXT_MATCH_TRANSFORMERS,
-                  ]}
-                />
-                <SlashCommandMenuPlugin />
-                <ColumnsPlugin />
-              </LexicalNestedComposer>
-            </div>
+            <ColumnCellContent
+              columnEditor={columnEditor}
+              onWrapperClick={(e) => e.stopPropagation()}
+            />
           </div>
           {i < columnCount - 1 && (
             <div

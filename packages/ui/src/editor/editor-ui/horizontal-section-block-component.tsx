@@ -29,6 +29,7 @@ import { ContentEditable } from "./content-editable"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin"
+import { ListExitPlugin } from "../plugins/list-exit-plugin"
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin"
 import {
   CHECK_LIST,
@@ -538,6 +539,7 @@ export default function HorizontalSectionBlockComponent({
                     <TablePlugin />
                     <ListPlugin />
                     <CheckListPlugin />
+                    <ListExitPlugin />
                     <LinkPlugin />
                     <AutoLinkPlugin />
                     <ClickableLinkPlugin />

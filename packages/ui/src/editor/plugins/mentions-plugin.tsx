@@ -6,12 +6,10 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import {
   LexicalTypeaheadMenuPlugin,
   MenuOption,
-  MenuTextMatch,
   useBasicTypeaheadTriggerMatch,
 } from "@lexical/react/LexicalTypeaheadMenuPlugin"
 import { TextNode, $setSelection } from "lexical"
 import { createPortal } from "react-dom"
-import { Layers, SquareSlash } from "lucide-react"
 
 import { $createMentionNode } from "../nodes/mention-node"
 import { useMentionsContext } from "../context/mentions-context"
@@ -22,54 +20,22 @@ import {
   CommandList,
 } from "../../command"
 
-const TRIGGERS = ["@"].join("")
+const SUGGESTION_LIST_LENGTH_LIMIT = 15
+const CHARS_BEYOND_SUGGESTION_THRESHOLD = 3
 
-// Simple regex to match @ followed by non-whitespace characters
-const AtSignMentionsRegex = new RegExp(
-  "(^|\\s|\\()(" + // Start of line, whitespace, or opening paren
-    "[" +
-    TRIGGERS +
-    "]" +
-    "([^\\s@]*)" + // Any non-whitespace, non-@ characters
-    ")$"
-)
-
-// At most, 7 suggestions are shown (5 tasks + 2 projects)
-const SUGGESTION_LIST_LENGTH_LIMIT = 7
-
-function checkForAtSignMentions(
-  text: string,
-  minMatchLength: number
-): MenuTextMatch | null {
-  const match = AtSignMentionsRegex.exec(text)
-  if (match === null) {
-    return null
-  }
-
-  // The strategy ignores leading whitespace but we need to know its length
-  const maybeLeadingWhitespace = match[1] || ""
-  const matchingString = match[3]
-
-  if (matchingString && matchingString.length >= minMatchLength) {
-    return {
-      leadOffset: match.index + maybeLeadingWhitespace.length,
-      matchingString,
-      replaceableString: match[2] || "",
-    }
-  }
-  return null
-}
-
-function getPossibleQueryMatch(text: string): MenuTextMatch | null {
-  return checkForAtSignMentions(text, 1)
+function formatTypeLabel(type: string): string {
+  if (type.length === 0) return type
+  return type
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 class MentionTypeaheadOption extends MenuOption {
   id: string
-  type: "project" | "task"
+  type: string
   label: string
 
-  constructor(id: string, type: "project" | "task", label: string) {
+  constructor(id: string, type: string, label: string) {
     super(label)
     this.id = id
     this.type = type
@@ -79,67 +45,43 @@ class MentionTypeaheadOption extends MenuOption {
 
 export function MentionsPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
-  const { projects, tasks } = useMentionsContext()
+  const { entities, renderIcon } = useMentionsContext()
   const [queryString, setQueryString] = useState<string | null>(null)
 
-  // Filter and build options from projects and tasks
   const options = useMemo(() => {
-    const allOptions: MentionTypeaheadOption[] = []
+    const query = (queryString ?? "").trim().toLowerCase()
+    // Search by name (label) only
+    let filtered = entities.filter((e) =>
+      e.label.toLowerCase().includes(query)
+    )
 
-    // Filter tasks by query string
-    const filteredTasks = (tasks || []).filter((task) => {
-      if (!queryString) return true
-      return (task.title || "Unnamed Task")
-        .toLowerCase()
-        .includes(queryString.toLowerCase())
-    })
+    if (filtered.length > 0) {
+      const maxLabelLength = Math.max(...filtered.map((e) => e.label.length))
+      if (query.length > maxLabelLength + CHARS_BEYOND_SUGGESTION_THRESHOLD) {
+        return []
+      }
+    }
 
-    // Add tasks (max 5)
-    filteredTasks.slice(0, 5).forEach((task) => {
-      allOptions.push(
-        new MentionTypeaheadOption(
-          task._id,
-          "task",
-          task.title || "Unnamed Task"
-        )
-      )
-    })
-
-    // Filter projects by query string
-    const filteredProjects = (projects || []).filter((project) => {
-      if (!queryString) return true
-      return (project.title || "Unnamed Project")
-        .toLowerCase()
-        .includes(queryString.toLowerCase())
-    })
-
-    // Add projects (max 2)
-    filteredProjects.slice(0, 2).forEach((project) => {
-      allOptions.push(
-        new MentionTypeaheadOption(
-          project._id,
-          "project",
-          project.title || "Unnamed Project"
-        )
-      )
-    })
-
-    return allOptions.slice(0, SUGGESTION_LIST_LENGTH_LIMIT)
-  }, [projects, tasks, queryString])
+    return filtered
+      .slice(0, SUGGESTION_LIST_LENGTH_LIMIT)
+      .map((e) => new MentionTypeaheadOption(e.id, e.type, e.label))
+  }, [entities, queryString])
 
   const checkForSlashTriggerMatch = useBasicTypeaheadTriggerMatch("/", {
     minLength: 0,
+  })
+  const checkForAtTriggerMatch = useBasicTypeaheadTriggerMatch("@", {
+    minLength: 0,
+    allowWhitespace: true,
   })
 
   const checkForMentionMatch = useCallback(
     (text: string) => {
       const slashMatch = checkForSlashTriggerMatch(text, editor)
-      if (slashMatch !== null) {
-        return null
-      }
-      return getPossibleQueryMatch(text)
+      if (slashMatch !== null) return null
+      return checkForAtTriggerMatch(text, editor)
     },
-    [checkForSlashTriggerMatch, editor]
+    [checkForSlashTriggerMatch, checkForAtTriggerMatch, editor]
   )
 
   const onSelectOption = useCallback(
@@ -157,7 +99,6 @@ export function MentionsPlugin(): JSX.Element | null {
         if (nodeToReplace) {
           nodeToReplace.replace(mentionNode)
         }
-        // Move selection after the mention node
         $setSelection(null)
         closeMenu()
       })
@@ -165,9 +106,27 @@ export function MentionsPlugin(): JSX.Element | null {
     [editor]
   )
 
-  // Separate tasks and projects for rendering
-  const taskOptions = options.filter((opt) => opt.type === "task")
-  const projectOptions = options.filter((opt) => opt.type === "project")
+  const optionsByType = useMemo(() => {
+    const map = new Map<string, MentionTypeaheadOption[]>()
+    for (const opt of options) {
+      const list = map.get(opt.type) ?? []
+      list.push(opt)
+      map.set(opt.type, list)
+    }
+    return map
+  }, [options])
+
+  const typeOrder = useMemo(() => {
+    const seen = new Set<string>()
+    const order: string[] = []
+    for (const opt of options) {
+      if (!seen.has(opt.type)) {
+        seen.add(opt.type)
+        order.push(opt.type)
+      }
+    }
+    return order
+  }, [options])
 
   return (
     <LexicalTypeaheadMenuPlugin
@@ -179,108 +138,90 @@ export function MentionsPlugin(): JSX.Element | null {
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }
       ) => {
-        if (!anchorElementRef.current || options.length === 0) {
+        if (!anchorElementRef.current) {
           return null
         }
 
-        // Calculate which option is selected
-        const selectedOption = selectedIndex !== null && selectedIndex !== undefined ? options[selectedIndex] : null
+        const optionsCount = options.length
+        let globalIndex = 0
 
         return createPortal(
           <div className="fixed z-50 w-64 max-h-80 overflow-auto bg-popover border border-border rounded-md shadow-md">
             <Command
               onKeyDown={(e) => {
+                if (optionsCount === 0) return
                 if (e.key === "ArrowUp") {
                   e.preventDefault()
                   setHighlightedIndex(
                     selectedIndex !== null
-                      ? (selectedIndex - 1 + options.length) % options.length
-                      : options.length - 1
+                      ? (selectedIndex - 1 + optionsCount) % optionsCount
+                      : optionsCount - 1
                   )
                 } else if (e.key === "ArrowDown") {
                   e.preventDefault()
                   setHighlightedIndex(
                     selectedIndex !== null
-                      ? (selectedIndex + 1) % options.length
+                      ? (selectedIndex + 1) % optionsCount
                       : 0
                   )
                 }
               }}
             >
               <CommandList>
-                {/* Tasks Section */}
-                <CommandGroup>
-                  <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide border-b border-border">
-                    Tasks
-                  </div>
-                  {taskOptions.length > 0 ? (
-                    taskOptions.map((option, index) => {
-                      const globalIndex = index
-                      const isSelected =
-                        selectedIndex === globalIndex &&
-                        selectedOption?.type === "task"
-                      return (
-                        <CommandItem
-                          key={option.key}
-                          value={option.label}
-                          onSelect={() => {
-                            selectOptionAndCleanUp(option)
-                          }}
-                          className={`flex items-center gap-2 ${
-                            isSelected ? "bg-accent" : ""
-                          }`}
-                        >
-                          <SquareSlash
-                            size={14}
-                            className="flex-shrink-0 text-muted-foreground"
-                          />
-                          <span className="truncate">{option.label}</span>
-                        </CommandItem>
-                      )
-                    })
-                  ) : (
-                    <div className="px-3 py-2 text-sm text-muted-foreground">
-                      No tasks found
-                    </div>
-                  )}
-                </CommandGroup>
+                {typeOrder.length > 0 ? (
+                  typeOrder.map((type) => {
+                    const typeOptions = optionsByType.get(type) ?? []
+                    const typeIcon = renderIcon?.(type)
+                    const sectionTitle = formatTypeLabel(type)
+                    const startIndex = globalIndex
+                    globalIndex += typeOptions.length
 
-                {/* Projects Section */}
-                <CommandGroup>
-                  <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide border-t border-b border-border">
-                    Projects
-                  </div>
-                  {projectOptions.length > 0 ? (
-                    projectOptions.map((option, index) => {
-                      const globalIndex = taskOptions.length + index
-                      const isSelected =
-                        selectedIndex === globalIndex &&
-                        selectedOption?.type === "project"
-                      return (
-                        <CommandItem
-                          key={option.key}
-                          value={option.label}
-                          onSelect={() => {
-                            selectOptionAndCleanUp(option)
-                          }}
-                          className={`flex items-center gap-2 ${
-                            isSelected ? "bg-accent" : ""
-                          }`}
-                        >
-                          <Layers
-                            size={14}
-                            className="flex-shrink-0 text-muted-foreground"
-                          />
-                          <span className="truncate">{option.label}</span>
-                        </CommandItem>
-                      )
-                    })
-                  ) : (
+                    return (
+                      <CommandGroup key={type}>
+                        <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide border-b border-border">
+                          {sectionTitle}
+                        </div>
+                        {typeOptions.length > 0 ? (
+                          typeOptions.map((option, index) => {
+                            const idx = startIndex + index
+                            const isSelected = selectedIndex === idx
+                            return (
+                              <CommandItem
+                                key={option.key}
+                                value={option.label}
+                                onSelect={() => {
+                                  selectOptionAndCleanUp(option)
+                                }}
+                                className={`flex items-center gap-2 ${
+                                  isSelected ? "bg-accent" : ""
+                                }`}
+                              >
+                                {typeIcon !== undefined && typeIcon !== null ? (
+                                  <span className="flex-shrink-0 text-muted-foreground [&>svg]:size-3.5">
+                                    {typeIcon}
+                                  </span>
+                                ) : null}
+                                <span className="truncate">{option.label}</span>
+                              </CommandItem>
+                            )
+                          })
+                        ) : (
+                          <div className="px-3 py-2 text-sm text-muted-foreground">
+                            No results
+                          </div>
+                        )}
+                      </CommandGroup>
+                    )
+                  })
+                ) : (
+                  <CommandGroup>
                     <div className="px-3 py-2 text-sm text-muted-foreground">
-                      No projects found
+                      {entities.length === 0
+                        ? "No mentionable items"
+                        : "No matches"}
                     </div>
-                  )}
-                </CommandGroup>
+                  </CommandGroup>
+                )}
               </CommandList>
             </Command>
           </div>,

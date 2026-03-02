@@ -12,7 +12,6 @@ import { ClickableLinkPlugin } from "../plugins/clickable-link-plugin"
 import { AutocompletePlugin } from "../plugins/autocomplete-plugin"
 import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { SharedAutocompleteContext } from "../context/shared-autocomplete-context"
-import { MentionsContextProvider, useMentionsContext } from "../context/mentions-context"
 import type { LexicalEditor, NodeKey } from "lexical"
 import { $createParagraphNode, $getNodeByKey } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
@@ -21,6 +20,7 @@ import { ContentEditable } from "./content-editable"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin"
+import { ListExitPlugin } from "../plugins/list-exit-plugin"
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin"
 import {
   CHECK_LIST,
@@ -48,7 +48,6 @@ export default function SmartSectionComponent({
   nodeKey: NodeKey
 }): JSX.Element {
   const [editor] = useLexicalComposerContext()
-  const { projects, tasks } = useMentionsContext()
   const [isExpanded, setIsExpanded] = useState(initialIsExpanded)
 
   // Sync state with node
@@ -113,24 +112,22 @@ export default function SmartSectionComponent({
         >
           <LexicalNestedComposer initialEditor={headerEditor}>
             <SharedAutocompleteContext>
-              <MentionsContextProvider projects={projects} tasks={tasks}>
-                <RichTextPlugin
-                  contentEditable={
-                    <ContentEditable
-                      placeholder=""
-                      className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
-                    />
-                  }
-                  ErrorBoundary={LexicalErrorBoundary}
-                />
-                <AutoFocusPlugin />
-                <HistoryPlugin />
-                <LinkPlugin />
-                <AutoLinkPlugin />
-                <ClickableLinkPlugin />
-                <AutocompletePlugin />
-                <MentionsPlugin />
-              </MentionsContextProvider>
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable
+                    placeholder=""
+                    className="EditorTheme__smartSectionHeaderEditable outline-none min-h-[1.5rem] cursor-text"
+                  />
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <AutoFocusPlugin />
+              <HistoryPlugin />
+              <LinkPlugin />
+              <AutoLinkPlugin />
+              <ClickableLinkPlugin />
+              <AutocompletePlugin />
+              <MentionsPlugin />
             </SharedAutocompleteContext>
           </LexicalNestedComposer>
         </div>
@@ -175,12 +172,14 @@ export default function SmartSectionComponent({
               <TablePlugin />
               <ListPlugin />
               <CheckListPlugin />
+              <ListExitPlugin />
               <LinkPlugin />
               <AutoLinkPlugin />
               <ClickableLinkPlugin />
               <ImagesPlugin />
               <InlineImagePlugin />
               <DropInsertImagePlugin />
+              <MentionsPlugin />
               <MarkdownShortcutPlugin
                 transformers={[
                   CHECK_LIST,

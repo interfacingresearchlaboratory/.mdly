@@ -46,12 +46,13 @@ import { InlineImagePlugin } from "./plugins/inline-image-plugin";
 import { AutoLinkPlugin } from "./plugins/auto-link-plugin";
 import { DropInsertImagePlugin } from "./plugins/drop-insert-image-plugin";
 import { FloatingLinkContext } from "./context/floating-link-context";
-import { MentionsContextProvider, type Project, type Task } from "./context/mentions-context";
+import { MentionsContextProvider, type MentionEntity } from "./context/mentions-context";
 import { MentionsPlugin } from "./plugins/mentions-plugin";
 import { SlashCommandMenuPlugin } from "./plugins/slash-command-menu-plugin";
 import { CodeBlockLanguagePlugin } from "./plugins/code-block-language-plugin";
 import { CodeHighlightPlugin } from "./plugins/code-highlight-plugin";
 import { TabIndentationPlugin } from "./plugins/tab-indent-plugin";
+import { ListExitPlugin } from "./plugins/list-exit-plugin";
 import { ListNumberingPlugin } from "./plugins/list-numbering-plugin";
 import { PlaceholderFormatPlugin } from "./plugins/placeholder-format-plugin";
 
@@ -73,10 +74,14 @@ type ToolbarlessEditorProps = {
   onChange?: (content: SerializedEditorState) => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  projects?: Project[] | null;
-  tasks?: Task[] | null;
+  /** Mentionable entities for @mention dropdown; optional getHref and renderIcon for badge link and icon. */
+  entities?: MentionEntity[];
+  getHref?: (type: string, id: string) => string | undefined;
+  renderIcon?: (type: string) => React.ReactNode;
   /** Optional typography overrides (letter spacing, font weight, document font) per block/format (e.g. from document settings). */
   typography?: TypographyConfig;
+  /** When true, content is displayed but not editable (no onChange, no edit UI). */
+  readOnly?: boolean;
 };
 
 const baseEditorConfig: Omit<InitialConfigType, "theme"> = {
@@ -115,9 +120,11 @@ export function ToolbarlessEditor({
   onChange,
   onFocus,
   onBlur,
-  projects,
-  tasks,
+  entities = [],
+  getHref,
+  renderIcon,
   typography,
+  readOnly = false,
 }: ToolbarlessEditorProps) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -133,6 +140,7 @@ export function ToolbarlessEditor({
   const initialConfig: InitialConfigType = {
     ...baseEditorConfig,
     theme: getEditorTheme(typography ?? undefined),
+    editable: !readOnly,
     ...(initialContent && isValidEditorState(initialContent)
       ? { editorState: JSON.stringify(initialContent) }
       : {}),
@@ -141,7 +149,7 @@ export function ToolbarlessEditor({
 
   return (
     <div className={className}>
-      <MentionsContextProvider projects={projects} tasks={tasks}>
+      <MentionsContextProvider entities={entities} getHref={getHref} renderIcon={renderIcon}>
         <FloatingLinkContext>
           <LexicalComposer
             key={String(resetKey ?? "toolbarless-editor")}
@@ -184,57 +192,62 @@ export function ToolbarlessEditor({
                   />
 
                   <TablePlugin />
-                  <TableActionMenuPlugin anchorElem={floatingAnchorElem} />
-                  <TableCellResizerPlugin />
-                  <TableHoverActionsPlugin anchorElem={floatingAnchorElem} />
-                  <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-                  <FloatingTextFormatToolbarPlugin
-                    anchorElem={floatingAnchorElem}
-                  />
-                  {floatingAnchorElem && (
-                    <CodeBlockLanguagePlugin anchorElem={floatingAnchorElem} />
+                  {!readOnly && (
+                    <>
+                      <TableActionMenuPlugin anchorElem={floatingAnchorElem} />
+                      <TableCellResizerPlugin />
+                      <TableHoverActionsPlugin anchorElem={floatingAnchorElem} />
+                      <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                      <FloatingTextFormatToolbarPlugin
+                        anchorElem={floatingAnchorElem}
+                      />
+                      {floatingAnchorElem && (
+                        <CodeBlockLanguagePlugin anchorElem={floatingAnchorElem} />
+                      )}
+                      <TabIndentationPlugin />
+                      <SlashCommandMenuPlugin />
+                      <MarkdownShortcutPlugin
+                        transformers={[
+                          CHECK_LIST,
+                          HORIZONTAL_RULE,
+                          SMART_SECTION, // Uses >>section to avoid conflict with blockquote transformer (>)
+                          ...ELEMENT_TRANSFORMERS,
+                          ...MULTILINE_ELEMENT_TRANSFORMERS,
+                          ...TEXT_FORMAT_TRANSFORMERS,
+                          ...TEXT_MATCH_TRANSFORMERS,
+                        ]}
+                      />
+                      <DropInsertImagePlugin />
+                      <HistoryPlugin />
+                    </>
                   )}
                   <CodeHighlightPlugin />
                   <ListPlugin />
                   <CheckListPlugin />
                   <ListNumberingPlugin />
-                  <TabIndentationPlugin />
+                  <ListExitPlugin />
                   <PlaceholderFormatPlugin />
 
                   <AutoLinkPlugin />
                   <LinkPlugin />
                   <ClickableLinkPlugin />
-                  <HistoryPlugin />
                   <ImagesPlugin />
                   <InlineImagePlugin />
-                  <DropInsertImagePlugin />
                   <SmartSectionPlugin />
                   <ColumnsPlugin />
                   <HorizontalSectionBlockPlugin />
-                  <SlashCommandMenuPlugin />
                   <MentionsPlugin />
-                  <MarkdownShortcutPlugin
-                    transformers={[
-                      CHECK_LIST,
-                      HORIZONTAL_RULE,
-                      SMART_SECTION, // Uses >>section to avoid conflict with blockquote transformer (>)
-                      ...ELEMENT_TRANSFORMERS,
-                      ...MULTILINE_ELEMENT_TRANSFORMERS,
-                      ...TEXT_FORMAT_TRANSFORMERS,
-                      ...TEXT_MATCH_TRANSFORMERS,
-                    ]}
-                  />
                 </div>
               </div>
 
-              <OnChangePlugin
-                ignoreSelectionChange={true}
-                onChange={(editorState: EditorState) => {
-                  const next = editorState.toJSON();
-                  console.log("editor state", next);
-                  onChange?.(next);
-                }}
-              />
+              {!readOnly && (
+                <OnChangePlugin
+                  ignoreSelectionChange={true}
+                  onChange={(editorState: EditorState) => {
+                    onChange?.(editorState.toJSON());
+                  }}
+                />
+              )}
             </CollaborationContextProvider>
           </LexicalComposer>
         </FloatingLinkContext>
