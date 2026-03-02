@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@editor/ui/select";
-import type { LetterSpacingTypographyConfig } from "@editor/ui/editor/themes/editor-theme";
-import { LETTER_SPACING_PRESETS } from "@editor/ui/lib/typography/letter-spacing";
+import type { LetterSpacingTypographyConfig } from "mdly/editor";
+import { LETTER_SPACING_PRESETS } from "mdly/lib/typography/letter-spacing";
 import { type SlotId, TYPOGRAPHY_SLOTS } from "./typography-slots";
 
 const DEFAULT_VALUE = "__default__";

@@ -2,7 +2,8 @@
 @import "@editor/ui/colors.css";
 @config "../../tailwind.config.ts";
 
-@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../../packages/mdly/src/**/*.{ts,tsx}";
 @source "./**/*.{ts,tsx}";
 
 @theme inline {

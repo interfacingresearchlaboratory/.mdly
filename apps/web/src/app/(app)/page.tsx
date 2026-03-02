@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { TableOfContents } from "@editor/ui/table-of-contents";
-import { ToolbarlessEditor } from "@editor/ui/editor/toolbarless-editor";
+import { ToolbarlessEditor } from "mdly/editor";
 import { ThemeToggle } from "../../components/theme-toggle";
 import { AppFontPicker } from "../../components/app-font-picker";
 import { ShortcutsDirectory } from "./_components/shortcuts-directory";
 import { TypographyDialog } from "./_components/typography-dialog";
 import { Button } from "@editor/ui/button";
 import { Coffee, Github } from "lucide-react";
-import type { TypographyConfig } from "@editor/ui/editor/themes/editor-theme";
+import type { TypographyConfig } from "mdly/editor";
 import { seedContent } from "@/seed/editor-seed";
 
 type EditorContent = Parameters<

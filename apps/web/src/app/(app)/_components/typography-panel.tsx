@@ -13,10 +13,10 @@ import type {
   FontWeightTypographyConfig,
   FontFamilyTypographyConfig,
   FontSizeTypographyConfig,
-} from "@editor/ui/editor/themes/editor-theme";
-import { LETTER_SPACING_PRESETS } from "@editor/ui/lib/typography/letter-spacing";
-import { FONT_WEIGHT_PRESETS } from "@editor/ui/lib/typography/font-weight";
-import { FONT_SIZE_PRESETS } from "@editor/ui/lib/typography/font-size";
+} from "mdly/editor";
+import { LETTER_SPACING_PRESETS } from "mdly/lib/typography/letter-spacing";
+import { FONT_WEIGHT_PRESETS } from "mdly/lib/typography/font-weight";
+import { FONT_SIZE_PRESETS } from "mdly/lib/typography/font-size";
 import { useCustomFonts } from "@/components/custom-fonts-provider";
 import { type SlotId, TYPOGRAPHY_SLOTS } from "./typography-slots";
 

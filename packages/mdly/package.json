@@ -1,0 +1,89 @@
+{
+  "name": "mdly",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "default": "./dist/editor.js"
+    },
+    "./editor-local": {
+      "types": "./dist/editor-local.d.ts",
+      "default": "./dist/editor-local.js"
+    },
+    "./editor/*": {
+      "types": "./dist/editor/*.d.ts",
+      "default": "./dist/editor/*.js"
+    },
+    "./editor-local/*": {
+      "types": "./dist/editor-local/*.d.ts",
+      "default": "./dist/editor-local/*.js"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "default": "./dist/lib/*.js"
+    },
+    "./editor/themes/editor-theme.css": "./dist/editor/themes/editor-theme.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/editor/themes && cp src/editor/themes/editor-theme.css dist/editor/themes/editor-theme.css",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@editor/eslint-config": "workspace:*",
+    "@editor/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "^9.39.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "5.9.2",
+    "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "dependencies": {
+    "@lexical/code": "^0.39.0",
+    "@lexical/headless": "^0.39.0",
+    "@lexical/html": "^0.39.0",
+    "@lexical/link": "^0.39.0",
+    "@lexical/list": "^0.39.0",
+    "@lexical/markdown": "^0.39.0",
+    "@lexical/react": "^0.39.0",
+    "@lexical/rich-text": "^0.39.0",
+    "@lexical/selection": "^0.39.0",
+    "@lexical/table": "^0.39.0",
+    "@lexical/utils": "^0.39.0",
+    "@radix-ui/react-checkbox": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-popover": "^1.1.2",
+    "@radix-ui/react-select": "^2.1.2",
+    "@radix-ui/react-separator": "^1.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tabs": "^1.1.1",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "lexical": "^0.39.0",
+    "lodash-es": "^4.17.23",
+    "lucide-react": "^0.563.0",
+    "marked": "^17.0.3",
+    "tailwind-merge": "^3.4.0"
+  }
+}
