@@ -1,0 +1,16 @@
+{
+  "name": "create-mdly-cli",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "create-mdly-cli": "./bin/create-mdly-cli.js"
+  },
+  "scripts": {
+    "start": "node ./bin/create-mdly-cli.js",
+    "test": "node ./bin/create-mdly-cli.js --help"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,6 +1,9 @@
 {
   "name": "editor",
   "private": true,
+  "bin": {
+    "create-mdly-cli": "packages/create-mdly-cli/bin/create-mdly-cli.js"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
