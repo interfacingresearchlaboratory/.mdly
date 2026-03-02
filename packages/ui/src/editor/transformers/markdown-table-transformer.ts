@@ -198,3 +198,20 @@ const mapToTableCells = (textContent: string): Array<TableCellNode> | null => {
   }
   return match[1].split("|").map((text) => $createTableCell(text))
 }
+
+/**
+ * In markdown table cells we serialize hard line breaks as literal "\\n".
+ * When rendering markdown through HTML (marked -> DOM), convert those literals
+ * to <br /> so they render as line breaks instead of raw characters.
+ */
+export function preprocessMarkdownTableEscapedNewlines(markdown: string): string {
+  const lines = markdown.split("\n")
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line) continue
+    if (!TABLE_ROW_REG_EXP.test(line)) continue
+    if (TABLE_ROW_DIVIDER_REG_EXP.test(line)) continue
+    lines[i] = line.replace(/\\n/g, "<br />")
+  }
+  return lines.join("\n")
+}

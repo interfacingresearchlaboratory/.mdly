@@ -13,7 +13,7 @@ import {
   type LexicalNode,
 } from "lexical"
 
-import { CustomLinkNode } from "../nodes/link-node"
+import { CustomLinkNode } from "../../editor/nodes/link-node"
 import {
   VELLUM_FILE_LINK_PREFIX,
   WIKI_FILE_LINK_REGEX,
@@ -33,7 +33,7 @@ function runNormalization(
       for (const key of keysToFix) {
         const node = $getNodeByKey(key)
         if (!node || !$isTextNode(node)) continue
-        let current = node as TextNode
+        const current = node as TextNode
         for (;;) {
           const text = current.getTextContent()
           re.lastIndex = 0

@@ -2,8 +2,8 @@ import { TextMatchTransformer } from "@lexical/markdown"
 import { $createTextNode } from "lexical"
 import { $isLinkNode } from "@lexical/link"
 
-import { CustomLinkNode } from "../nodes/link-node"
-import { VELLUM_FILE_LINK_PREFIX } from "../utils/vellum-file-constants"
+import { CustomLinkNode } from "../../editor/nodes/link-node"
+import { VELLUM_FILE_LINK_PREFIX } from "../../editor/utils/vellum-file-constants"
 
 export { VELLUM_FILE_LINK_PREFIX }
 

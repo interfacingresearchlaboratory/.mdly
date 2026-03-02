@@ -78,10 +78,14 @@ export class BacklinkNode extends DecoratorNode<JSX.Element> {
     _dom: HTMLElement,
     _config: EditorConfig
   ): boolean {
+    void _prevNode
+    void _dom
+    void _config
     return false
   }
 
   createDOM(_config: EditorConfig): HTMLElement {
+    void _config
     return document.createElement("span")
   }
 

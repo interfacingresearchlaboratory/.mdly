@@ -15,7 +15,6 @@ import { SmartSectionNode } from "./nodes/smart-section-node"
 import { ColumnsNode } from "./nodes/columns-node"
 import { HorizontalSectionBlockNode } from "./nodes/horizontal-section-block-node"
 import { MentionNode } from "./nodes/mention-node"
-import { BacklinkNode } from "./nodes/backlink-node"
 import { PlaceholderTextNode } from "./nodes/placeholder-text-node"
 
 export const nodes = [
@@ -40,10 +39,8 @@ export const nodes = [
   ColumnsNode,
   HorizontalSectionBlockNode,
   MentionNode,
-  BacklinkNode,
   PlaceholderTextNode,
 ]
-
 
 
 

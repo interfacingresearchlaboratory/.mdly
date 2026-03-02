@@ -10,7 +10,6 @@ import { HORIZONTAL_RULE } from "./transformers/markdown-horizontal-rule-transfo
 import { SMART_SECTION } from "./transformers/markdown-smart-section-transformer"
 import { TABLE } from "./transformers/markdown-table-transformer"
 import { IMAGE } from "./transformers/markdown-image-transformer"
-import { BACKLINK } from "./transformers/markdown-backlink-transformer"
 
 export const MARKDOWN_TRANSFORMERS = [
   CHECK_LIST,
@@ -18,7 +17,6 @@ export const MARKDOWN_TRANSFORMERS = [
   SMART_SECTION,
   TABLE,
   IMAGE,
-  BACKLINK,
   ...ELEMENT_TRANSFORMERS,
   ...MULTILINE_ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,

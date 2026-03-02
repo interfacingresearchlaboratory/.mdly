@@ -95,7 +95,7 @@ export function BacklinkTransformPlugin(): null {
         for (const { nodeKey, matches } of toTransform) {
           const node = $getNodeByKey(nodeKey)
           if (!node || !$isTextNode(node)) continue
-          let textNode = node as TextNode
+          const textNode = node as TextNode
           const sortedMatches = [...matches].sort((a, b) => b.index - a.index)
           for (const m of sortedMatches) {
             const path = resolvePageNameToPath(
