@@ -16,7 +16,7 @@ export const HORIZONTAL_RULE: ElementTransformer = {
     return "---"
   },
   regExp: /^(-{3,})\s*$/,
-  replace: (parentNode, _children, match) => {
+  replace: (parentNode, _children, _match) => {
     if (!$isParagraphNode(parentNode)) {
       return
     }
@@ -31,7 +31,7 @@ export const HORIZONTAL_RULE: ElementTransformer = {
 
     const horizontalRuleNode = $createHorizontalRuleNode()
     parentNode.replace(horizontalRuleNode)
-    
+
     // Create a new paragraph after the horizontal rule for continued editing
     const nextSibling = horizontalRuleNode.getNextSibling()
     if (!nextSibling || !$isParagraphNode(nextSibling)) {

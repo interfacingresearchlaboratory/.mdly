@@ -26,6 +26,9 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  const verifiedBucket = bucket ?? "";
+  const verifiedAccessKeyId = accessKeyId ?? "";
+  const verifiedSecretAccessKey = secretAccessKey ?? "";
 
   let formData: FormData;
   try {
@@ -54,17 +57,20 @@ export async function POST(request: Request) {
 
     const client = new S3Client({
       region,
-      credentials: { accessKeyId, secretAccessKey },
+      credentials: {
+        accessKeyId: verifiedAccessKeyId,
+        secretAccessKey: verifiedSecretAccessKey,
+      },
     });
     await client.send(
       new PutObjectCommand({
-        Bucket: bucket,
+        Bucket: verifiedBucket,
         Key: key,
         Body: body,
         ContentType: file.type || "application/octet-stream",
       })
     );
-    const url = buildPublicUrl(key, bucket, region);
+    const url = buildPublicUrl(key, verifiedBucket, region);
     return NextResponse.json({ url });
   } catch (err) {
     console.error("S3 upload failed:", err);
