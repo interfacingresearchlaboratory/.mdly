@@ -29,7 +29,7 @@ export function DraggableBlockPlugin({
       menuComponent={
         <div
           ref={menuRef}
-          className="draggable-block-menu absolute top-2 left-0 flex items-start cursor-grab rounded-sm px-[1px] py-0.5 opacity-0 will-change-transform hover:bg-gray-100 active:cursor-grabbing"
+          className="draggable-block-menu absolute top-0 left-0 flex items-start cursor-grab rounded-sm px-[1px] py-0.5 opacity-0 will-change-transform hover:bg-gray-100 active:cursor-grabbing"
         >
           <GripVerticalIcon className="size-4 shrink-0 opacity-30" />
         </div>

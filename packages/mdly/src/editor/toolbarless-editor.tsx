@@ -249,7 +249,7 @@ export function ToolbarlessEditor({
                         >
                           <ContentEditable
                             placeholder={placeholder}
-                            className="ContentEditable__root relative block min-h-[160px] w-full overflow-visible focus:outline-none"
+                            className="ContentEditable__root relative block flow-root min-h-[160px] w-full overflow-visible focus:outline-none"
                             placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 pl-6 pt-1 text-sm select-none"
                             onFocus={() => onFocus?.()}
                             onBlur={() => onBlur?.()}
@@ -278,7 +278,7 @@ export function ToolbarlessEditor({
                       >
                         <ContentEditable
                           placeholder={placeholder}
-                          className="ContentEditable__root relative block min-h-[160px] w-full overflow-visible focus:outline-none"
+                          className="ContentEditable__root relative block flow-root min-h-[160px] w-full overflow-visible focus:outline-none"
                           placeholderClassName="text-muted-foreground pointer-events-none absolute top-0 left-0 pl-6 pt-1 text-sm select-none"
                           onFocus={() => onFocus?.()}
                           onBlur={() => onBlur?.()}
