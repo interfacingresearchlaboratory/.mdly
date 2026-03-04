@@ -32,6 +32,7 @@ import { preprocessMarkdownTableEscapedNewlines } from "./transformers/markdown-
 import { SmartSectionPlugin } from "./plugins/smart-section-plugin";
 import { ColumnsPlugin } from "./plugins/columns-plugin";
 import { HorizontalSectionBlockPlugin } from "./plugins/horizontal-section-block-plugin";
+import { HorizontalRuleShortcutPlugin } from "./plugins/horizontal-rule-shortcut-plugin";
 import { ContentEditable } from "./editor-ui/content-editable";
 import { DraggableBlockPlugin } from "./plugins/draggable-block-plugin";
 import { TableActionMenuPlugin } from "./plugins/table-action-menu-plugin";
@@ -43,6 +44,10 @@ import { InlineImagePlugin } from "./plugins/inline-image-plugin";
 import { AutoLinkPlugin } from "./plugins/auto-link-plugin";
 import { DropInsertImagePlugin } from "./plugins/drop-insert-image-plugin";
 import { FloatingLinkContext } from "./context/floating-link-context";
+import {
+  ImageUploadContextProvider,
+  type ImageUploadConfig,
+} from "./context/image-upload-context";
 import {
   MentionsContextProvider,
   type MentionEntity,
@@ -120,6 +125,14 @@ export type ToolbarlessEditorProps = {
     floatingAnchorElem: HTMLDivElement | null;
     readOnly: boolean;
   }) => ReactNode;
+  /**
+   * Optional image upload: when provided, dropped/pasted/selected images are uploaded
+   * and the returned URL is inserted. Supply your host app's upload (e.g. wyrdos
+   * image upload). Use imageUploadConfig for full config including onUploadError (e.g. toast).
+   */
+  imageUpload?: (file: File) => Promise<string>;
+  /** Full image upload config (upload + optional onUploadError). Host app provides this. */
+  imageUploadConfig?: ImageUploadConfig | null;
 };
 
 /**
@@ -168,9 +181,14 @@ export function ToolbarlessEditor({
   preprocessInitialMarkdown,
   wrapEditor,
   renderAdditionalPlugins,
+  imageUpload,
+  imageUploadConfig,
 }: ToolbarlessEditorProps) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
+
+  const resolvedImageUploadConfig =
+    imageUploadConfig ?? (imageUpload ? { upload: imageUpload } : null);
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
@@ -321,6 +339,7 @@ export function ToolbarlessEditor({
               <InlineImagePlugin />
               {!readOnly && <DropInsertImagePlugin />}
               <SmartSectionPlugin />
+              {!readOnly && <HorizontalRuleShortcutPlugin />}
               <ColumnsPlugin />
               <HorizontalSectionBlockPlugin />
               {!readOnly && <SlashCommandMenuPlugin />}
@@ -366,7 +385,9 @@ export function ToolbarlessEditor({
         projects={projects}
         tasks={tasks}
       >
-        {wrapEditor ? wrapEditor(editorTree) : editorTree}
+        <ImageUploadContextProvider config={resolvedImageUploadConfig}>
+          {wrapEditor ? wrapEditor(editorTree) : editorTree}
+        </ImageUploadContextProvider>
       </MentionsContextProvider>
     </div>
   );

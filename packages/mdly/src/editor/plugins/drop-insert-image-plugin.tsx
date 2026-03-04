@@ -8,19 +8,45 @@ import {
   $isRangeSelection,
   COMMAND_PRIORITY_HIGH,
   DROP_COMMAND,
+  PASTE_COMMAND,
 } from "lexical"
 
-import { insertImageFileFromDrop } from "./images-plugin"
+import { INSERT_IMAGE_COMMAND, insertImageFileFromDrop } from "./images-plugin"
+import { useImageUploadConfig } from "../context/image-upload-context"
 
 function isImageFile(file: File): boolean {
   return file.type.startsWith("image/")
 }
 
+function processImageFiles(
+  editor: ReturnType<typeof useLexicalComposerContext>[0],
+  files: File[],
+  config: ReturnType<typeof useImageUploadConfig>
+): void {
+  if (!config) {
+    files.forEach((file) => {
+      void insertImageFileFromDrop(editor, file)
+    })
+    return
+  }
+  void (async () => {
+    for (const file of files) {
+      try {
+        const url = await config.upload(file)
+        editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src: url, altText: "" })
+      } catch (err) {
+        config.onUploadError?.(err instanceof Error ? err : new Error(String(err)))
+      }
+    }
+  })()
+}
+
 export function DropInsertImagePlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
+  const imageUploadConfig = useImageUploadConfig()
 
   useEffect(() => {
-    return editor.registerCommand<DragEvent>(
+    const dropUnregister = editor.registerCommand<DragEvent>(
       DROP_COMMAND,
       (event) => {
         const dataTransfer = event.dataTransfer
@@ -68,17 +94,32 @@ export function DropInsertImagePlugin(): JSX.Element | null {
           }
         })
 
-        // Perform uploads / inserts outside the update block; each insert
-        // will dispatch INSERT_IMAGE_COMMAND back into Lexical.
-        imageFiles.forEach((file) => {
-          void insertImageFileFromDrop(editor, file)
-        })
-
+        processImageFiles(editor, imageFiles, imageUploadConfig)
         return true
       },
       COMMAND_PRIORITY_HIGH
     )
-  }, [editor])
+
+    const pasteUnregister = editor.registerCommand<ClipboardEvent>(
+      PASTE_COMMAND,
+      (event) => {
+        const files = event.clipboardData?.files
+        if (!files?.length) return false
+        const imageFiles = Array.from(files).filter(isImageFile)
+        if (imageFiles.length === 0) return false
+
+        event.preventDefault()
+        processImageFiles(editor, imageFiles, imageUploadConfig)
+        return true
+      },
+      COMMAND_PRIORITY_HIGH
+    )
+
+    return () => {
+      dropUnregister()
+      pasteUnregister()
+    }
+  }, [editor, imageUploadConfig])
 
   return null
 }
