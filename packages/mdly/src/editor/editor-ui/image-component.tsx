@@ -88,10 +88,14 @@ function LazyImage({
   )
 }
 
+const TRANSPARENT_PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+
 function BrokenImage(): JSX.Element {
   return (
     <img
-      src={""}
+      src={TRANSPARENT_PIXEL}
+      alt=""
       style={{
         height: 200,
         opacity: 0.2,

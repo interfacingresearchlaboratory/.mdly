@@ -35,6 +35,7 @@ import {
   ImageNode,
   ImagePayload,
 } from "../nodes/image-node"
+import { useImageUploadConfig } from "../context/image-upload-context"
 import { CAN_USE_DOM } from "../shared/can-use-dom"
 import { Button } from "../../button"
 import { DialogFooter } from "../../dialog"
@@ -103,20 +104,37 @@ export function InsertImageUploadedDialogBody({
 }) {
   const [src, setSrc] = useState("")
   const [altText, setAltText] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
+  const imageUploadConfig = useImageUploadConfig()
 
-  const isDisabled = src === ""
+  const isDisabled = src === "" || isUploading
 
   const loadImage = (files: FileList | null) => {
+    const file = files?.[0]
+    if (!file || !file.type.startsWith("image/")) return
+
+    if (imageUploadConfig) {
+      setIsUploading(true)
+      imageUploadConfig
+        .upload(file)
+        .then((url) => {
+          setSrc(url)
+          setIsUploading(false)
+        })
+        .catch((err) => {
+          imageUploadConfig.onUploadError?.(err instanceof Error ? err : new Error(String(err)))
+          setIsUploading(false)
+        })
+      return
+    }
+
     const reader = new FileReader()
     reader.onload = function () {
       if (typeof reader.result === "string") {
         setSrc(reader.result)
       }
-      return ""
     }
-    if (files !== null && files[0]) {
-      reader.readAsDataURL(files[0])
-    }
+    reader.readAsDataURL(file)
   }
 
   return (
@@ -128,8 +146,12 @@ export function InsertImageUploadedDialogBody({
           type="file"
           onChange={(e) => loadImage(e.target.files)}
           accept="image/*"
+          disabled={isUploading}
           data-test-id="image-modal-file-upload"
         />
+        {isUploading && (
+          <p className="text-muted-foreground text-sm">Uploading…</p>
+        )}
       </div>
       <div className="grid gap-2">
         <Label htmlFor="alt-text">Alt Text</Label>
