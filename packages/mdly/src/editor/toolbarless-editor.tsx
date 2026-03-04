@@ -32,6 +32,7 @@ import { preprocessMarkdownTableEscapedNewlines } from "./transformers/markdown-
 import { SmartSectionPlugin } from "./plugins/smart-section-plugin";
 import { ColumnsPlugin } from "./plugins/columns-plugin";
 import { HorizontalSectionBlockPlugin } from "./plugins/horizontal-section-block-plugin";
+import { HorizontalRuleShortcutPlugin } from "./plugins/horizontal-rule-shortcut-plugin";
 import { ContentEditable } from "./editor-ui/content-editable";
 import { DraggableBlockPlugin } from "./plugins/draggable-block-plugin";
 import { TableActionMenuPlugin } from "./plugins/table-action-menu-plugin";
@@ -321,6 +322,7 @@ export function ToolbarlessEditor({
               <InlineImagePlugin />
               {!readOnly && <DropInsertImagePlugin />}
               <SmartSectionPlugin />
+              {!readOnly && <HorizontalRuleShortcutPlugin />}
               <ColumnsPlugin />
               <HorizontalSectionBlockPlugin />
               {!readOnly && <SlashCommandMenuPlugin />}
