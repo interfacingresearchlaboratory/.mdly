@@ -17,7 +17,9 @@ import { $createQuoteNode } from "@lexical/rich-text"
 import { $setBlocksType } from "@lexical/selection"
 import {
   $getSelection,
+  $createParagraphNode,
   $isElementNode,
+  $isParagraphNode,
   $isRangeSelection,
   TextNode,
 } from "lexical"
@@ -31,6 +33,7 @@ import {
   LayoutIcon,
   ListIcon,
   ListOrderedIcon,
+  MinusIcon,
   QuoteIcon,
   TableIcon,
 } from "lucide-react"
@@ -39,6 +42,7 @@ import { Command, CommandItem, CommandList } from "../../command"
 import { INSERT_COLUMNS_COMMAND } from "./columns-plugin"
 import { INSERT_HORIZONTAL_SECTION_BLOCK_COMMAND } from "./horizontal-section-block-plugin"
 import { INSERT_SMART_SECTION_COMMAND } from "./smart-section-plugin"
+import { $createHorizontalRuleNode } from "../nodes/horizontal-rule-node"
 
 type SlashCommandKey =
   | "table"
@@ -48,6 +52,7 @@ type SlashCommandKey =
   | "bulleted-list"
   | "numbered-list"
   | "quote"
+  | "separator"
   | "columns-2"
   | "columns-3"
   | "columns-4"
@@ -74,6 +79,11 @@ const SLASH_COMMANDS: ReadonlyArray<{
     icon: <ListOrderedIcon className="size-4" />,
   },
   { key: "quote", label: "Quote", icon: <QuoteIcon className="size-4" /> },
+  {
+    key: "separator",
+    label: "Separator",
+    icon: <MinusIcon className="size-4" />,
+  },
   {
     key: "columns-2",
     label: "Columns 2",
@@ -178,6 +188,24 @@ export function SlashCommandMenuPlugin(): JSX.Element | null {
           editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
         } else if (key === "quote") {
           $setBlocksType(selection, () => $createQuoteNode())
+        } else if (key === "separator") {
+          const anchorNode = selection.anchor.getNode()
+          const paragraphFromSelection = $isParagraphNode(anchorNode)
+            ? anchorNode
+            : anchorNode.getParent()
+          const targetParagraph = $isParagraphNode(parent)
+            ? parent
+            : $isParagraphNode(paragraphFromSelection)
+              ? paragraphFromSelection
+              : null
+
+          if (targetParagraph) {
+            const horizontalRuleNode = $createHorizontalRuleNode()
+            targetParagraph.replace(horizontalRuleNode)
+            const nextParagraph = $createParagraphNode()
+            horizontalRuleNode.insertAfter(nextParagraph)
+            nextParagraph.selectStart()
+          }
         } else if (key === "columns-2") {
           editor.dispatchCommand(INSERT_COLUMNS_COMMAND, { columnCount: 2 })
         } else if (key === "columns-3") {
