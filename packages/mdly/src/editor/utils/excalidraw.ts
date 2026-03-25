@@ -2,7 +2,11 @@ const SCENE_PATH_REGEXP = /\/scene\//i
 
 function isExcalidrawHost(hostname: string): boolean {
   const normalized = hostname.toLowerCase()
-  return normalized === "excalidraw.com" || normalized.endsWith(".excalidraw.com")
+  return (
+    normalized === "excalidraw.com" ||
+    normalized.endsWith(".excalidraw.com") ||
+    normalized === "link.excalidraw.com"
+  )
 }
 
 function parseUrl(raw: string): URL | null {
@@ -33,6 +37,7 @@ export function isLikelyExcalidrawSceneUrl(raw: string): boolean {
   return (
     SCENE_PATH_REGEXP.test(path) ||
     (isExcalidraw && path.includes("/embed")) ||
+    (isExcalidraw && path.includes("/readonly/")) ||
     search.has("json") ||
     search.has("room") ||
     search.has("id") ||

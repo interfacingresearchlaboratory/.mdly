@@ -20,6 +20,12 @@ describe("isLikelyExcalidrawSceneUrl", () => {
     ).toBe(true)
   })
 
+  it("matches readonly links on link.excalidraw.com", () => {
+    expect(
+      isLikelyExcalidrawSceneUrl("https://link.excalidraw.com/readonly/itpXOE2MWEyaO8wce1RU")
+    ).toBe(true)
+  })
+
   it("rejects non-scene urls", () => {
     expect(isLikelyExcalidrawSceneUrl("https://example.com/docs")).toBe(false)
   })
