@@ -24,6 +24,7 @@ import { ImageNode } from "./image-node"
 import { InlineImageNode } from "./inline-image-node"
 import { HorizontalRuleNode } from "./horizontal-rule-node"
 import { ColumnsNode } from "./columns-node"
+import { ExcalidrawEmbedNode } from "./excalidraw-embed-node"
 
 const HorizontalSectionBlockComponent = React.lazy(
   () => import("../editor-ui/horizontal-section-block-component")
@@ -100,6 +101,7 @@ function getCardContentNodes() {
     },
     ImageNode,
     InlineImageNode,
+    ExcalidrawEmbedNode,
     AutocompleteNode,
     HorizontalRuleNode,
     ColumnsNode,

@@ -27,6 +27,7 @@ import { ImageNode } from "./image-node"
 import { InlineImageNode } from "./inline-image-node"
 import { HorizontalRuleNode } from "./horizontal-rule-node"
 import { ColumnsNode } from "./columns-node"
+import { ExcalidrawEmbedNode } from "./excalidraw-embed-node"
 
 const SmartSectionComponent = React.lazy(
   () => import("../editor-ui/smart-section-component")
@@ -95,6 +96,7 @@ const contentNodes = [
   },
   ImageNode,
   InlineImageNode,
+  ExcalidrawEmbedNode,
   AutocompleteNode,
   HorizontalRuleNode,
   ColumnsNode,

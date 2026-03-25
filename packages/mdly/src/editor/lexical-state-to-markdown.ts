@@ -1,13 +1,27 @@
 import { createHeadlessEditor } from "@lexical/headless"
 import { $convertToMarkdownString } from "@lexical/markdown"
+import { $getRoot, $isParagraphNode } from "lexical"
 import type { SerializedEditorState } from "lexical"
 
 import { getEditorTheme } from "./themes/editor-theme"
 import { nodes } from "./nodes"
+import { $isColumnsNode } from "./nodes/columns-node"
 import { MARKDOWN_TRANSFORMERS } from "./markdown-transformers"
 
+/** Hoist paragraph-wrapped ColumnsNodes to root so the COLUMNS transformer runs during export. */
+function hoistParagraphWrappedColumns(root: ReturnType<typeof $getRoot>): void {
+  const children = root.getChildren()
+  for (const child of children) {
+    if (!$isParagraphNode(child)) continue
+    if (child.getChildrenSize() !== 1) continue
+    const firstChild = child.getFirstChild()
+    if (!firstChild || !$isColumnsNode(firstChild)) continue
+    child.replace(firstChild)
+  }
+}
+
 /** Node types that have no markdown transformer; saving as Markdown would lose structure. */
-const NON_MARKDOWN_NODE_TYPES = ["columns", "horizontal-section-block"]
+const NON_MARKDOWN_NODE_TYPES = ["horizontal-section-block"]
 
 function hasNonMarkdownInNodes(nodes: unknown): boolean {
   if (!Array.isArray(nodes)) return false
@@ -63,9 +77,14 @@ export function lexicalStateToMarkdown(state: SerializedEditorState): string {
   editor.setEditorState(editor.parseEditorState(JSON.stringify(state)))
 
   let markdown = ""
-  editor.getEditorState().read(() => {
-    markdown = $convertToMarkdownString(MARKDOWN_TRANSFORMERS)
-  })
+  editor.update(
+    () => {
+      const root = $getRoot()
+      hoistParagraphWrappedColumns(root)
+      markdown = $convertToMarkdownString(MARKDOWN_TRANSFORMERS, root) ?? ""
+    },
+    { tag: "lexical-state-to-markdown" },
+  )
 
   return markdown
 }

@@ -16,6 +16,7 @@ import { ColumnsNode } from "./nodes/columns-node"
 import { HorizontalSectionBlockNode } from "./nodes/horizontal-section-block-node"
 import { MentionNode } from "./nodes/mention-node"
 import { PlaceholderTextNode } from "./nodes/placeholder-text-node"
+import { ExcalidrawEmbedNode } from "./nodes/excalidraw-embed-node"
 
 export const nodes = [
   HeadingNode,
@@ -40,8 +41,8 @@ export const nodes = [
   HorizontalSectionBlockNode,
   MentionNode,
   PlaceholderTextNode,
+  ExcalidrawEmbedNode,
 ]
-
 
 
 

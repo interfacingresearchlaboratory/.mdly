@@ -40,6 +40,7 @@ import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
 import { MentionsPlugin } from "../plugins/mentions-plugin"
 import { ColumnsPlugin } from "../plugins/columns-plugin"
 import { FloatingTextFormatToolbarPlugin } from "../plugins/floating-text-format-plugin"
+import { ExcalidrawPasteEmbedPlugin } from "../plugins/excalidraw-paste-embed-plugin"
 import { Trash2Icon } from "lucide-react"
 
 const MIN_COLUMN_FRACTION = 0.15
@@ -99,6 +100,7 @@ function ColumnCellContent({
             ...TEXT_MATCH_TRANSFORMERS,
           ]}
         />
+        <ExcalidrawPasteEmbedPlugin />
         <SlashCommandMenuPlugin />
         <MentionsPlugin />
         <ColumnsPlugin />

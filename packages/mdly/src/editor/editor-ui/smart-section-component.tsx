@@ -36,6 +36,7 @@ import { HORIZONTAL_RULE } from "../transformers/markdown-horizontal-rule-transf
 import { SlashCommandMenuPlugin } from "../plugins/slash-command-menu-plugin"
 import { ColumnsPlugin } from "../plugins/columns-plugin"
 import { FloatingTextFormatToolbarPlugin } from "../plugins/floating-text-format-plugin"
+import { ExcalidrawPasteEmbedPlugin } from "../plugins/excalidraw-paste-embed-plugin"
 import { cn } from "../../lib/utils"
 
 export default function SmartSectionComponent({
@@ -204,6 +205,7 @@ export default function SmartSectionComponent({
                   ...TEXT_MATCH_TRANSFORMERS,
                 ]}
               />
+              <ExcalidrawPasteEmbedPlugin />
               <SlashCommandMenuPlugin />
               <ColumnsPlugin />
               <FloatingTextFormatToolbarPlugin anchorElem={contentAnchorElem} />

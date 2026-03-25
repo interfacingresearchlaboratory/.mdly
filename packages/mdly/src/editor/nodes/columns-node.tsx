@@ -22,6 +22,7 @@ import { CodeNode, CodeHighlightNode } from "@lexical/code"
 import { ImageNode } from "./image-node"
 import { InlineImageNode } from "./inline-image-node"
 import { HorizontalRuleNode } from "./horizontal-rule-node"
+import { ExcalidrawEmbedNode } from "./excalidraw-embed-node"
 
 const ColumnsComponent = React.lazy(
   () => import("../editor-ui/columns-component")
@@ -64,6 +65,7 @@ const contentNodesBase = [
   },
   ImageNode,
   InlineImageNode,
+  ExcalidrawEmbedNode,
   AutocompleteNode,
   HorizontalRuleNode,
 ]
@@ -121,11 +123,17 @@ export class ColumnsNode extends DecoratorNode<JSX.Element> {
 
     columnEditors.forEach((serialized, i) => {
       const ed = editors[i]
-      if (ed && serialized?.editorState) {
-        const state = ed.parseEditorState(serialized.editorState)
-        if (!state.isEmpty()) {
-          ed.setEditorState(state)
-        }
+      if (!ed || serialized == null) return
+      const statePayload =
+        (serialized as { editorState?: unknown }).editorState ?? serialized
+      if (statePayload == null) return
+      const toParse =
+        typeof statePayload === "string"
+          ? statePayload
+          : JSON.stringify(statePayload)
+      const state = ed.parseEditorState(toParse)
+      if (!state.isEmpty()) {
+        ed.setEditorState(state)
       }
     })
 
@@ -157,7 +165,9 @@ export class ColumnsNode extends DecoratorNode<JSX.Element> {
       version: 1,
       columnCount: this.__columnCount,
       widths: [...this.__widths],
-      columnEditors: this.__editors.map((ed) => ed.toJSON()),
+      columnEditors: this.__editors.map((ed) => ({
+        editorState: ed.getEditorState().toJSON(),
+      })),
     }
   }
 
