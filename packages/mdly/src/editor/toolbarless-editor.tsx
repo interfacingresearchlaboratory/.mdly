@@ -15,6 +15,7 @@ import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { ExcalidrawPasteEmbedPlugin } from "./plugins/excalidraw-paste-embed-plugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import type { Transformer } from "@lexical/markdown";
 import { ClickableLinkPlugin } from "./plugins/clickable-link-plugin";
@@ -347,6 +348,7 @@ export function ToolbarlessEditor({
               {!readOnly && (
                 <MarkdownShortcutPlugin transformers={markdownTransformers ?? MARKDOWN_TRANSFORMERS} />
               )}
+              {!readOnly && <ExcalidrawPasteEmbedPlugin />}
               {renderAdditionalPlugins?.({ floatingAnchorElem, readOnly })}
               {pageHeight != null && pageMargins != null && (
                 <PageBreakPlugin

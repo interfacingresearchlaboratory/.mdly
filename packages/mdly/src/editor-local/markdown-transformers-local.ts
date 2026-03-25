@@ -10,6 +10,7 @@ import { HORIZONTAL_RULE } from "../editor/transformers/markdown-horizontal-rule
 import { SMART_SECTION } from "../editor/transformers/markdown-smart-section-transformer"
 import { TABLE } from "../editor/transformers/markdown-table-transformer"
 import { IMAGE } from "../editor/transformers/markdown-image-transformer"
+import { EXCALIDRAW } from "../editor/transformers/markdown-excalidraw-transformer"
 import { BACKLINK } from "./transformers/markdown-backlink-transformer"
 
 export const MARKDOWN_TRANSFORMERS_LOCAL = [
@@ -18,6 +19,7 @@ export const MARKDOWN_TRANSFORMERS_LOCAL = [
   SMART_SECTION,
   TABLE,
   IMAGE,
+  EXCALIDRAW,
   BACKLINK,
   ...ELEMENT_TRANSFORMERS,
   ...MULTILINE_ELEMENT_TRANSFORMERS,
